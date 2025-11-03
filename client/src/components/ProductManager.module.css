@@ -1,0 +1,105 @@
+.productContainer {
+  padding: 25px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-top: 20px;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.productContainer h3 {
+  margin-top: 0;
+}
+.addForm {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.productInput {
+  flex-grow: 1;
+  padding: 12px;
+  border: 1px solid var(--border-color-input);
+  border-radius: 8px;
+  background-color: var(--bg-inset);
+  color: var(--text-color);
+  font-size: 1em;
+}
+.addButton {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.addButton:hover {
+  background-color: var(--primary-hover);
+}
+.productList {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.productItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5px; /* Less horizontal padding */
+  border-bottom: 1px solid var(--border-color);
+}
+.productItem:last-child {
+  border-bottom: none;
+}
+.productName {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: var(--heading-color);
+}
+.productStatus {
+  font-size: 0.9em;
+  margin-left: 10px;
+}
+.productStatus.available {
+  color: var(--success-color);
+}
+.productStatus.unavailable {
+  color: var(--danger-color);
+}
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+}
+.toggleButton {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: 100px;
+  transition: background-color 0.2s;
+}
+.toggleButton.available {
+  background-color: var(--success-color);
+  color: white;
+}
+.toggleButton.unavailable {
+  background-color: var(--secondary-color);
+  color: white;
+}
+.deleteButton {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: var(--danger-color);
+  color: white;
+  min-width: 80px;
+  transition: background-color 0.2s;
+}
+.deleteButton:hover {
+  background-color: var(--danger-hover);
+}

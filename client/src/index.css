@@ -1,0 +1,75 @@
+:root {
+  /* Light theme variables */
+  --primary-color: #007bff;
+  --primary-hover: #0056b3;
+  --bg-color: #f8f9fa;
+  --bg-secondary: #ffffff;
+  --bg-inset: #e9ecef;
+  --text-color: #343a40;
+  --text-color-light: #6c757d;
+  --border-color: #dee2e6;
+  --border-color-input: #ced4da;
+  --navbar-bg: #343a40; /* Darker navbar for contrast */
+  --navbar-text: #ffffff;
+  --navbar-link-hover: #adb5bd;
+}
+
+body.dark {
+  /* Dark theme variables */
+  --primary-color: #66b3ff; /* Lighter blue for dark mode */
+  --primary-hover: #3385ff;
+  --bg-color: #212529;
+  --bg-secondary: #2c313a;
+  --bg-inset: #3a4049;
+  --text-color: #e0e0e0;
+  --text-color-light: #b0b0b0;
+  --border-color: #495057;
+  --border-color-input: #6c757d;
+  --navbar-bg: #212529;
+  --navbar-text: #ffffff;
+  --navbar-link-hover: #a0a0a0;
+  background-image: linear-gradient(110deg, #0d1117 0%, #1a233a 100%);
+}
+
+/* --- CRITICAL FULL-SCREEN LAYOUT --- */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Make them all take full height */
+  width: 100%;
+  overflow: hidden; /* Hide scrollbars for the main layout */
+  box-sizing: border-box; /* Include padding/border in element's total width and height */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color); /* Fallback */
+  color: var(--text-color);
+  transition: background-color 0.2s, color 0.2s;
+  
+  /* --- ADD THIS LINE for the cool background --- */
+  background-image: linear-gradient(110deg, #e6f0ff 0%, #b3d1ff 100%);
+}
+
+/* This ensures #root doesn't introduce extra padding/width constraints by default */
+#root {
+  display: flex; /* Helps with full height children */
+  flex-direction: column; /* Stack children vertically */
+}
+
+/* Global Link Styling */
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+a:hover {
+  text-decoration: underline;
+  color: var(--primary-hover);
+}
+
+/* Helper Classes (e.g., for spacing) */
+.mt-15 { margin-top: 15px; }
+.mb-15 { margin-bottom: 15px; }

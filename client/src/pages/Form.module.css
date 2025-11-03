@@ -1,0 +1,89 @@
+.formContainer {
+  /* --- This creates the glass card --- */
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(10px); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  
+  /* --- HERE ARE THE CHANGES --- */
+  max-width: 500px;  /* Was 450px, now it's wider */
+  margin: 60px auto; 
+  padding: 40px;     /* Was 30px, now it's taller */
+  /* --- END OF CHANGES --- */
+}
+
+/* --- Dark mode tweaks for the glass --- */
+body.dark .formContainer {
+  background: rgba(44, 49, 58, 0.3); /* Darker semi-transparent */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.formContainer h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.formInput {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  box-sizing: border-box; 
+  /* Semi-transparent input background */
+  background-color: rgba(255, 255, 255, 0.2); 
+  color: var(--text-color);
+  font-size: 1em;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+body.dark .formInput {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.formInput::placeholder { /* Style placeholder text */
+  color: var(--text-color-light);
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.formButton {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.formButton:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.formButton:disabled {
+  background-color: var(--secondary-color);
+  cursor: not-allowed;
+}

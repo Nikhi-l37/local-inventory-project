@@ -1,0 +1,236 @@
+.homeContainer {
+  position: relative;
+  width: 100%;
+  height: 100%; /* Now takes 100% of its parent's height (which is full remaining viewport) */
+  overflow: hidden;
+}
+
+.mapContainer {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Floating Search Card --- */
+.searchPanel {
+  position: absolute;
+top: 15px;  /* Position from the top */
+  left: 15px; /* Position from the left */
+  /* transform: translate(-50%, -50%); */ /* <- DELETE THIS LINE */  z-index: 1000;
+  background: rgba(var(--bg-secondary-rgb), 0.9); /* Slightly transparent background */
+  backdrop-filter: blur(8px); /* Frosted glass effect */
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+  width: 400px; /* Fixed width for desktop */
+  max-width: 90%; /* Responsive for smaller screens */
+  border: 1px solid var(--border-color);
+  box-sizing: border-box; /* Include padding in width */
+}
+
+/* Styling for the label */
+.searchPanel label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+/* Input Field Styles */
+.locationInput,
+.searchInput {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color-input);
+  border-radius: 8px;
+  box-sizing: border-box;
+  background-color: var(--bg-inset);
+  color: var(--text-color);
+  font-size: 1em;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.locationInput:focus,
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Location Suggestions */
+.locationGroup {
+  position: relative;
+  margin-bottom: 20px;
+}
+.suggestionsList {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  position: absolute;
+  width: 100%;
+  z-index: 1001;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.suggestionItem {
+  padding: 12px 15px;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: background-color 0.2s;
+}
+.suggestionItem:hover {
+  background-color: var(--bg-inset);
+}
+
+/* Main Search Input and Button */
+.searchMain {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.searchButton {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background-color 0.2s, transform 0.2s;
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+.searchButton:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Filter Toggle Button */
+.filterToggle {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px 0;
+  width: 100%;
+  text-align: left;
+  font-size: 1em;
+  margin-bottom: 10px;
+  transition: color 0.2s;
+}
+.filterToggle:hover {
+  color: var(--primary-hover);
+}
+
+/* Collapsible Filters Area */
+.filtersContent {
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color);
+}
+.searchToggles {
+  display: flex;
+  background-color: var(--bg-inset); /* Use inset background */
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+.searchToggles button {
+  flex: 1;
+  padding: 10px 15px;
+  font-size: 0.9em;
+  font-weight: bold;
+  border: none;
+  background-color: transparent;
+  color: var(--text-color-light);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.searchToggles button.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.filterCheckbox {
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+  font-size: 0.95em;
+}
+.filterCheckbox input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2); /* Slightly larger checkbox */
+  accent-color: var(--primary-color); /* The actual checkbox color */
+}
+
+/* Modal Styles (Adjusted for better theme integration) */
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* Ensure modal is above everything */
+}
+.modalContent {
+  background-color: var(--bg-secondary);
+  color: var(--text-color);
+  padding: 25px;
+  border-radius: 12px;
+  min-width: 350px;
+  max-width: 90%;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+.modalContent h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--text-color);
+}
+.modalContent button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.modalContent button:hover {
+  background-color: var(--primary-hover);
+}
+.modalContent ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0 0 0;
+}
+.modalContent li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.modalContent li:last-child {
+  border-bottom: none;
+}
+
+.backButton {
+  background: var(--bg-inset);
+  color: var(--text-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  width: auto;
+  height: auto;
+  padding: 8px 15px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 15px; /* Add space below it */
+  transition: all 0.2s;
+}
+.backButton:hover {
+  background: var(--bg-color);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}

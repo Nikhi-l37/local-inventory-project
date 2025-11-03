@@ -1,0 +1,57 @@
+/* Navbar styles */
+.navbar {
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2000; /* Ensure navbar is above map */
+  flex-shrink: 0; /* Prevents navbar from shrinking */
+}
+
+.navLinks a {
+  color: var(--navbar-text);
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 20px;
+  transition: color 0.2s ease;
+}
+
+.navLinks a:hover {
+  color: var(--navbar-link-hover);
+  text-decoration: none; /* Override default link hover underline */
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 20px; /* Adjust margin */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.logoutButton:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.regularContent {
+  flex-grow: 1;
+  padding: 30px 40px; /* More padding */
+  max-width: 1100px;  /* Wider */
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.fullPageContent {
+  flex-grow: 1; /* Allows it to take up available vertical space */
+  padding: 0; /* No padding for full-screen map */
+  max-width: 100%; /* No max width for full-screen map */
+  overflow: hidden; /* Hide scrollbars, map handles its own */
+}

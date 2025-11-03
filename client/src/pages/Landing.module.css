@@ -1,0 +1,58 @@
+.landingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.logo {
+  /* This style is for the logo on the landing page */
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  /* We wrap the Logo component in this div */
+}
+
+.tagline {
+  font-size: 1.2em;
+  color: var(--text-color-light);
+  margin-bottom: 40px;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+}
+
+.button {
+  display: block;
+  padding: 20px 40px;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.primaryButton {
+  background-color: var(--primary-color);
+  color: white;
+}
+.primaryButton:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- THIS IS THE FIXED BUTTON STYLE --- */
+.secondaryButton {
+  background-color: var(--bg-secondary);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+.secondaryButton:hover {
+  background-color: var(--primary-color-faded, rgba(0,123,255,0.05));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

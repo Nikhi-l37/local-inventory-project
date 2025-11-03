@@ -1,0 +1,35 @@
+.dashboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  /* We use the main border color from our theme */
+  border-bottom: 2px solid var(--border-color);
+}
+
+.dashboardHeader h2 {
+  margin: 0;
+  color: var(--heading-color);
+}
+
+.logoutButton {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+.logoutButton:hover {
+  background-color: var(--secondary-hover);
+}
+
+.loading {
+  font-size: 1.2em;
+  text-align: center;
+  padding: 40px;
+  color: var(--text-color-light);
+}

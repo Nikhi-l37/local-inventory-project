@@ -1,0 +1,38 @@
+.locationContainer {
+  /* This creates the card "section" */
+  padding: 25px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-top: 20px;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.locationContainer h4 {
+  margin-top: 0;
+  font-size: 1.2em;
+  color: var(--heading-color);
+}
+
+.locationContainer p {
+  color: var(--text-color-light);
+}
+
+.mapContainer {
+  height: 250px;
+  width: 100%; 
+  border-radius: 8px; 
+  margin-top: 15px;
+  border: 1px solid var(--border-color);
+}
+
+.addressDisplay {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: var(--text-color);
+  padding: 12px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-top: 10px;
+} 
