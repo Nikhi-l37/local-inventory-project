@@ -41,35 +41,29 @@ function Dashboard() {
     return <div className={styles.loading}>Loading Dashboard...</div>;
   }
 
+// nikhi-l37/local-inventory-project/local-inventory-project-311337e0354f330c870cbcf8e0b43f1dfb388258/client/src/pages/Dashboard.jsx (Only JSX updated)
+
+// ... (imports)
+
   return (
     <div>
-      {/* 3. Apply the header styles */}
       {shop ? (
-        <div className={styles.dashboardHeader}>
-          <h2>{shop.name} ({shop.category})</h2>
-          {/* We can remove this button, it's in the main navbar now */}
-          {/* <button onClick={handleLogout} className={styles.logoutButton}>Logout</button> */}
+        // Start of the new grid layout
+        <div className={styles.dashboardLayout}> 
+          <div className={styles.columnLeft}> {/* NEW: Column for status & location */}
+            <ShopStatus 
+              initialShop={shop} 
+              onStatusChange={(updatedShop) => setShop(updatedShop)} 
+            />
+            <ShopLocation shop={shop} />
+          </div>
+          
+          <div className={styles.columnRight}> {/* NEW: Column for product manager */}
+            <ProductManager shop={shop} />
+          </div>
         </div>
       ) : (
-        <div className={styles.dashboardHeader}>
-          <h2>Seller Dashboard</h2>
-          {/* <button onClick={handleLogout} className={styles.logoutButton}>Logout</button> */}
-        </div>
-      )}
-
-      {shop ? (
-        <div>
-          <ShopLocation shop={shop} />
-          <ShopStatus 
-            initialShop={shop} 
-            onStatusChange={(updatedShop) => setShop(updatedShop)} 
-          />
-          <ProductManager shop={shop} />
-        </div>
-      ) : (
-        <div>
-          <ShopCreator onShopCreated={(newShop) => setShop(newShop)} />
-        </div>
+        <ShopCreator onShopCreated={(newShop) => setShop(newShop)} />
       )}
     </div>
   );

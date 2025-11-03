@@ -41,15 +41,31 @@
   opacity: 0.8;
 }
 
-/* --- THIS IS THE FIX for the "bad space" --- */
+
+
+/* ... (styles before .regularContent) */
+
+/* --- THIS IS THE FIX for a functional, hidden scrollbar --- */
 .regularContent {
   flex-grow: 1;
-  padding: 30px 40px; /* More padding */
-  max-width: 1100px;  /* Wider layout */
+  padding: 30px 40px; 
+  max-width: 1100px;  
   margin: 0 auto;
   box-sizing: border-box;
-  overflow-y: auto;
+  
+  /* REVERT: Use 'auto' to ensure scrolling works for the Dashboard, but 
+     the small Login card will no longer cause overflow due to smaller size */
+  overflow-y: auto; 
+
+  /* REVERT: Remove the scrollbar hiding CSS properties */
+  /* scrollbar-width: none; */
 }
+
+/* 3. HIDE SCROLLBAR FOR WEB-KIT (Chrome, Safari, new Edge) */
+.regularContent::-webkit-scrollbar {
+  display: none; /* Safely hides the visual scrollbar element */
+}
+
 
 .fullPageContent {
   flex-grow: 1;

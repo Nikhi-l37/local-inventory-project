@@ -26,7 +26,7 @@ function ShopStatus({ initialShop, onStatusChange }) {
   // 2. This JSX applies the styles AND renders the button
   return (
     <div className={styles.statusContainer}>
-      <p className={styles.statusText}>
+     <p className={styles.statusText}>
         Your shop is currently: 
         <strong className={isOpen ? styles.open : styles.closed}>
           {isOpen ? ' OPEN' : ' CLOSED'}

@@ -11,13 +11,23 @@ const buttonStyle = {
   fontSize: '16px',
 };
 
+// nikhi-l37/local-inventory-project/local-inventory-project-311337e0354f330c870cbcf8e0b43f1dfb388258/client/src/components/ThemeToggle.jsx
+
+// ... (imports and buttonStyle)
+
 function ThemeToggle() {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
+  // Helper to determine the correct icon based on the three themes
+  const getIcon = () => {
+    if (theme === 'light') return '☀️'; // Sun for light
+    if (theme === 'dark') return '🌙'; // Moon for dark
+    return '🛡️'; // Shield or something unique for ScreenCoach theme
+  };
+
   return (
     <button onClick={toggleTheme} style={buttonStyle}>
-      {/* Show an icon based on the current theme */}
-      {theme === 'light' ? '🌙' : '☀️'}
+      {getIcon()}
     </button>
   );
 }

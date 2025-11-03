@@ -11,7 +11,7 @@ module.exports = function(req, res, next) {
 
   // 3. Verify the token
   try {
-    const decoded = jwt.verify(token, 'our_secret_key');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // FIXED: Use ENV variable
     
     // 4. Add the seller's ID from the token to the request object
     req.sellerId = decoded.sellerId;

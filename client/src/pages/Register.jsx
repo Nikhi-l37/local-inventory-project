@@ -1,10 +1,13 @@
+// nikhi-l37/local-inventory-project/local-inventory-project-311337e0354f330c870cbcf8e0b43f1dfb388258/client/src/pages/Register.jsx
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api'; // CHANGED: Use API client for non-public routes
+import { Link } from 'react-router-dom'; // ADDED Link
+import Logo from '../components/Logo.jsx'; // <-- IMPORT LOGO
     
-// 1. This line IMPORTS the styles
 import styles from './Form.module.css';
 
 function Register() {
+// ... (state and handleSubmit function remain the same)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,18 +15,35 @@ function Register() {
     e.preventDefault();
     const newUser = { email, password };
     try {
-      const response = await axios.post('http://localhost:3001/api/sellers/register', newUser);
+      const response = await api.post('/api/sellers/register', newUser);
       console.log('Registration successful! Token:', response.data.token);
       alert('Registration successful! You can now log in.');
     } catch (err) {
       console.error('Registration failed:', err.response.data);
+      alert('Registration failed: ' + err.response.data); // Added alert to match login
     }
   };
       
-  // 2. This code APPLIES the styles with 'className'
   return (
     <div className={styles.formContainer}>
-      <h2>Register as a Seller</h2>
+      
+      {/* --- REPLACED with Finder Branding --- */}
+      <div className={styles.logoWrapper}>
+        <Logo simple={true} /> {/* Use the simple version of your logo */}
+      </div>
+      <h2>Seller Registration</h2> {/* Changed heading text */}
+      <p className={styles.tagline}>Manage your screen time with secure authentication</p>
+
+      {/* --- Tab Navigation (Sign In / Sign Up) --- */}
+      <div className={styles.tabContainer}>
+        <Link to="/login" className={styles.tabButton}>
+          Sign In
+        </Link>
+        <button className={`${styles.tabButton} ${styles.active}`}>
+          Sign Up
+        </button>
+      </div>
+
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label>Email:</label>
@@ -33,6 +53,7 @@ function Register() {
             onChange={(e) => setEmail(e.target.value)}
             required
             className={styles.formInput}
+            placeholder="your@email.com"
           />
         </div>
         <div className={styles.formGroup}>
@@ -43,9 +64,10 @@ function Register() {
             onChange={(e) => setPassword(e.target.value)}
             required
             className={styles.formInput}
+            placeholder="••••••"
           />
         </div>
-        <button type="submit" className={styles.formButton}>Register</button>
+        <button type="submit" className={styles.formButton}>Sign Up</button>
       </form>
     </div>
   );

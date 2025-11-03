@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../api';
 
 // 1. This imports the styles
-import styles from './ProductManager.module.css';
+import styles from './ProductManager.module.css'; 
 
 function ProductManager({ shop }) {
   const [products, setProducts] = useState([]);
@@ -29,7 +29,6 @@ function ProductManager({ shop }) {
     try {
       const response = await api.post('/api/products', {
         name: newProductName,
-        shopId: shop.id,
       });
       setProducts([...products, response.data]);
       setNewProductName('');
@@ -102,7 +101,8 @@ function ProductManager({ shop }) {
                 </span>
               </div>
 
-              {/* --- HERE ARE YOUR BUTTONS --- */}
+              {/* --- HERE ARE YOUR STYLED BUTTONS --- */}
+             {/* --- HERE ARE YOUR BUTTONS --- */}
               <div className={styles.buttonGroup}>
                 <button 
                   onClick={() => handleToggleProduct(product.id, product.is_available)}
@@ -121,6 +121,12 @@ function ProductManager({ shop }) {
               </div>
             </li>
           ))}
+
+
+
+
+
+
         </ul>
       )}
     </div>

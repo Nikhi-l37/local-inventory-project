@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
     // (We'll store the seller's ID in the token)
     const token = jwt.sign(
       { sellerId: newSeller.rows[0].id },
-      'our_secret_key' // Replace with a real secret key in .env later
+      process.env.JWT_SECRET // FIXED: Use ENV variable
     );
 
     // 6. Send the token back to the user
@@ -74,7 +74,7 @@ router.post('/login', async (req, res) => {
     // 4. If email and password are correct, create a new JWT token
     const token = jwt.sign(
       { sellerId: user.rows[0].id },
-      'our_secret_key' // Same secret as before
+      process.env.JWT_SECRET // FIXED: Use ENV variable
     );
 
     // 5. Send the new token back
@@ -87,4 +87,3 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router; // Export the router
-

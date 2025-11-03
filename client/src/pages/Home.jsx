@@ -166,8 +166,7 @@ function Home() {
     }
     const origin = `${userLocation.lat},${userLocation.lon}`;
     const destination = `${lat},${lon}`;
-    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
-    window.open(url, '_blank');
+const url = `https://www.google.com/maps/dir/${origin}/${destination}`;    window.open(url, '_blank');
   };
 
   return (

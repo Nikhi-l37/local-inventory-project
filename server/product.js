@@ -8,23 +8,21 @@ const auth = require('./middleware/auth'); // Our auth middleware
 // ACCESS: Private (requires token)
 router.post('/', auth, async (req, res) => {
   try {
-    const { name, shopId } = req.body;
+    const { name } = req.body; // FIXED: Removed shopId from destructuring (Issue 5)
     const sellerId = req.sellerId; // From auth middleware
 
-    // Security Check: Does this seller own the shop they're adding to?
-    const shop = await pool.query('SELECT * FROM shops WHERE id = $1 AND seller_id = $2', [
-      shopId,
-      sellerId,
-    ]);
+    // 1. Get the shopId for the currently logged-in seller securely
+    const shopResult = await pool.query('SELECT id FROM shops WHERE seller_id = $1', [sellerId]);
 
-    if (shop.rows.length === 0) {
-      return res.status(403).json({ msg: 'Authorization denied. You do not own this shop.' });
+    if (shopResult.rows.length === 0) {
+      return res.status(404).json({ msg: 'Seller does not have a registered shop.' });
     }
+    const shopId = shopResult.rows[0].id; // Get the shopId securely from the DB
 
     // If they own it, add the product
     const newProduct = await pool.query(
       'INSERT INTO products (shop_id, name) VALUES ($1, $2) RETURNING *',
-      [shopId, name]
+      [shopId, name] // Use the securely fetched shopId
     );
 
     res.json(newProduct.rows[0]);

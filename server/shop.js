@@ -87,10 +87,10 @@ router.get('/my-shop', auth, async (req, res) => {
 
     res.json(shop.rows[0]);
 
-  } catch (err) { // <-- You are missing this opening brace
+  } catch (err) { 
     console.error(err.message);
     res.status(500).send('Server Error');
-  } // <-- You are missing this closing brace
+  } 
 });
 
 // ROUTE: PATCH /api/shops/status

@@ -2,39 +2,50 @@
   padding: 25px;
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  margin-top: 20px;
   background-color: var(--bg-secondary);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 .productContainer h3 {
   margin-top: 0;
+  margin-bottom: 20px; /* Added margin below the heading */
 }
 .addForm {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* Increased margin for separation */
+  padding-bottom: 15px; /* Added padding */
+  border-bottom: 1px solid var(--border-color); /* Added separator line */
 }
 .productInput {
   flex-grow: 1;
   padding: 12px;
   border: 1px solid var(--border-color-input);
-  border-radius: 8px;
+  border-radius: 8px; /* Slightly larger radius for a modern feel */
   background-color: var(--bg-inset);
   color: var(--text-color);
   font-size: 1em;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
+/* Add focus style for the input field */
+.productInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(rgba(var(--primary-color-rgb), 0.2));
+}
+
 .addButton {
   background-color: var(--primary-color);
   color: white;
-  padding: 0 20px;
+  padding: 12px 20px; /* Matched padding with input height */
   border: none;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
 }
 .addButton:hover {
   background-color: var(--primary-hover);
+  transform: translateY(-1px); /* Little lift effect */
 }
 .productList {
   list-style: none;
@@ -45,20 +56,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 5px;
-  border-bottom: 1px solid var(--border-color);
+  /* Increased padding and added horizontal padding */
+  padding: 15px; 
+  /* Added a subtle top border for separation between items */
+  border-top: 1px solid var(--border-color); 
+  
+  /* Added transitions for the hover effect */
+  transition: background-color 0.2s; 
+  border-radius: 4px; /* Slight rounding for hover area */
 }
+.productItem:hover {
+  background-color: var(--bg-inset); /* Highlight the item on hover */
+}
+/* Ensure the first item doesn't have the top border */
+.productItem:first-child { 
+  border-top: none;
+}
+/* REMOVED: This logic is now handled by the top border, so we keep only the list padding */
 .productItem:last-child {
-  border-bottom: none;
+  border-bottom: none; 
 }
+
+
 .productName {
   font-size: 1.1em;
-  font-weight: 500;
-  color: var(--heading-color);
+  font-weight: 600; /* Made name bolder */
+  color: var(--text-color); /* Used primary text color */
 }
 .productStatus {
   font-size: 0.9em;
   margin-left: 10px;
+  font-weight: 500; /* Set a moderate weight */
 }
 .productStatus.available {
   color: var(--success-color);
@@ -80,23 +108,25 @@
   min-width: 100px;
   transition: background-color 0.2s;
 }
+
 .toggleButton.available {
-  background-color: var(--success-color);
+  background-color: var(--success-color); /* This is the desired GREEN color */
   color: white;
 }
 .toggleButton.unavailable {
-  background-color: var(--secondary-color);
+  background-color: var(--secondary-color); /* This is likely a gray color */
   color: white;
 }
+
 .deleteButton {
-  padding: 8px 12px;
+  padding: 8px 12px;  
   border: none;
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
   font-size: 14px;
   background-color: var(--danger-color);
-  color: white;
+  color: whi;
   min-width: 80px;
   transition: background-color 0.2s;
 }
