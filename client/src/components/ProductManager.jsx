@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
 
-// 1. Import the CSS Module
+// 1. This imports the styles
 import styles from './ProductManager.module.css';
 
 function ProductManager({ shop }) {
@@ -67,7 +67,7 @@ function ProductManager({ shop }) {
 
   if (loading) return <div>Loading products...</div>;
 
-  // 2. This JSX applies all the styles and renders the buttons
+  // 2. This JSX applies all the 'className' styles
   return (
     <div className={styles.productContainer}>
       <h3>Product Manager</h3>
@@ -102,7 +102,7 @@ function ProductManager({ shop }) {
                 </span>
               </div>
 
-              {/* --- HERE ARE YOUR MISSING BUTTONS --- */}
+              {/* --- HERE ARE YOUR BUTTONS --- */}
               <div className={styles.buttonGroup}>
                 <button 
                   onClick={() => handleToggleProduct(product.id, product.is_available)}

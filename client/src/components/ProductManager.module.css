@@ -45,7 +45,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 5px; /* Less horizontal padding */
+  padding: 15px 5px;
   border-bottom: 1px solid var(--border-color);
 }
 .productItem:last-child {

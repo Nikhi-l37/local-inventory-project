@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import api from '../api';
 
-// 1. Import the CSS Module
-import styles from './ShopStatus.module.css';
+// 1. This imports the styles
+import styles from './ShopStatus.module.css'; 
 
 function ShopStatus({ initialShop, onStatusChange }) {
   const [isOpen, setIsOpen] = useState(initialShop.is_open);
@@ -12,10 +12,9 @@ function ShopStatus({ initialShop, onStatusChange }) {
     setLoading(true);
     const newStatus = !isOpen;
     try {
-      // This API call now returns the full shop object
       const response = await api.patch('/api/shops/status', { is_open: newStatus });
       setIsOpen(response.data.is_open);
-      onStatusChange(response.data); // Update the whole shop object in parent
+      onStatusChange(response.data); 
     } catch (err) {
       console.error('Error updating status:', err);
       alert('Failed to update shop status.');
