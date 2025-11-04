@@ -86,4 +86,83 @@ router.post('/login', async (req, res) => {
   }
 });
 
+
+
+// ROUTE: POST /api/sellers/forgot-password
+// PURPOSE: To request a password reset
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // 1. Find the user by email
+    const user = await pool.query('SELECT * FROM sellers WHERE email = $1', [email]);
+
+    // 2. IMPORTANT: Even if the user is NOT found, we send a "success" message.
+    // This prevents attackers from guessing which emails are registered.
+    if (user.rows.length === 0) {
+      console.log(`(Password reset requested for non-existent user: ${email})`);
+      return res.json({ msg: 'If an account with this email exists, a reset link has been sent.' });
+    }
+
+    const sellerId = user.rows[0].id;
+
+    // 3. Create a special, short-lived token for password reset
+    const resetToken = jwt.sign(
+      { sellerId: sellerId },
+      process.env.JWT_SECRET,
+      { expiresIn: '15m' } // Make the token last only 15 minutes!
+    );
+
+    // 4. Create the full reset link
+    const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+
+    // 5. --- THIS IS OUR "FAKE EMAIL" ---
+    // In a real app, you'd use an email service. We'll just log it.
+    console.log('=============== PASSWORD RESET ================');
+    console.log(`Reset link for ${email}:`);
+    console.log(resetLink);
+    console.log('===============================================');
+
+    res.json({ msg: 'If an account with this email exists, a reset link has been sent.' });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+
+// ROUTE: POST /api/sellers/reset-password/:token
+// PURPOSE: To set a new password using a valid token
+router.post('/reset-password/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    // 1. Verify the token is valid and not expired
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ msg: 'Token is invalid or has expired.' });
+    }
+
+    // 2. Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    // 3. Update the seller's password in the database
+    await pool.query(
+      'UPDATE sellers SET password_hash = $1 WHERE id = $2',
+      [passwordHash, decoded.sellerId]
+    );
+
+    res.json({ msg: 'Password has been reset successfully. You can now log in.' });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 module.exports = router; // Export the router

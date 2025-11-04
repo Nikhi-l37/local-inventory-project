@@ -11,6 +11,8 @@ import Dashboard from './pages/Dashboard.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx'; 
 import Home from './pages/Home.jsx'; // This is our map page
 import Landing from './pages/Landing.jsx'; // <--- 1. IMPORT NEW PAGE
+import ForgotPassword from './pages/ForgotPassword.jsx'; // <--- 1. IMPORT
+import ResetPassword from './pages/ResetPassword.jsx';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +35,17 @@ const router = createBrowserRouter([
         path: '/login',
         element: <Login />,
       },
+
+      { // <--- 2. ADD THIS NEW ROUTE BLOCK
+        path: '/forgot-password',
+        element: <ForgotPassword />,
+      },
+
+      { // <--- 2. ADD THIS NEW ROUTE BLOCK
+        path: '/reset-password/:token',
+        element: <ResetPassword />,
+      },
+
       { 
         path: '/dashboard',
         element: (

@@ -64,9 +64,9 @@ function Login() {
           </div>
           <button type="submit" className={styles.formButton}>Sign In</button>
         </form>
-        <a href="#" style={{ display: 'block', marginTop: '15px', color: 'var(--primary-color)' }}>
-          Forgot password?
-        </a>
+       <Link to="/forgot-password" style={{ display: 'block', marginTop: '15px' }}>
+  Forgot password?
+</Link>
       </div>
 
       {/* --- THIS IS THE NEW "ABOUT" SECTION --- */}

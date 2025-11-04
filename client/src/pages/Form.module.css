@@ -1,104 +1,35 @@
-
 .formContainer {
-  background: var(--bg-secondary); 
-  border: 1px solid var(--border-color);
-  border-radius: 0.75rem; 
-  box-shadow: var(--shadow-lg, 0 10px 15px -3px hsla(222 84% 5% / 0.1));
+  /* --- This creates the glass card --- */
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent */
+  backdrop-filter: blur(10px); /* The "glass" blur */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
-  max-width: 380px;
-  /* --- THIS FIXES THE SCROLLING --- */
-  margin: 40px auto; /* Was 100px, now smaller */ 
-  padding: 30px;
+  max-width: 450px;  /* Wider */
+  margin: 60px auto; 
+  padding: 40px;     /* Taller */
   text-align: center;
 }
 
-.formContainer h2 {
-  display: none; /* HIDE: Removed the 'Seller Portal' text */
-}
-
 /* --- Dark mode tweaks for the glass --- */
-/* REMOVE BODY.DARK BLOCK - Not needed, as ScreenCoach theme handles the styling */
+body.dark .formContainer,
+body.screen-coach-theme .formContainer {
+  background: rgba(44, 49, 58, 0.3); /* Darker semi-transparent */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.formContainer h2 {
+  display: none; 
+}
 
 .tabContainer {
   display: flex;
-  margin-bottom: 30px;
-  background-color: var(--bg-inset); 
-  border-radius: 8px;
-  overflow: hidden;
-  padding: 2px; /* FIXED: Reduced padding from 4px to 2px */
-}
-.formGroup {
-  margin-bottom: 20px;
-}
-
-.formGroup label {
-  display: block;
-  font-weight: 600; /* Slightly bolder labels */
-  margin-bottom: 8px;
-  color: var(--text-color-light); /* Use the subtle text color for labels */
-  text-align: left; /* Align labels to the left */
-}
-
-.formInput {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid var(--border-color-input);
-  border-radius: 8px;
-  box-sizing: border-box; 
-  
-  /* ScreenCoach Input Style */
-  background-color: var(--bg-inset); /* Darker input background */
-  color: var(--text-color);
-  font-size: 1em;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-/* REMOVE BODY.DARK .formInput BLOCK - Not needed */
-
-.formInput::placeholder { 
-  color: var(--text-color-light);
-}
-
-.formInput:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
-}
-
-.formButton {
-  width: 100%;
-  /* ScreenCoach Button Style */
-  background-color: var(--primary-color); 
-  color: var(--bg-secondary); /* Text color should contrast with dark primary color */
-  padding: 12px 15px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 20px; /* Added spacing above the button */
-  transition: background-color 0.2s, transform 0.2s;
-}
-
-.formButton:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.formButton:disabled {
-  background-color: var(--secondary-color);
-  cursor: not-allowed;
-}
-/* nikhi-l37/local-inventory-project/local-inventory-project-311337e0354f330c870cbcf8e0b43f1dfb388258/client/src/pages/Form.module.css (Add these new styles) */
-
-.tabContainer {
-  display: flex;
-  margin-bottom: 25px; /* Reduced space below tabs */
+  margin-bottom: 25px;
   background-color: var(--border-color-input); 
   border-radius: 0.75rem; 
   overflow: hidden;
-  padding: 4px; /* Slightly increased padding back to 4px for better contrast */
+  padding: 4px;
 }
 .tabButton {
   flex: 1;
@@ -111,26 +42,83 @@
   transition: all 0.2s;
   border-radius: 6px; 
   font-size: 1em;
-  /* margin-top: 25px; */ /* <--- DELETE THIS LINE */
 }
 
 .tabButton.active {
   background-color: var(--bg-secondary); 
   color: var(--text-color); 
-  box-shadow: none; /* FIXED: Removed box shadow for lighter feel */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* --- NEW BRANDING STYLES --- */
 .logoWrapper {
   margin-bottom: 10px;
   color: var(--primary-color);
-  /* INCREASE LOGO FONT SIZE */
-  font-size: 1.4em; /* Makes the 'Finder' text larger */
+  font-size: 1.4em;
 }
 .tagline {
   font-size: 0.9em; 
   color: var(--text-color-light);
-  margin-bottom: 25px; /* Reduced space below tagline */
+  margin-bottom: 25px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-color-light);
+  text-align: left;
+}
+
+.formInput {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  box-sizing: border-box; 
+  /* Semi-transparent input */
+  background-color: rgba(255, 255, 255, 0.2); 
+  color: var(--text-color);
+  font-size: 1em;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+body.dark .formInput,
+body.screen-coach-theme .formInput {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.formInput::placeholder {
+  color: var(--text-color-light);
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.formButton {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--bg-secondary);
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.formButton:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
 }
 
 .formContainer a {

@@ -1,13 +1,13 @@
+// ...existing code...
 import React, { useState, useEffect, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { useNavigate } from 'react-router-dom'; // <--- IMPORT THIS
+import { useNavigate } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
-// ... rest of imports
 import api from '../api';
 import axios from 'axios';
 import styles from './Home.module.css';
 
-// Leaflet icon fix
+// (Leaflet icon fix)
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -30,8 +30,8 @@ function ProductListModal({ shop, onClose }) {
   }, [shop.id]);
 
   return (
-    <div className={styles.modalOverlay}> {/* Use CSS module class */}
-      <div className={styles.modalContent}> {/* Use CSS module class */}
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
         <button onClick={onClose} style={{ float: 'right', background: 'none', border: 'none', color: 'var(--text-color)', fontSize: '1.2em', cursor: 'pointer' }}>X</button>
         <h3>Products at {shop.name}</h3>
         {loading ? <p>Loading products...</p> : (
@@ -57,24 +57,22 @@ function ChangeMapView({ center }) {
 }
 
 function Home() {
-
-  const navigate = useNavigate(); // <--- ADD THIS LINE
-  const [mapCenter, setMapCenter] = useState([17.3850, 78.4867]); // Default to Hyderabad
+  const navigate = useNavigate(); // <-- This uses the correct import
+  const [mapCenter, setMapCenter] = useState([17.3850, 78.4867]);
   const [userLocation, setUserLocation] = useState(null);
-
+  
   const [locationQuery, setLocationQuery] = useState('');
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchMode, setSearchMode] = useState('product'); // 'product' or 'shop'
+  const [searchMode, setSearchMode] = useState('product');
   const [openOnly, setOpenOnly] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedShop, setSelectedShop] = useState(null);
-
+  
   const [showFilters, setShowFilters] = useState(false);
 
-  // Get user's GPS location on load
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -82,18 +80,17 @@ function Home() {
         const userCoords = { lat: latitude, lon: longitude };
         setUserLocation(userCoords);
         setMapCenter([latitude, longitude]);
-        setLocationQuery('Your Current Location'); // Set friendly name
+        setLocationQuery('Your Current Location');
         setSelectedLocation(userCoords);
       },
       () => {
         console.error("Error getting location. Using default Hyderabad.");
-        setSelectedLocation({ lat: 17.3850, lon: 78.4867 }); // Fallback to Hyderabad
+        setSelectedLocation({ lat: 17.3850, lon: 78.4867 });
         setLocationQuery('Hyderabad');
       }
     );
   }, []);
 
-  // Handle location autocomplete
   useEffect(() => {
     if (!locationQuery || locationQuery === 'Your Current Location') {
       setLocationSuggestions([]);
@@ -119,7 +116,6 @@ function Home() {
     return () => clearTimeout(handler);
   }, [locationQuery]);
 
-  // Handle clicking a suggestion
   const handleSuggestionClick = (suggestion) => {
     const coords = { lat: suggestion.latitude, lon: suggestion.longitude };
     setLocationQuery(`${suggestion.name}, ${suggestion.admin1 || ''}, ${suggestion.country_code || ''}`.replace(/, ,/g, ',').replace(/,,/g, ',').trim());
@@ -128,7 +124,6 @@ function Home() {
     setLocationSuggestions([]);
   };
 
-  // Main search function
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery || !selectedLocation) {
@@ -158,7 +153,6 @@ function Home() {
     }
   };
 
-  // "Get Directions" button logic
   const getDirections = (lat, lon) => {
     if (!userLocation) {
       alert("Could not get your current location to provide directions.");
@@ -166,26 +160,25 @@ function Home() {
     }
     const origin = `${userLocation.lat},${userLocation.lon}`;
     const destination = `${lat},${lon}`;
-const url = `https://www.google.com/maps/dir/${origin}/${destination}`;    window.open(url, '_blank');
+    // This is the correct Google Maps URL
+    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
+    window.open(url, '_blank');
   };
 
   return (
     <div className={styles.homeContainer}>
-
+      
       <MapContainer 
         center={mapCenter} 
         zoom={14} 
         className={styles.mapContainer}
-        
-
-        
       >
         <ChangeMapView center={mapCenter} />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-
+        
         {searchResults.map(result => (
           <Marker 
             key={result.id || result.shop_id} 
@@ -197,14 +190,14 @@ const url = `https://www.google.com/maps/dir/${origin}/${destination}`;    windo
                   <strong>{result.shop_name}</strong><br />
                   Product: {result.product_name}<br />
                   Status: {result.is_open ? 'OPEN' : 'CLOSED'}<br />
-                  <button className={styles.popupDirectionsButton} onClick={() => getDirections(result.latitude, result.longitude)}>Get Directions</button>
+                  <button onClick={() => getDirections(result.latitude, result.longitude)}>Get Directions</button>
                 </>
               ) : (
                 <>
                   <strong>{result.name}</strong><br />
                   Status: {result.is_open ? 'OPEN' : 'CLOSED'}<br />
-                  <button className={styles.popupActionButton} onClick={() => setSelectedShop({ id: result.id, name: result.name })}>See Products</button>
-                  <button className={styles.popupDirectionsButton} onClick={() => getDirections(result.latitude, result.longitude)}>Get Directions</button>
+                  <button onClick={() => setSelectedShop({ id: result.id, name: result.name })}>See Products</button>
+                  <button onClick={() => getDirections(result.latitude, result.longitude)}>Get Directions</button>
                 </>
               )}
             </Popup>
@@ -214,10 +207,12 @@ const url = `https://www.google.com/maps/dir/${origin}/${destination}`;    windo
 
       {/* --- The Floating Search Panel --- */}
       <div className={styles.searchPanel}>
+
         <button onClick={() => navigate('/')} className={styles.backButton}>
-          &larr;
+          &larr; Back to Home
         </button>
-        <div className={styles.locationGroup}>
+
+        <div className={styles.searchGroup}>
           <label htmlFor="location-input">Location</label>
           <input 
             id="location-input"
@@ -273,7 +268,7 @@ const url = `https://www.google.com/maps/dir/${origin}/${destination}`;    windo
                   Search by Shop
                 </button>
               </div>
-
+              
               <div className={styles.filterCheckbox}>
                 <input 
                   type="checkbox"
@@ -297,5 +292,16 @@ const url = `https://www.google.com/maps/dir/${origin}/${destination}`;    windo
     </div>
   );
 }
+
+// Modal styles (using var() to support themes)
+const modalOverlayStyle = {
+  position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.7)', display: 'flex',
+  justifyContent: 'center', alignItems: 'center', zIndex: 1000,
+};
+const modalContentStyle = {
+  backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)',
+  padding: '20px', borderRadius: '5px', minWidth: '300px', zIndex: 1001,
+};
 
 export default Home;

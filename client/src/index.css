@@ -43,6 +43,7 @@ body.dark {
   --danger-hover: #bd2130;
   --secondary-color: #6c757d; 
   --secondary-hover: #5a6268;
+  background-image: linear-gradient(110deg, #0d1117 0%, #1a233a 100%);
 }
 
 body.screen-coach-theme {
@@ -93,6 +94,7 @@ body {
   background-color: var(--bg-color); 
   color: var(--text-color);
   transition: background-color 0.2s, color 0.2s;
+  background-image: linear-gradient(110deg, #e6f0ff 0%, #b3d1ff 100%);
 }
 
 #root {
