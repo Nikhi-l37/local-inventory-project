@@ -10,11 +10,9 @@
   --text-color-light: #6c757d;
   --border-color: #dee2e6;
   --border-color-input: #ced4da;
-  --navbar-bg: #343a40; /* Darker navbar for contrast */
+  --navbar-bg: #343a40;
   --navbar-text: #ffffff;
   --navbar-link-hover: #adb5bd;
-  
-  /* --- ADDED STATUS/SECONDARY COLOR VARIABLES (FIX for button issues) --- */
   --success-color: #28a745;
   --success-hover: #1e7e34;
   --danger-color: #dc3545;
@@ -25,8 +23,9 @@
 
 body.dark {
   /* Dark theme variables */
-  --primary-color: #66b3ff; /* Lighter blue for dark mode */
+  --primary-color: #66b3ff;
   --primary-hover: #3385ff;
+  --primary-color-rgb: 102, 179, 255;
   --bg-color: #212529;
   --bg-secondary: #2c313a;
   --bg-inset: #3a4049;
@@ -37,9 +36,7 @@ body.dark {
   --navbar-bg: #212529;
   --navbar-text: #ffffff;
   --navbar-link-hover: #a0a0a0;
-  background-image: linear-gradient(110deg, #0d1117 0%, #1a233a 100%);
-
-  /* --- ADDED STATUS/SECONDARY COLOR VARIABLES (FIX for button issues) --- */
+  /* -- NO MORE background-image here -- */
   --success-color: #28a745;
   --success-hover: #1e7e34;
   --danger-color: #dc3545;
@@ -48,76 +45,61 @@ body.dark {
   --secondary-hover: #5a6268;
 }
 
-
-/* --- NEW SCREEN COACH THEME VARIABLES (Based on provided images) --- */
-/* nikhi-l37/local-inventory-project/local-inventory-project-311337e0354f330c870cbcf8e0b43f1dfb388258/client/src/index.css (Replace the existing body.screen-coach-theme block) */
-
-/* --- NEW HSL-BASED PROFESSIONAL THEME --- */
 body.screen-coach-theme {
-    /* Core HSL Colors */
-    --bg-color: hsl(222 84% 5%); /* Replaces --background */
-    --text-color: hsl(210 40% 98%); /* Replaces --foreground */
-    --bg-secondary: hsl(222 84% 7%); /* Replaces --card */
-    --heading-color: hsl(210 40% 98%); /* Same as foreground */
-    
-    /* Brand Colors */
-    --primary-color: hsl(189 100% 42%); /* Replaces --primary */
-    --primary-hover: hsl(189 100% 55%); /* Replaces --primary-glow, slightly adjusted for hover */
-    --primary-color-rgb: 0, 203, 214; /* Derived from HSL(189, 100%, 42%) */
-    
-    --secondary-color: hsl(240 6% 20%); /* Replaces --secondary */
-    
-    --text-color-light: hsl(215 20% 65%); /* Replaces --muted-foreground for labels */
-    
-    /* Border/Input Colors */
-    --border-color: hsl(217 33% 17%); /* Replaces --border */
-    --border-color-input: hsl(217 33% 17%); /* Replaces --input */
-    
-    /* Status Colors (Mapped from your HSL) */
-    --success-color: hsl(142 76% 36%); /* Replaces --success */
-    --success-hover: hsl(142 76% 45%); 
-    --danger-color: hsl(0 84% 60%); /* Replaces --destructive */
-    --danger-hover: hsl(0 84% 50%); 
+  /* Core HSL Colors */
+  --bg-color: hsl(222 84% 5%);
+  --text-color: hsl(210 40% 98%);
+  --bg-secondary: hsl(222 84% 7%);
+  --heading-color: hsl(210 40% 98%);
 
-    --navbar-bg: hsl(222 84% 5%);
-    --navbar-text: hsl(210 40% 98%);
-    --navbar-link-hover: hsl(189 100% 42%);
+  /* Brand Colors */
+  --primary-color: hsl(189 100% 42%);
+  --primary-hover: hsl(189 100% 55%);
+  --primary-color-rgb: 0, 203, 214;
 
-    background-image: none;
+  --secondary-color: hsl(240 6% 20%);
+
+  --text-color-light: hsl(215 20% 65%);
+
+  /* Border/Input Colors */
+  --border-color: hsl(217 33% 17%);
+  --border-color-input: hsl(217 33% 17%);
+
+  /* Status Colors */
+  --success-color: hsl(142 76% 36%);
+  --success-hover: hsl(142 76% 45%); 
+  --danger-color: hsl(0 84% 60%);
+  --danger-hover: hsl(0 84% 50%); 
+
+  --navbar-bg: hsl(222 84% 5%);
+  --navbar-text: hsl(210 40% 98%);
+  --navbar-link-hover: hsl(189 100% 42%);
+
+  /* -- NO MORE background-image here -- */
 }
-/* REMOVE old body.dark block if you want the HSL theme to be the only dark option, 
-   but for now, we'll keep the existing light/dark blocks and assume this is the third theme. */
 
-/* --- CRITICAL FULL-SCREEN LAYOUT --- */
 html, body, #root {
   margin: 0;
   padding: 0;
-  height: 100%; /* Make them all take full height */
+  height: 100%;
   width: 100%;
-  overflow: hidden; /* Hide scrollbars for the main layout */
-  box-sizing: border-box; /* Include padding/border in element's total width and height */
+  overflow: hidden; 
+  box-sizing: border-box;
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: var(--bg-color); /* Fallback */
+  background-color: var(--bg-color); 
   color: var(--text-color);
   transition: background-color 0.2s, color 0.2s;
-  
-  /* --- ADD THIS LINE for the cool background --- */
-  background-image: linear-gradient(110deg, #e6f0ff 0%, #b3d1ff 100%);
 }
 
-/* This ensures #root doesn't introduce extra padding/width constraints by default */
 #root {
   display: flex; 
   flex-direction: column; 
-  min-height: 100vh; /* Use min-height to ensure it fills the viewport */
 }
-/* Global Link Styling */
+
 a {
   text-decoration: none;
   color: var(--primary-color);
@@ -126,7 +108,3 @@ a:hover {
   text-decoration: underline;
   color: var(--primary-hover);
 }
-
-/* Helper Classes (e.g., for spacing) */
-.mt-15 { margin-top: 15px; }
-.mb-15 { margin-bottom: 15px; }

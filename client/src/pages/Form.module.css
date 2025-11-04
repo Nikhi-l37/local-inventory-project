@@ -4,10 +4,11 @@
   border: 1px solid var(--border-color);
   border-radius: 0.75rem; 
   box-shadow: var(--shadow-lg, 0 10px 15px -3px hsla(222 84% 5% / 0.1));
-  
-  max-width: 380px;  /* FINAL SIZE: Reduced width from 400px to 380px (Medium size) */
-  margin: 100px auto; 
-  padding: 30px;     /* FINAL SIZE: Reduced padding from 35px to 30px */
+
+  max-width: 380px;
+  /* --- THIS FIXES THE SCROLLING --- */
+  margin: 40px auto; /* Was 100px, now smaller */ 
+  padding: 30px;
   text-align: center;
 }
 
@@ -101,7 +102,7 @@
 }
 .tabButton {
   flex: 1;
-  padding: 10px 0; /* FIXED: Reduced vertical padding from 12px to 10px */
+  padding: 10px 0;
   border: none;
   background-color: transparent;
   color: var(--text-color-light); 
@@ -110,7 +111,7 @@
   transition: all 0.2s;
   border-radius: 6px; 
   font-size: 1em;
-margin-top: 25px;
+  /* margin-top: 25px; */ /* <--- DELETE THIS LINE */
 }
 
 .tabButton.active {

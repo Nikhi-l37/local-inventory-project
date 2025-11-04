@@ -22,7 +22,7 @@
 
 .buttonContainer {
   display: flex;
-  gap: 20px;
+  gap: 50px;
 }
 
 .button {
@@ -36,11 +36,12 @@
 }
 
 .primaryButton {
-  background-color: var(--primary-color);
-  color: white;
+ background-color: var(--bg-secondary);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
 }
 .primaryButton:hover {
-  background-color: var(--primary-hover);
+   background-color: var(--primary-color-faded, rgba(0,123,255,0.05));
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -55,4 +56,29 @@
   background-color: var(--primary-color-faded, rgba(0,123,255,0.05));
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.aboutSection {
+  max-width: 450px; /* Make it a bit wider than the form */
+  margin: 30px auto;
+  padding: 20px;
+  text-align: left;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.aboutSection h2 {
+  margin-top: 0;
+  color: var(--heading-color);
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+.aboutSection p {
+  font-size: 1em;
+  line-height: 1.6;
+  color: var(--text-color-light);
 }

@@ -48,28 +48,18 @@
 /* --- THIS IS THE FIX for a functional, hidden scrollbar --- */
 .regularContent {
   flex-grow: 1;
-  padding: 30px 40px; 
-  max-width: 1100px;  
-  margin: 0 auto;
+  width: 90%; /* Use 90% of the screen width */
+  max-width: 1200px; /* But don't go wider than 1200px */
+  margin: 30px auto; /* Center it and add top/bottom margin */
   box-sizing: border-box;
-  
-  /* REVERT: Use 'auto' to ensure scrolling works for the Dashboard, but 
-     the small Login card will no longer cause overflow due to smaller size */
-  overflow-y: auto; 
-
-  /* REVERT: Remove the scrollbar hiding CSS properties */
-  /* scrollbar-width: none; */
+  overflow-y: auto;
 }
 
-/* 3. HIDE SCROLLBAR FOR WEB-KIT (Chrome, Safari, new Edge) */
+/* This hides the ugly scrollbar */
 .regularContent::-webkit-scrollbar {
-  display: none; /* Safely hides the visual scrollbar element */
+  display: none;
 }
-
-
-.fullPageContent {
-  flex-grow: 1;
-  padding: 0;
-  max-width: 100%;
-  overflow: hidden;
+.regularContent {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
