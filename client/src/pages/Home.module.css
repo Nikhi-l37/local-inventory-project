@@ -7,14 +7,16 @@
 
 .mapContainer {
   width: 100%;
-  height: 100%;
+height: calc(100vh - 0px);
+  min-height: 80vh;
 }
 
 /* --- Floating Search Card --- */
 .searchPanel {
+/* ... (rest of file remains the same) ... */
   position: absolute;
-top: 15px;  /* Position from the top */
-  left: 15px; /* Position from the left */
+top: 15px;
+  left: 15px; 
   /* transform: translate(-50%, -50%); */ /* <- DELETE THIS LINE */  z-index: 1000;
   background: rgba(var(--bg-secondary-rgb), 0.9); /* Slightly transparent background */
   backdrop-filter: blur(8px); /* Frosted glass effect */
@@ -25,14 +27,6 @@ top: 15px;  /* Position from the top */
   max-width: 90%; /* Responsive for smaller screens */
   border: 1px solid var(--border-color);
   box-sizing: border-box; /* Include padding in width */
-}
-
-/* Styling for the label */
-.searchPanel label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: var(--text-color);
 }
 
 /* Input Field Styles */
