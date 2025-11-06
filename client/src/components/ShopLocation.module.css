@@ -35,3 +35,9 @@
   border-radius: 8px;
   margin-top: 10px;
 } 
+
+@media (max-width: 800px) {
+  .mapContainer {
+    height: 200px; /* Slightly reduce the map height on mobile */
+  }
+}

@@ -63,3 +63,12 @@
   font-weight: 500;
   color: var(--text-color);
 }
+
+@media (max-width: 600px) {
+  .creatorContainer {
+    padding: 15px;
+  }
+  .mapContainer {
+    height: 250px; /* Make map slightly shorter on mobile */
+  }
+}

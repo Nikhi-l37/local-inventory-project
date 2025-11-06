@@ -3,42 +3,125 @@
   justify-content: space-between;
   align-items: center;
   padding-bottom: 10px;
-  /* We use the main border color from our theme */
   border-bottom: 2px solid var(--border-color);
-  margin-bottom: 25px; /* Added space below header */
+  margin-bottom: 25px; 
 }
 
 .dashboardHeader h2 {
   margin: 0;
-  color: var(--text-color); /* Used --text-color for theme consistency */
+  color: var(--text-color);
 }
-/* ... (logoutButton, loading styles remain the same) */
+/* ... (logoutButton and loading styles remain the same) ... */
 
 
-/* --- NEW LAYOUT STYLES --- */
-.dashboardLayout {
-  display: grid;
-  /* 2/3 width for product list, 1/3 width for status/location */
-  grid-template-columns: 2fr 1fr; 
-  gap: 30px; /* Space between columns */
-}
-
-.columnLeft {
+/* --- NEW VERTICAL STACK LAYOUT STYLES --- */
+.dashboardStack {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Space between the status and location cards */
-  min-height: 100%;
+  gap: 25px; /* Spacing between the major sections */
 }
 
-.columnRight {
-  /* ProductManager takes full height of the second column */
+.topSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Profile and Location side-by-side */
+  gap: 25px;
 }
 
-/* Responsive adjustment for smaller screens */
-@media (max-width: 900px) {
-  .dashboardLayout {
-    /* Stack components vertically on mobile/tablet */
+.profileContainer {
+  /* Style for the new Profile card */
+  padding: 25px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.profileContainer h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detailGroup {
+  margin-bottom: 10px;
+  font-size: 1em;
+  display: flex; /* Makes the label and input/span align */
+  justify-content: space-between;
+  align-items: center;
+}
+.detailGroup strong {
+  color: var(--text-color);
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.middleSection {
+  /* ShopStatus component will be displayed here, taking full width */
+}
+
+.bottomSection {
+  /* ProductManager component will be displayed here, taking full width */
+}
+
+/* Responsive adjustment */
+@media (max-width: 800px) {
+  .topSection {
+    /* Stack Profile and Location vertically on small screens */
     grid-template-columns: 1fr;
-    gap: 20px;
   }
+}
+
+.dashboardStack {
+    padding: 0 10px; 
+    gap: 15px;
+  }
+  
+  /* General component padding reduction for mobile */
+  .profileContainer, 
+  .middleSection > div, /* Targets ShopStatus */
+  .bottomSection > div { /* Targets ProductManager */
+    padding: 15px; 
+  }
+
+
+.profileInput,
+.profileSelect {
+  flex-grow: 1;
+  padding: 8px 10px;
+  margin-left: 10px;
+  border: 1px solid var(--border-color-input);
+  border-radius: 6px;
+  background-color: var(--bg-inset);
+  color: var(--text-color);
+}
+
+.profileButton {
+  margin-top: 20px;
+  background-color: var(--primary-color);
+  color: var(--bg-color); 
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.profileButton:hover {
+  background-color: var(--primary-hover);
+}
+
+.cancelButton {
+  margin-top: 20px;
+  margin-left: 10px;
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.cancelButton:hover {
+  background-color: var(--secondary-hover);
 }

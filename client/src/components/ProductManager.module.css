@@ -47,11 +47,17 @@
   background-color: var(--primary-hover);
   transform: translateY(-1px); /* Little lift effect */
 }
+
 .productList {
   list-style: none;
   padding-left: 0;
   margin: 0;
+  /* --- NEW SCROLLING IMPLEMENTATION --- */
+  max-height: 350px; /* Sets a fixed maximum height before scrolling starts */
+  overflow-y: auto;  /* Enables scrolling when content exceeds max-height */
+  /* ------------------------------------- */
 }
+
 .productItem {
   display: flex;
   justify-content: space-between;

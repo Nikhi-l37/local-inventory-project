@@ -7,8 +7,9 @@
 
 .mapContainer {
   width: 100%;
-height: calc(100vh - 0px);
-  min-height: 80vh;
+  /* FIXED: Use 100vh minus the fixed navbar height (approx 60px) */
+  height: calc(100vh - 60px); 
+  min-height: 100%; /* Ensure it uses the space */
 }
 
 /* --- Floating Search Card --- */

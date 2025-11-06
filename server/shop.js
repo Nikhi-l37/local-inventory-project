@@ -69,15 +69,17 @@ router.get('/my-shop', auth, async (req, res) => {
   try {
     const sellerId = req.sellerId;
 
-    // UPDATED QUERY: Now selects all address fields
+    // --- FIX: JOIN sellers table to fetch the email address ---
     const shop = await pool.query(
       `SELECT 
-         id, seller_id, name, category, is_open,
-         town_village, mandal, district, state,
-         ST_Y(location::geometry) AS latitude,
-         ST_X(location::geometry) AS longitude
-       FROM shops 
-       WHERE seller_id = $1`,
+         s.id, s.seller_id, s.name, s.category, s.is_open,
+         s.town_village, s.mandal, s.district, s.state,
+         ST_Y(s.location::geometry) AS latitude,
+         ST_X(s.location::geometry) AS longitude,
+         e.email AS seller_email  /* <--- ADDED SELLER EMAIL */
+       FROM shops s
+       JOIN sellers e ON s.seller_id = e.id 
+       WHERE s.seller_id = $1`,
       [sellerId]
     );
 
@@ -155,6 +157,47 @@ router.get('/my-shop/products', auth, async (req, res) => {
     ]);
 
     res.json(products.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+router.patch('/update-details', auth, async (req, res) => {
+  try {
+    const { name, category } = req.body;
+    const sellerId = req.sellerId;
+
+    // 1. Perform the update
+    await pool.query(
+      `UPDATE shops 
+       SET name = $1, category = $2 
+       WHERE seller_id = $3`,
+      [name, category, sellerId]
+    );
+
+    // 2. Fetch the newly updated shop data including the seller_email (reusing /my-shop logic)
+    const updatedShop = await pool.query(
+      `SELECT 
+         s.id, s.seller_id, s.name, s.category, s.is_open,
+         s.town_village, s.mandal, s.district, s.state,
+         ST_Y(s.location::geometry) AS latitude,
+         ST_X(s.location::geometry) AS longitude,
+         e.email AS seller_email 
+       FROM shops s
+       JOIN sellers e ON s.seller_id = e.id 
+       WHERE s.seller_id = $1`,
+      [sellerId]
+    );
+
+    if (updatedShop.rows.length === 0) {
+      // This should technically never happen after a successful update, but safety first
+      return res.status(404).json({ msg: 'Shop update failed or shop disappeared.' });
+    }
+
+    res.json(updatedShop.rows[0]);
+
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

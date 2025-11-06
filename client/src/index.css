@@ -2,7 +2,7 @@
   /* Light theme variables */
   --primary-color: #007bff;
   --primary-hover: #0056b3;
-  --primary-color-rgb: 0, 123, 255;
+  --primary-color-rgb: 0, 123, 255; 
   --bg-color: #f8f9fa;
   --bg-secondary: #ffffff;
   --bg-inset: #e9ecef;
@@ -10,9 +10,10 @@
   --text-color-light: #6c757d;
   --border-color: #dee2e6;
   --border-color-input: #ced4da;
-  --navbar-bg: #343a40;
+  --navbar-bg: #343a40; 
   --navbar-text: #ffffff;
   --navbar-link-hover: #adb5bd;
+  
   --success-color: #28a745;
   --success-hover: #1e7e34;
   --danger-color: #dc3545;
@@ -36,49 +37,51 @@ body.dark {
   --navbar-bg: #212529;
   --navbar-text: #ffffff;
   --navbar-link-hover: #a0a0a0;
-  /* -- NO MORE background-image here -- */
+  background-image: linear-gradient(110deg, #0d1117 0%, #1a233a 100%);
+
   --success-color: #28a745;
   --success-hover: #1e7e34;
   --danger-color: #dc3545;
   --danger-hover: #bd2130;
   --secondary-color: #6c757d; 
   --secondary-hover: #5a6268;
-  background-image: linear-gradient(110deg, #0d1117 0%, #1a233a 100%);
 }
 
+/* --- HSL-BASED PROFESSIONAL THEME (Default) --- */
 body.screen-coach-theme {
-  /* Core HSL Colors */
-  --bg-color: hsl(222 84% 5%);
-  --text-color: hsl(210 40% 98%);
-  --bg-secondary: hsl(222 84% 7%);
-  --heading-color: hsl(210 40% 98%);
+    /* Core HSL Colors */
+    --bg-color: hsl(222 84% 5%); 
+    --text-color: hsl(210 40% 98%); 
+    --bg-secondary: hsl(222 84% 7%); 
+    --heading-color: hsl(210 40% 98%); 
+    
+    /* Brand Colors */
+    --primary-color: hsl(189 100% 42%); 
+    --primary-hover: hsl(189 100% 55%); 
+    --primary-color-rgb: 0, 203, 214; 
+    
+    --secondary-color: hsl(240 6% 20%); 
+    
+    --text-color-light: hsl(215 20% 65%); 
+    
+    /* Border/Input Colors */
+    --border-color: hsl(217 33% 17%); 
+    --border-color-input: hsl(217 33% 17%); 
+    
+    /* Status Colors */
+    --success-color: hsl(142 76% 36%); 
+    --success-hover: hsl(142 76% 45%); 
+    --danger-color: hsl(0 84% 60%); 
+    --danger-hover: hsl(0 84% 50%); 
 
-  /* Brand Colors */
-  --primary-color: hsl(189 100% 42%);
-  --primary-hover: hsl(189 100% 55%);
-  --primary-color-rgb: 0, 203, 214;
+    --navbar-bg: hsl(222 84% 5%);
+    --navbar-text: hsl(210 40% 98%);
+    --navbar-link-hover: hsl(189 100% 42%);
 
-  --secondary-color: hsl(240 6% 20%);
-
-  --text-color-light: hsl(215 20% 65%);
-
-  /* Border/Input Colors */
-  --border-color: hsl(217 33% 17%);
-  --border-color-input: hsl(217 33% 17%);
-
-  /* Status Colors */
-  --success-color: hsl(142 76% 36%);
-  --success-hover: hsl(142 76% 45%); 
-  --danger-color: hsl(0 84% 60%);
-  --danger-hover: hsl(0 84% 50%); 
-
-  --navbar-bg: hsl(222 84% 5%);
-  --navbar-text: hsl(210 40% 98%);
-  --navbar-link-hover: hsl(189 100% 42%);
-
-  /* -- NO MORE background-image here -- */
+    background-image: none;
 }
 
+/* --- CRITICAL FULL-SCREEN LAYOUT --- */
 html, body, #root {
   margin: 0;
   padding: 0;
@@ -94,14 +97,17 @@ body {
   background-color: var(--bg-color); 
   color: var(--text-color);
   transition: background-color 0.2s, color 0.2s;
+  
   background-image: linear-gradient(110deg, #e6f0ff 0%, #b3d1ff 100%);
 }
 
 #root {
   display: flex; 
   flex-direction: column; 
+  min-height: 100vh;
 }
 
+/* Global Link Styling (rest of file...) */
 a {
   text-decoration: none;
   color: var(--primary-color);
@@ -110,3 +116,7 @@ a:hover {
   text-decoration: underline;
   color: var(--primary-hover);
 }
+
+/* Helper Classes (e.g., for spacing) */
+.mt-15 { margin-top: 15px; }
+.mb-15 { margin-bottom: 15px; }

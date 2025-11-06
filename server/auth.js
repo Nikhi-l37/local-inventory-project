@@ -88,8 +88,8 @@ router.post('/login', async (req, res) => {
 
 
 
-// ROUTE: POST /api/sellers/forgot-password
-// PURPOSE: To request a password reset
+
+
 router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
@@ -98,7 +98,6 @@ router.post('/forgot-password', async (req, res) => {
     const user = await pool.query('SELECT * FROM sellers WHERE email = $1', [email]);
 
     // 2. IMPORTANT: Even if the user is NOT found, we send a "success" message.
-    // This prevents attackers from guessing which emails are registered.
     if (user.rows.length === 0) {
       console.log(`(Password reset requested for non-existent user: ${email})`);
       return res.json({ msg: 'If an account with this email exists, a reset link has been sent.' });
@@ -113,11 +112,11 @@ router.post('/forgot-password', async (req, res) => {
       { expiresIn: '15m' } // Make the token last only 15 minutes!
     );
 
-    // 4. Create the full reset link
+    // 4. Create the full reset link (Client URL is hardcoded for dev simplicity)
     const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
 
     // 5. --- THIS IS OUR "FAKE EMAIL" ---
-    // In a real app, you'd use an email service. We'll just log it.
+    // Log the link to the console for the developer/user to copy
     console.log('=============== PASSWORD RESET ================');
     console.log(`Reset link for ${email}:`);
     console.log(resetLink);
@@ -165,4 +164,4 @@ router.post('/reset-password/:token', async (req, res) => {
   }
 });
 
-module.exports = router; // Export the router
+module.exports = router;

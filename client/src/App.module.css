@@ -41,25 +41,33 @@
   opacity: 0.8;
 }
 
-
-
-/* ... (styles before .regularContent) */
-
-/* --- THIS IS THE FIX for a functional, hidden scrollbar --- */
+/* --- Content Layout --- */
 .regularContent {
   flex-grow: 1;
-  width: 90%; /* Use 90% of the screen width */
-  max-width: 1200px; /* But don't go wider than 1200px */
-  margin: 30px auto; /* Center it and add top/bottom margin */
+  padding: 30px 40px; 
+  max-width: 1100px;  
+  margin: 0 auto;
   box-sizing: border-box;
-  overflow-y: auto;
+  /* Allows scrolling on content that exceeds height (like Dashboard) */
+  overflow-y: auto; 
 }
 
-/* This hides the ugly scrollbar */
-.regularContent::-webkit-scrollbar {
-  display: none;
+.fullPageContent {
+  flex-grow: 1;
+  padding: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
-.regularContent {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
+
+@media (max-width: 600px) {
+  .regularContent {
+    /* Reduce side padding significantly on smaller screens */
+    padding: 20px 10px; 
+  }
+  .navLinks a {
+    /* Adjust navbar link spacing for small screens */
+    margin-left: 10px;
+    font-size: 0.9em;
+  
+  }}
+  
