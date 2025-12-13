@@ -2,17 +2,28 @@ const express = require('express');
 const router = express.Router();
 const pool = require('./db');
 
-// ROUTE: GET /api/search (Now updated for 'open_only' filter)
+// ROUTE: GET /api/search (Product Search)
 router.get('/', async (req, res) => {
   try {
-    // 1. Get all params from the query (new one is 'open_only')
+    // 1. Get all params from the query
     const { q, lat, lon, open_only } = req.query;
     
-    // We can set a larger radius now, e.g., 10000m = 10km
+    // --- FIX: Robust Validation Check ---
+    // 1. Check for required search query
+    if (!q) {
+        return res.status(400).send('Search query (q) is required.');
+    }
+    // 2. Ensure coordinates are valid numeric values
+    if (!lat || !lon || isNaN(parseFloat(lat)) || isNaN(parseFloat(lon))) {
+      return res.status(400).send('Invalid or missing location coordinates. Please refresh or select a location.');
+    }
+    // --- End of validation ---
+
+    // Set search parameters
     const searchRadius = 10000; 
     const userLocation = `POINT(${lon} ${lat})`;
 
-    // 2. Build our query dynamically and safely
+    // Build WHERE clauses
     const params = [userLocation, `%${q}%`, searchRadius];
     const whereClauses = [
       "p.is_available = true",
@@ -20,13 +31,12 @@ router.get('/', async (req, res) => {
       "ST_DWithin(s.location, ST_GeomFromText($1, 4326)::geography, $3)" // $1 is location, $3 is radius
     ];
 
-    // 3. THIS IS THE NEW LOGIC!
-    // If open_only is 'true', we add another condition to the query
+    // Add open_only filter
     if (open_only === 'true') {
       whereClauses.push("s.is_open = true");
     }
 
-    // 4. Construct the final query string
+    // Construct the final query string
     const queryString = `
       SELECT
         s.id AS shop_id, s.name AS shop_name, s.is_open,
@@ -40,43 +50,47 @@ router.get('/', async (req, res) => {
       ORDER BY distance_meters;
     `;
 
-    // 5. Execute the query
+    // Execute the query
     const results = await pool.query(queryString, params);
 
     res.json(results.rows);
 
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.error('Server Search Error:', err.message); // Log full error details
+    res.status(500).send('Server Error during search query.');
   }
 });
 
-// We will add the '/shops' route here in the next step
-
-// ROUTE: GET /api/search/shops
-// PURPOSE: To find shops by name near a user
+// ROUTE: GET /api/search/shops (Shop Search)
 router.get('/shops', async (req, res) => {
   try {
-    // 1. Get params (same as before)
     const { q, lat, lon, open_only } = req.query;
     
-    // 10km radius for shops
+    // --- FIX: Robust Validation Check ---
+    if (!q) {
+        return res.status(400).send('Search query (q) is required.');
+    }
+    if (!lat || !lon || isNaN(parseFloat(lat)) || isNaN(parseFloat(lon))) {
+      return res.status(400).send('Invalid or missing location coordinates. Please refresh or select a location.');
+    }
+    // --- End of validation ---
+    
     const searchRadius = 10000; 
     const userLocation = `POINT(${lon} ${lat})`;
 
-    // 2. Build our query dynamically
+    // Build WHERE clauses
     const params = [userLocation, `%${q}%`, searchRadius];
     const whereClauses = [
-      "name ILIKE $2", // $2 is the shop name
-      "ST_DWithin(location, ST_GeomFromText($1, 4326)::geography, $3)" // $1 is location, $3 is radius
+      "name ILIKE $2", 
+      "ST_DWithin(location, ST_GeomFromText($1, 4326)::geography, $3)"
     ];
 
-    // 3. Add the 'open_only' filter if it's 'true'
+    // Add open_only filter
     if (open_only === 'true') {
       whereClauses.push("is_open = true");
     }
 
-    // 4. Construct the final query
+    // Construct the final query
     const queryString = `
       SELECT
         id, name, category, is_open,
@@ -88,14 +102,14 @@ router.get('/shops', async (req, res) => {
       ORDER BY distance_meters;
     `;
 
-    // 5. Execute the query
+    // Execute the query
     const results = await pool.query(queryString, params);
 
     res.json(results.rows);
 
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.error('Server Shop Search Error:', err.message); // Log full error details
+    res.status(500).send('Server Error during shop search query.');
   }
 });
 
