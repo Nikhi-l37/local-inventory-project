@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs'); // For hashing passwords
 const jwt = require('jsonwebtoken'); // For creating tokens
 const pool = require('./db'); // Our database connection
 
-const router = express.Router(); // Create an Express router
+const router = express.Router(); 
 
 // ROUTE: POST /api/sellers/register
 // PURPOSE: To register a new seller
