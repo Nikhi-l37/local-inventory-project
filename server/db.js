@@ -15,7 +15,7 @@ const pool = new Pool({
   port: process.env.DATABASE_PORT || 5432, // <--- CHANGED
 });
 
-// 4. Export the pool so we can use it in other files
+
 module.exports = pool;
 
 
