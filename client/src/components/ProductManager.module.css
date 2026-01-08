@@ -1,141 +1,392 @@
-.productContainer {
-  padding: 25px;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background-color: var(--bg-secondary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-.productContainer h3 {
-  margin-top: 0;
-  margin-bottom: 20px; /* Added margin below the heading */
-}
-.addForm {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px; /* Increased margin for separation */
-  padding-bottom: 15px; /* Added padding */
-  border-bottom: 1px solid var(--border-color); /* Added separator line */
-}
-.productInput {
-  flex-grow: 1;
-  padding: 12px;
-  border: 1px solid var(--border-color-input);
-  border-radius: 8px; /* Slightly larger radius for a modern feel */
-  background-color: var(--bg-inset);
-  color: var(--text-color);
-  font-size: 1em;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-/* Add focus style for the input field */
-.productInput:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(rgba(var(--primary-color-rgb), 0.2));
+/* Main Container */
+.managerContainer {
+  width: 100%;
 }
 
-.addButton {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 12px 20px; /* Matched padding with input height */
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
-}
-.addButton:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px); /* Little lift effect */
-}
-
-.productList {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-  /* --- NEW SCROLLING IMPLEMENTATION --- */
-  max-height: 350px; /* Sets a fixed maximum height before scrolling starts */
-  overflow-y: auto;  /* Enables scrolling when content exceeds max-height */
-  /* ------------------------------------- */
-}
-
-.productItem {
+/* Header Section */
+.managerHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* Increased padding and added horizontal padding */
-  padding: 15px; 
-  /* Added a subtle top border for separation between items */
-  border-top: 1px solid var(--border-color); 
-  
-  /* Added transitions for the hover effect */
-  transition: background-color 0.2s; 
-  border-radius: 4px; /* Slight rounding for hover area */
-}
-.productItem:hover {
-  background-color: var(--bg-inset); /* Highlight the item on hover */
-}
-/* Ensure the first item doesn't have the top border */
-.productItem:first-child { 
-  border-top: none;
-}
-/* REMOVED: This logic is now handled by the top border, so we keep only the list padding */
-.productItem:last-child {
-  border-bottom: none; 
+  margin-bottom: 24px;
 }
 
-
-.productName {
-  font-size: 1.1em;
-  font-weight: 600; /* Made name bolder */
-  color: var(--text-color); /* Used primary text color */
+.managerHeader h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: var(--text-color);
 }
-.productStatus {
+
+.managerHeader p {
+  margin: 4px 0 0;
+  color: var(--text-color-light);
   font-size: 0.9em;
-  margin-left: 10px;
-  font-weight: 500; /* Set a moderate weight */
 }
-.productStatus.available {
-  color: var(--success-color);
+
+.addBtn {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s;
 }
-.productStatus.unavailable {
-  color: var(--danger-color);
+
+.addBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: var(--primary-hover);
 }
-.buttonGroup {
+
+
+/* Product Grid */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.productCard {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s;
   display: flex;
-  gap: 8px;
+  flex-direction: column;
 }
-.toggleButton {
+
+.productCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-color: var(--primary-color);
+}
+
+/* Image Section */
+.cardImageContainer {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  background: var(--bg-inset);
+}
+
+.cardImageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardNoImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color-light);
+  font-weight: 500;
+}
+
+/* Menu Dropdown */
+.menuContainer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  /* Instead of status badge at top right, we might need to move status badge */
+  z-index: 10;
+}
+
+/* Adjust Status Badge to Top Left or keep it, user said "at top right it should diplay pencil" */
+/* So I will move Status Badge to Top LEFT */
+.statusBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: auto;
+  font-size: 0.7em;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.menuTrigger {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-color);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  color: #333;
+  /* Pencil always visible */
+}
+
+.menuTrigger:hover {
+  transform: scale(1.1);
+  background: white;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  width: 180px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  z-index: 20;
+  animation: fadeIn 0.1s ease-out;
+}
+
+.dropdownMenu button {
+  background: none;
+  border: none;
+  text-align: left;
   padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
+  color: var(--text-color);
+  font-size: 0.85em;
   cursor: pointer;
-  font-size: 14px;
-  min-width: 100px;
-  transition: background-color 0.2s;
+  border-radius: 4px;
+  transition: background 0.1s;
 }
 
-.toggleButton.available {
-  background-color: var(--success-color); /* This is the desired GREEN color */
-  color: white;
-}
-.toggleButton.unavailable {
-  background-color: var(--secondary-color); /* This is likely a gray color */
-  color: white;
+.dropdownMenu button:hover {
+  background: var(--bg-inset);
+  color: var(--primary-color);
 }
 
-.deleteButton {
-  padding: 8px 12px;  
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 14px;
-  background-color: var(--danger-color);
-  color: whi;
-  min-width: 80px;
-  transition: background-color 0.2s;
+.dropdownMenu button.dangerItem:hover {
+  color: var(--danger-color);
+  background: rgba(220, 53, 69, 0.1);
 }
-.deleteButton:hover {
-  background-color: var(--danger-hover);
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.inStock {
+  background: rgba(40, 167, 69, 0.2);
+  color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.outOfStock {
+  background: rgba(220, 53, 69, 0.2);
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+/* Content Section */
+.cardContent {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.catBadge {
+  font-size: 0.75em;
+  background: var(--bg-inset);
+  color: var(--text-color-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.priceTag {
+  font-weight: 700;
+  font-size: 1.1em;
+  color: var(--primary-color);
+}
+
+.cardContent h3 {
+  margin: 0 0 6px 0;
+  font-size: 1em;
+  color: var(--text-color);
+  line-height: 1.4;
+}
+
+.desc {
+  font-size: 0.85em;
+  color: var(--text-color-light);
+  margin: 0 0 16px 0;
+  flex: 1;
+  /* Pushes actions down */
+
+  /* Truncate text */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Action Buttons (Icons) */
+.cardActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.cardActions button {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s;
+  color: var(--text-color-light);
+}
+
+.cardActions button:hover {
+  background: var(--bg-inset);
+  color: var(--primary-color);
+}
+
+.delBtn:hover {
+  background: rgba(220, 53, 69, 0.1);
+  border-color: var(--danger-color);
+  color: var(--danger-color) !important;
+}
+
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  /* Increased to fix overlap/bleed-through issues */
+}
+
+.modalContent {
+  background: var(--bg-secondary);
+  width: 600px;
+  max-width: 95%;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease-out;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalContent h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.4em;
+  color: var(--text-color);
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.fieldsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fieldsWrapper input,
+.fieldsWrapper select,
+.fieldsWrapper textarea {
+  padding: 10px;
+  border: 1px solid var(--border-color-input);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95em;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-inset);
+  color: var(--text-color);
+}
+
+.fieldsWrapper textarea {
+  resize: vertical;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.primaryButton {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.secondaryButton {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.secondaryButton:hover {
+  background: var(--bg-inset);
 }

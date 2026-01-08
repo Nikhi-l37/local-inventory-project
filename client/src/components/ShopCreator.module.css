@@ -1,74 +1,201 @@
+/* Main Container */
 .creatorContainer {
-  padding: 20px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  margin-top: 20px;
-  background-color: var(--bg-inset);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 40px 20px;
 }
 
+/* 2-Column Grid */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+/* Card Styles */
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.cardHeader {
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+}
+
+.cardHeader h3 {
+  margin: 0;
+  color: var(--primary-color);
+  /* Assuming blue from screenshot */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.subText {
+  color: var(--text-color-light);
+  font-size: 0.9em;
+  margin-top: 5px;
+  display: block;
+}
+
+/* Form Groups */
 .formGroup {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .formGroup label {
   display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.required {
+  color: var(--danger-color);
+  margin-left: 2px;
 }
 
 .formInput,
-.formSelect {
+.formSelect,
+.formTextarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid var(--border-color-input);
-  border-radius: 5px;
-  box-sizing: border-box;
-  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  background-color: var(--bg-inset);
   color: var(--text-color);
+  font-family: inherit;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.formInput:focus,
+.formSelect:focus,
+.formTextarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+/* Right Panel: Map */
+.mapWrapper {
+  height: 350px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .mapContainer {
-  height: 300px;
+  height: 100%;
   width: 100%;
-  margin-top: 10px;
-  border-radius: 8px;
 }
 
-.createButton {
-  margin-top: 15px;
-  width: 100%;
-  background-color: var(--success-color);
-  color: white;
-  padding: 12px 15px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s;
-}
-.createButton:hover {
-  background-color: var(--success-hover);
-}
-.createButton:disabled {
-  background-color: var(--secondary-color);
-}
-
-.addressDisplay {
-  padding: 10px;
-  background-color: var(--bg-color);
+.locationCard {
+  background: var(--bg-inset);
   border: 1px solid var(--border-color);
-  border-radius: 5px;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.locationIcon {
+  color: var(--primary-color);
+  font-size: 1.2em;
+  margin-top: 2px;
+}
+
+.useLocationBtn {
+  width: 100%;
   margin-top: 15px;
-  font-weight: 500;
+  padding: 10px;
+  background: white;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.useLocationBtn:hover {
+  background: var(--bg-inset);
+}
+
+/* Bottom Bar */
+.bottomBar {
+  margin-top: 30px;
+  background: white;
+  /* Or themed secondary */
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  bottom: 20px;
+  /* Floating look */
+  z-index: 100;
+}
+
+.barContent h4 {
+  margin: 0;
   color: var(--text-color);
 }
 
-@media (max-width: 600px) {
-  .creatorContainer {
-    padding: 15px;
-  }
-  .mapContainer {
-    height: 250px; /* Make map slightly shorter on mobile */
+.barContent p {
+  margin: 5px 0 0;
+  color: var(--text-color-light);
+  font-size: 0.9em;
+}
+
+.createButton {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.createButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.createButton:disabled {
+  background-color: var(--border-color);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 }

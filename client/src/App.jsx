@@ -8,8 +8,8 @@ const LogoutButton = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/'); 
-    window.location.reload(); 
+    navigate('/');
+    window.location.reload();
   };
   return (
     <button onClick={handleLogout} className={styles.logoutButton}>
@@ -30,7 +30,7 @@ function App() {
 
   return (
     // NO more extra div here. #root handles the flex column
-    <> 
+    <>
       {/* Render navbar ONLY if not on search page */}
       {!isSearchPage && (
         <nav className={styles.navbar}>
@@ -65,7 +65,7 @@ function App() {
 
       {/* The main content area. This will fill remaining space */}
       {/* We now apply content styles directly here, or not at all for full-screen map */}
-      <div className={isSearchPage ? styles.fullPageContent : styles.regularContent}>
+      <div className={(isSearchPage || path.startsWith('/dashboard')) ? styles.fullPageContent : styles.regularContent}>
         <Outlet />
       </div>
     </>

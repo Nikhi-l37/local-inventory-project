@@ -14,6 +14,40 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 let DefaultIcon = L.icon({ iconUrl: icon, shadowUrl: iconShadow });
 L.Marker.prototype.options.icon = DefaultIcon;
 
+// Helper to format time (e.g. 14:00 -> 2:00 PM)
+const formatTime = (timeStr) => {
+  if (!timeStr) return '';
+  const [hours, minutes] = timeStr.split(':');
+  const date = new Date();
+  date.setHours(parseInt(hours), parseInt(minutes));
+  return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+};
+
+// Helper to determine status color and text
+const getShopStatus = (opening, closing, isOpenOverride) => {
+  if (isOpenOverride === false) return { text: 'Closed (Owner Only)', color: '#e53e3e' };
+
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+
+  if (!opening || !closing) return { text: 'Unknown', color: '#718096' };
+
+  const [openH, openM] = opening.split(':').map(Number);
+  const [closeH, closeM] = closing.split(':').map(Number);
+  const openTime = openH * 60 + openM;
+  const closeTime = closeH * 60 + closeM;
+
+  if (currentTime < openTime) {
+    if (openTime - currentTime <= 60) return { text: `Opening Soon (${formatTime(opening)})`, color: '#d69e2e' }; // Orange
+    return { text: `Closed (Opens ${formatTime(opening)})`, color: '#e53e3e' }; // Red
+  } else if (currentTime >= openTime && currentTime < closeTime) {
+    if (closeTime - currentTime <= 60) return { text: `Closing Soon (${formatTime(closing)})`, color: '#d69e2e' }; // Orange
+    return { text: 'Open Now', color: '#38a169' }; // Green
+  } else {
+    return { text: 'Closed', color: '#e53e3e' };
+  }
+};
+
 function ProductListModal({ shop, onClose }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,18 +66,40 @@ function ProductListModal({ shop, onClose }) {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button onClick={onClose} style={{ float: 'right', background: 'none', border: 'none', color: 'var(--text-color)', fontSize: '1.2em', cursor: 'pointer' }}>X</button>
-        <h3>Products at {shop.name}</h3>
+        <div className={styles.modalHeader}>
+          <h3>{shop.name}</h3>
+          <button onClick={onClose} className={styles.closeButton}>×</button>
+        </div>
+
+        {shop.image_url && (
+          <img src={`${import.meta.env.VITE_API_BASE_URL}${shop.image_url}`} alt={shop.name} className={styles.modalShopImage} />
+        )}
+        <p className={styles.modalSubtitle}>{shop.category} • {shop.town_village}</p>
+        <p>{shop.description}</p>
+
+        <hr />
+
+        <h4>Products</h4>
         {loading ? <p>Loading products...</p> : (
-          <ul>
+          <div className={styles.modalProductList}>
             {products.length > 0 ? (
               products.map((product) => (
-                <li key={product.id}>
-                  {product.name} (Last updated: {new Date(product.last_updated).toLocaleDateString()})
-                </li>
+                <div key={product.id} className={styles.modalProductItem}>
+                  {product.image_url ? (
+                    <img src={`${import.meta.env.VITE_API_BASE_URL}${product.image_url}`} alt={product.name} className={styles.productThumb} />
+                  ) : <div className={styles.placeholderThumb}></div>}
+                  <div className={styles.modalProductInfo}>
+                    <strong>{product.name}</strong>
+                    <span>{product.category}</span>
+                    <span className={styles.price}>{product.price ? `₹${product.price}` : ''}</span>
+                  </div>
+                  <div className={styles.statusBadge} style={{ backgroundColor: product.is_available ? '#c6f6d5' : '#fed7d7', color: product.is_available ? '#2f855a' : '#c53030' }}>
+                    {product.is_available ? 'In Stock' : 'Out of Stock'}
+                  </div>
+                </div>
               ))
             ) : <p>No available products found for this shop.</p>}
-          </ul>
+          </div>
         )}
       </div>
     </div>
@@ -60,7 +116,7 @@ function Home() {
   const navigate = useNavigate(); // <-- This uses the correct import
   const [mapCenter, setMapCenter] = useState([17.3850, 78.4867]);
   const [userLocation, setUserLocation] = useState(null);
-  
+
   const [locationQuery, setLocationQuery] = useState('');
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -70,7 +126,7 @@ function Home() {
   const [openOnly, setOpenOnly] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedShop, setSelectedShop] = useState(null);
-  
+
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -167,10 +223,10 @@ function Home() {
 
   return (
     <div className={styles.homeContainer}>
-      
-      <MapContainer 
-        center={mapCenter} 
-        zoom={14} 
+
+      <MapContainer
+        center={mapCenter}
+        zoom={14}
         className={styles.mapContainer}
       >
         <ChangeMapView center={mapCenter} />
@@ -178,31 +234,48 @@ function Home() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-        
-        {searchResults.map(result => (
-          <Marker 
-            key={result.id || result.shop_id} 
-            position={[result.latitude, result.longitude]}
-          >
-            <Popup>
-              {searchMode === 'product' ? (
-                <>
-                  <strong>{result.shop_name}</strong><br />
-                  Product: {result.product_name}<br />
-                  Status: {result.is_open ? 'OPEN' : 'CLOSED'}<br />
-                  <button onClick={() => getDirections(result.latitude, result.longitude)}>Get Directions</button>
-                </>
-              ) : (
-                <>
-                  <strong>{result.name}</strong><br />
-                  Status: {result.is_open ? 'OPEN' : 'CLOSED'}<br />
-                  <button onClick={() => setSelectedShop({ id: result.id, name: result.name })}>See Products</button>
-                  <button onClick={() => getDirections(result.latitude, result.longitude)}>Get Directions</button>
-                </>
-              )}
-            </Popup>
-          </Marker>
-        ))}
+
+        {searchResults.map(result => {
+          const status = getShopStatus(result.opening_time, result.closing_time, result.is_open);
+          const imageUrl = result.shop_image || result.image_url;
+
+          return (
+            <Marker
+              key={result.id || result.shop_id}
+              position={[result.latitude, result.longitude]}
+            >
+              <Popup className={styles.customPopup}>
+                <div className={styles.popupContent}>
+                  {imageUrl && (
+                    <img
+                      src={`${import.meta.env.VITE_API_BASE_URL}${imageUrl}`}
+                      alt="Shop"
+                      className={styles.popupImage}
+                    />
+                  )}
+                  <strong>{result.shop_name || result.name}</strong>
+                  <div style={{ color: status.color, fontWeight: 'bold', fontSize: '0.9em' }}>
+                    {status.text}
+                  </div>
+
+                  {searchMode === 'product' && (
+                    <div className={styles.popupProduct}>
+                      Product: <strong>{result.product_name}</strong>
+                      {result.price && <span> - ₹{result.price}</span>}
+                    </div>
+                  )}
+
+                  <div className={styles.popupActions}>
+                    {searchMode === 'shop' && (
+                      <button onClick={() => setSelectedShop({ ...result, image_url: imageUrl })}>See Products</button>
+                    )}
+                    <button onClick={() => getDirections(result.latitude, result.longitude)}>Directions</button>
+                  </div>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
 
       {/* --- The Floating Search Panel --- */}
@@ -214,7 +287,7 @@ function Home() {
 
         <div className={styles.searchGroup}>
           <label htmlFor="location-input">Location</label>
-          <input 
+          <input
             id="location-input"
             type="text"
             value={locationQuery}
@@ -253,14 +326,14 @@ function Home() {
           {showFilters && (
             <div className={styles.filtersContent}>
               <div className={styles.searchToggles}>
-                <button 
+                <button
                   type="button"
-                  onClick={() => setSearchMode('product')} 
+                  onClick={() => setSearchMode('product')}
                   className={searchMode === 'product' ? styles.active : ''}
                 >
                   Search by Product
                 </button>
-                <button 
+                <button
                   type="button"
                   onClick={() => setSearchMode('shop')}
                   className={searchMode === 'shop' ? styles.active : ''}
@@ -268,9 +341,9 @@ function Home() {
                   Search by Shop
                 </button>
               </div>
-              
+
               <div className={styles.filterCheckbox}>
-                <input 
+                <input
                   type="checkbox"
                   id="openOnly"
                   checked={openOnly}
@@ -281,11 +354,54 @@ function Home() {
             </div>
           )}
         </form>
+
+        {/* --- Results List --- */}
+        <div className={styles.resultsList}>
+          {searchResults.map(result => {
+            const status = getShopStatus(result.opening_time, result.closing_time, result.is_open);
+            const imageUrl = result.shop_image || result.image_url;
+
+            return (
+              <div
+                key={result.id || result.shop_id}
+                className={styles.resultCard}
+                onClick={() => {
+                  setMapCenter([result.latitude, result.longitude]);
+                }}
+              >
+                <div className={styles.cardHeader}>
+                  {imageUrl ? (
+                    <img src={`${import.meta.env.VITE_API_BASE_URL}${imageUrl}`} alt="shop" className={styles.cardImage} />
+                  ) : <div className={styles.cardPlaceholder}></div>}
+                  <div className={styles.cardInfo}>
+                    <h4>{result.shop_name || result.name}</h4>
+                    <span style={{ color: status.color, fontSize: '0.85em', fontWeight: 'bold' }}>{status.text}</span>
+                    <span className={styles.distance}>{Math.round(result.distance_meters / 100) / 10} km away</span>
+                  </div>
+                </div>
+
+                {searchMode === 'product' && (
+                  <div className={styles.cardProduct}>
+                    <span>Found: <strong>{result.product_name}</strong></span>
+                    {result.price && <span className={styles.cardPrice}>₹{result.price}</span>}
+                  </div>
+                )}
+
+                <div className={styles.cardActions}>
+                  {searchMode === 'shop' && (
+                    <button onClick={(e) => { e.stopPropagation(); setSelectedShop({ ...result, image_url: imageUrl }); }}>View Products</button>
+                  )}
+                  <button onClick={(e) => { e.stopPropagation(); getDirections(result.latitude, result.longitude); }}>Go</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {selectedShop && (
-        <ProductListModal 
-          shop={selectedShop} 
+        <ProductListModal
+          shop={selectedShop}
           onClose={() => setSelectedShop(null)}
         />
       )}

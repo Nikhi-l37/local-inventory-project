@@ -1,127 +1,524 @@
-.dashboardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--border-color);
-  margin-bottom: 25px; 
-}
-
-.dashboardHeader h2 {
-  margin: 0;
+/* Dashboard Layout Grid */
+.dashboardContainer {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  /* Themed */
+  font-family: 'Inter', sans-serif;
   color: var(--text-color);
+  padding-top: 80px;
+  /* Clear Sticky Navbar */
+  box-sizing: border-box;
+  /* Themed */
 }
-/* ... (logoutButton and loading styles remain the same) ... */
 
+/* Sidebar + Content Grid */
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  /* Fixed Sidebar, Fluid Main */
+  gap: 0;
+  min-height: 100vh;
+}
 
-/* --- NEW VERTICAL STACK LAYOUT STYLES --- */
-.dashboardStack {
+/* --- SIDEBAR STYLES --- */
+.sidebar {
+  background: var(--bg-secondary);
+  /* Themed */
+  border-right: 1px solid var(--border-color);
+  /* Themed */
+  padding: 20px;
+
+  height: calc(100vh - 64px);
+  /* Account for Header Height */
+  position: sticky;
+  top: 64px;
+  /* Start below the header */
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 25px; /* Spacing between the major sections */
+  gap: 20px;
+  z-index: 1000;
+  /* Ensure Sidebar (and its modals) sits above Main Content */
 }
 
-.topSection {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Profile and Location side-by-side */
-  gap: 25px;
-}
-
-.profileContainer {
-  /* Style for the new Profile card */
-  padding: 25px;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background-color: var(--bg-secondary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.profileContainer h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
+/* Sidebar Cards (Profile, Location, etc.) */
+.sidebarCard {
+  background: var(--bg-secondary);
+  /* Themed */
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--border-color);
+  /* Themed */
 }
 
-.detailGroup {
-  margin-bottom: 10px;
-  font-size: 1em;
-  display: flex; /* Makes the label and input/span align */
+.sidebarCard:last-child {
+  border-bottom: none;
+}
+
+/* Profile Section */
+.profileHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Ensures horizontal centering */
+  text-align: center;
+  margin-bottom: 20px;
+  padding-top: 10px;
+}
+
+.profileImageContainer {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin-bottom: 15px;
+  /* Spacing below image */
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--border-color);
+  background-color: var(--bg-inset);
+}
+
+.placeholderAvatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.editIconBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 0.8em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileInfo h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: var(--text-color);
+}
+
+.proBadge {
+  background: rgba(var(--primary-color-rgb), 0.15);
+  /* Transparent Primary */
+  color: var(--primary-color);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75em;
+  font-weight: 600;
+  display: inline-block;
+  margin: 4px 0;
+}
+
+.since {
+  margin: 0;
+  color: var(--text-color-light);
+  font-size: 0.8em;
+}
+
+/* New Status Toggle Button */
+.statusToggleBtn {
+  margin-top: 8px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: none;
+  font-size: 0.85em;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  max-width: 140px;
+  /* Limit width */
+  transition: all 0.2s;
+}
+
+.statusOpen {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+.statusOpen:hover {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.statusClosed {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+}
+
+.statusClosed:hover {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.statusDetail {
+  display: block;
+  font-size: 0.75em;
+  color: var(--text-color-light);
+  margin-top: 5px;
+}
+
+/* Stats Widget */
+.statsRow {
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-inset);
+  /* Themed Inset */
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.statValue {
+  font-weight: 700;
+  font-size: 1.1em;
+  color: var(--text-color);
+}
+
+.statLabel {
+  font-size: 0.75em;
+  color: var(--text-color-light);
+}
+
+
+/* Location Widget */
+.cardHeader {
+  display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
-.detailGroup strong {
+
+.cardHeader h4 {
+  margin: 0;
+  font-size: 0.95em;
+  text-transform: uppercase;
+  color: var(--text-color-light);
+  letter-spacing: 0.05em;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  color: var(--text-color-light);
+}
+
+.iconBtn:hover {
+  color: var(--primary-color);
+}
+
+
+.addressText {
+  font-size: 0.9em;
   color: var(--text-color);
-  margin-right: 8px;
-  flex-shrink: 0;
-}
-.middleSection {
-  /* ShopStatus component will be displayed here, taking full width */
+  line-height: 1.4;
 }
 
-.bottomSection {
-  /* ProductManager component will be displayed here, taking full width */
+/* Category Navigation */
+.categoryNav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-/* Responsive adjustment */
-@media (max-width: 800px) {
-  .topSection {
-    /* Stack Profile and Location vertically on small screens */
+.categoryNav button {
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 0.95em;
+  transition: all 0.2s;
+}
+
+.categoryNav button:hover {
+  background: var(--bg-inset);
+  color: var(--primary-color);
+}
+
+.categoryNav button.activeCat {
+  background: rgba(var(--primary-color-rgb), 0.15);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* --- MAIN CONTENT --- */
+.mainContent {
+  padding: 30px;
+  /* Standard padding */
+  overflow-y: auto;
+  height: calc(100vh - 64px);
+  /* Scroll independently */
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2em;
+  color: var(--text-color-light);
+}
+
+/* Map Container for Location Manager */
+.mapContainer {
+  width: 100%;
+  height: 300px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.editMap {
+  width: 100%;
+  height: 100%;
+}
+
+.addressPreview {
+  background: var(--bg-inset);
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+  color: var(--text-color);
+  border: 1px solid var(--border-color-input);
+}
+
+/* Modals (Shared) */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  /* Boost z-index to stay on top */
+}
+
+.modalContent {
+  background: var(--bg-secondary);
+  color: var(--text-color);
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  /* Slightly wider */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color);
+}
+
+/* Edit Form Styles */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.editForm input,
+.editForm select,
+.editForm textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color-input);
+  background: var(--bg-inset);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 0.95em;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  /* Ensure padding doesn't affect width */
+}
+
+.editForm input:focus,
+.editForm select:focus,
+.editForm textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.row {
+  display: flex;
+  gap: 15px;
+}
+
+.row input {
+  flex: 1;
+  /* Equal width for side-by-side inputs */
+}
+
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.primaryButton {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.secondaryButton {
+  background: var(--bg-inset);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Category Manager Styles (Embedded) */
+.managerContainer {
+  width: 100%;
+}
+
+.managerContainer h2 {
+  margin-bottom: 5px;
+  color: var(--text-color);
+}
+
+.subtext {
+  color: var(--text-color-light);
+  margin-bottom: 20px;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.categoryCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.catCardImage {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.catCardPlaceholder {
+  width: 100%;
+  height: 80px;
+  background: var(--bg-inset);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.deleteBtn {
+  font-size: 0.75em;
+  color: var(--danger-color);
+  background: none;
+  border: 1px solid var(--danger-color);
+  border-radius: 4px;
+  padding: 2px 5px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.addCategoryCard {
+  border: 1px dashed var(--border-color);
+  background: var(--bg-inset);
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.inputField,
+.fileInput {
+  width: 100%;
+  padding: 5px;
+  font-size: 0.85em;
+  border: 1px solid var(--border-color-input);
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  color: var(--text-color);
+}
+
+.actionBtn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layoutGrid {
     grid-template-columns: 1fr;
   }
-}
 
-.dashboardStack {
-    padding: 0 10px; 
-    gap: 15px;
+  .sidebar {
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
   }
-  
-  /* General component padding reduction for mobile */
-  .profileContainer, 
-  .middleSection > div, /* Targets ShopStatus */
-  .bottomSection > div { /* Targets ProductManager */
-    padding: 15px; 
-  }
-
-
-.profileInput,
-.profileSelect {
-  flex-grow: 1;
-  padding: 8px 10px;
-  margin-left: 10px;
-  border: 1px solid var(--border-color-input);
-  border-radius: 6px;
-  background-color: var(--bg-inset);
-  color: var(--text-color);
-}
-
-.profileButton {
-  margin-top: 20px;
-  background-color: var(--primary-color);
-  color: var(--bg-color); 
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-.profileButton:hover {
-  background-color: var(--primary-hover);
-}
-
-.cancelButton {
-  margin-top: 20px;
-  margin-left: 10px;
-  background-color: var(--secondary-color);
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-.cancelButton:hover {
-  background-color: var(--secondary-hover);
 }

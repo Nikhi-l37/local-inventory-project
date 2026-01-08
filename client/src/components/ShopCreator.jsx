@@ -3,6 +3,7 @@ import api from '../api';
 import axios from 'axios'; // To call the geocoding API
 import { MapContainer, TileLayer, Marker, useMapEvents, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import ImageUpload from './ImageUpload'; // Import ImageUpload
 import styles from './ShopCreator.module.css';
 
 // (Leaflet icon fix)
@@ -56,7 +57,7 @@ function ShopCreator({ onShopCreated }) {
 
   // 2. *** THIS IS THE FIXED FUNCTION ***
   // It now uses the Nominatim API
-// 2. *** THIS IS THE FIXED FUNCTION ***
+  // 2. *** THIS IS THE FIXED FUNCTION ***
   // It now requests English
   const fetchAddress = useCallback(async ({ lat, lng }) => {
     setAddressLoading(true);
@@ -66,9 +67,9 @@ function ShopCreator({ onShopCreated }) {
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=en`
       );
-      
+
       const addr = response.data.address;
-      
+
       // Parse the new address format
       setAddress({
         town_village: addr.village || addr.town || addr.city_district || 'N/A',
@@ -88,6 +89,13 @@ function ShopCreator({ onShopCreated }) {
     setPosition(latlng);
     fetchAddress(latlng);
   };
+
+  // NEW STATE: Image, Description, Hours
+  const [image, setImage] = useState(null);
+  const [description, setDescription] = useState('');
+  const [openingTime, setOpeningTime] = useState('09:00');
+  const [closingTime, setClosingTime] = useState('21:00');
+
 
   // 4. Handle the final form submission
   const handleSubmit = async () => {
@@ -113,16 +121,28 @@ function ShopCreator({ onShopCreated }) {
       state: null,
     };
 
-    const shopData = {
-      name,
-      category,
-      latitude: position.lat,
-      longitude: position.lng,
-      ...addressData 
-    };
+    // Use FormData for file upload
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('category', category);
+    formData.append('latitude', position.lat);
+    formData.append('longitude', position.lng);
+    formData.append('town_village', addressData.town_village || '');
+    formData.append('mandal', addressData.mandal || '');
+    formData.append('district', addressData.district || '');
+    formData.append('state', addressData.state || '');
+
+    // Append new fields
+    formData.append('description', description);
+    formData.append('opening_time', openingTime);
+    formData.append('closing_time', closingTime);
+    if (image) {
+      formData.append('image', image);
+    }
 
     try {
-      const response = await api.post('/api/shops', shopData);
+      // POST FormData (axios handles the headers automatically)
+      const response = await api.post('/api/shops', formData);
       alert('Shop created successfully!');
       onShopCreated(response.data);
     } catch (err) {
@@ -138,62 +158,124 @@ function ShopCreator({ onShopCreated }) {
   }
 
   // 5. Our JSX (now with correct styles)
+  // 5. Our New Layout
   return (
     <div className={styles.creatorContainer}>
-      <h3>Create Your Shop</h3>
-      <p>Click on the map to place the pin *exactly* where your shop is.</p>
-      
-      <div className={styles.formGroup}>
-        <label>Shop Name: </label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className={styles.formInput}
-        />
-      </div>
-      <div className={styles.formGroup}>
-        <label>Category: </label>
-        <select value={category} onChange={(e) => setCategory(e.target.value)} className={styles.formSelect}>
-          <option value="Grocery">Grocery</option>
-          <option value="Electronics">Electronics</option>
-          <option value="Pharmacy">Pharmacy</option>
-          <option value="Other">Other</option>
-        </select>
+
+      <div className={styles.grid}>
+        {/* --- LEFT PANEL: SHOP INFO --- */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h3>🛒 Shop Information</h3>
+            <span className={styles.subText}>Fill in the details to add your shop</span>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label>Shop Name <span className={styles.required}>*</span></label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={styles.formInput}
+              placeholder="e.g. My Awesome Store"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label>Category <span className={styles.required}>*</span></label>
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className={styles.formSelect}>
+              <option value="Grocery">Grocery</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Pharmacy">Pharmacy</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label>Description <span className={styles.required}>*</span></label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className={styles.formTextarea}
+              placeholder="Add a descriptive text about your shop..."
+              rows={4}
+            />
+          </div>
+
+          <div className={styles.row}>
+            <div className={styles.formGroup} style={{ flex: 1 }}>
+              <label>Opening Time <span className={styles.required}>*</span></label>
+              <input type="time" value={openingTime} onChange={(e) => setOpeningTime(e.target.value)} className={styles.formInput} />
+            </div>
+            <div className={styles.formGroup} style={{ flex: 1 }}>
+              <label>Closing Time <span className={styles.required}>*</span></label>
+              <input type="time" value={closingTime} onChange={(e) => setClosingTime(e.target.value)} className={styles.formInput} />
+            </div>
+          </div>
+
+          <div className={styles.formGroup}>
+            <ImageUpload
+              label="Shop Image (Optional)"
+              currentImage={null}
+              onImageSelect={(file) => setImage(file)}
+            />
+          </div>
+        </div>
+
+        {/* --- RIGHT PANEL: LOCATION --- */}
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h3>📍 Location & Map</h3>
+            <span className={styles.subText}>Click on the map to set your shop location</span>
+          </div>
+
+          <div className={styles.mapWrapper}>
+            <MapContainer
+              center={position}
+              zoom={15}
+              className={styles.mapContainer}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <LocationFinder position={position} setPosition={handleMapClick} />
+            </MapContainer>
+          </div>
+
+          <div className={styles.locationCard}>
+            <span className={styles.locationIcon}>📍</span>
+            <div>
+              <strong>Current Location:</strong>
+              <p style={{ margin: '5px 0 0', fontSize: '0.9em', color: 'var(--text-color)' }}>
+                {addressLoading ? 'Finding address...' : (address ? `${address.town_village}, ${address.mandal}, ${address.district}` : 'Click map to select')}
+              </p>
+            </div>
+          </div>
+
+          <button className={styles.useLocationBtn} onClick={() => {
+            navigator.geolocation.getCurrentPosition(pos => handleMapClick({ lat: pos.coords.latitude, lng: pos.coords.longitude }));
+          }}>
+            🎯 Use My Current Location
+          </button>
+        </div>
       </div>
 
-      <MapContainer 
-        center={position} 
-        zoom={15} 
-        className={styles.mapContainer}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <LocationFinder position={position} setPosition={handleMapClick} />
-      </MapContainer>
-
-      {/* Display the auto-found address */}
-      <div className={styles.addressDisplay}>
-        {addressLoading ? (
-          <p>Finding address for this location...</p>
-        ) : address ? (
-          <>
-            <strong>Location:</strong> {address.town_village}, {address.mandal}, {address.district}, {address.state}
-          </>
-        ) : (
-          <p>Could not find address for this location.</p>
-        )}
+      {/* --- BOTTOM BAR --- */}
+      <div className={styles.bottomBar}>
+        <div className={styles.barContent}>
+          <h4>Ready to add your shop?</h4>
+          <p>Make sure all required fields are filled before creating</p>
+        </div>
+        <button
+          onClick={handleSubmit}
+          disabled={loading || addressLoading}
+          className={styles.createButton}
+        >
+          {loading ? 'Creating Shop...' : 'Create Shop'}
+        </button>
       </div>
-      
-      <button 
-        onClick={handleSubmit} 
-        disabled={loading || addressLoading} 
-        className={styles.createButton}
-      >
-        {loading ? 'Saving...' : 'Create Shop'}
-      </button>
+
     </div>
   );
 }

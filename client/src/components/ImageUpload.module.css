@@ -1,0 +1,46 @@
+.uploadContainer {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.previewArea {
+    width: 120px;
+    height: 120px;
+    background-color: #f7f9fc;
+    border: 2px dashed #cbd5e0;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.previewArea:hover {
+    border-color: #4299e1;
+    background-color: #ebf8ff;
+}
+
+.previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.placeholder {
+    color: #888;
+    font-size: 0.9em;
+}
+
+.fileInput {
+    padding: 5px;
+}

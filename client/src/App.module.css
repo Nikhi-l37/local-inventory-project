@@ -9,6 +9,11 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 2000;
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 64px;
+  /* Explicit height helps with calc() elsewhere */
+  box-sizing: border-box;
 }
 
 .navLinks a {
@@ -36,6 +41,7 @@
   cursor: pointer;
   transition: opacity 0.2s;
 }
+
 .logoutButton:hover {
   text-decoration: underline;
   opacity: 0.8;
@@ -44,12 +50,12 @@
 /* --- Content Layout --- */
 .regularContent {
   flex-grow: 1;
-  padding: 30px 40px; 
-  max-width: 1100px;  
+  padding: 30px 40px;
+  max-width: 1100px;
   margin: 0 auto;
   box-sizing: border-box;
   /* Allows scrolling on content that exceeds height (like Dashboard) */
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 
 .fullPageContent {
@@ -62,12 +68,13 @@
 @media (max-width: 600px) {
   .regularContent {
     /* Reduce side padding significantly on smaller screens */
-    padding: 20px 10px; 
+    padding: 20px 10px;
   }
+
   .navLinks a {
     /* Adjust navbar link spacing for small screens */
     margin-left: 10px;
     font-size: 0.9em;
-  
-  }}
-  
+
+  }
+}
