@@ -163,7 +163,7 @@ const validateCreateShop = (req, res, next) => {
   } = req.body;
 
   // Required fields
-  if (!name || !category || !latitude || !longitude || !town_village || !mandal || !district || !state) {
+  if (!name || !category || latitude === undefined || latitude === null || longitude === undefined || longitude === null || !town_village || !mandal || !district || !state) {
     return res.status(400).json({ msg: 'All required fields must be provided (name, category, location, address).' });
   }
 
@@ -262,7 +262,7 @@ const validateUpdateShopLocation = (req, res, next) => {
   const { latitude, longitude, town_village, mandal, district, state } = req.body;
 
   // All fields required for location update
-  if (!latitude || !longitude || !town_village || !mandal || !district || !state) {
+  if (latitude === undefined || latitude === null || longitude === undefined || longitude === null || !town_village || !mandal || !district || !state) {
     return res.status(400).json({ msg: 'All location fields are required.' });
   }
 
