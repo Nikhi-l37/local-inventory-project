@@ -3,12 +3,18 @@ const express = require('express');
 const bcrypt = require('bcryptjs'); // For hashing passwords
 const jwt = require('jsonwebtoken'); // For creating tokens
 const pool = require('./db'); // Our database connection
+const {
+  validateRegister,
+  validateLogin,
+  validateForgotPassword,
+  validateResetPassword
+} = require('./middleware/validation');
 
 const router = express.Router(); 
 
 // ROUTE: POST /api/sellers/register
 // PURPOSE: To register a new seller
-router.post('/register', async (req, res) => {
+router.post('/register', validateRegister, async (req, res) => {
   try {
     // 1. Get the email and password from the request body
     const { email, password } = req.body;
@@ -48,7 +54,7 @@ router.post('/register', async (req, res) => {
 
 // ROUTE: POST /api/sellers/login
 // PURPOSE: To log in an existing seller
-router.post('/login', async (req, res) => {
+router.post('/login', validateLogin, async (req, res) => {
   try {
     // 1. Get the email and password from the request body
     const { email, password } = req.body;
@@ -90,7 +96,7 @@ router.post('/login', async (req, res) => {
 
 
 
-router.post('/forgot-password', async (req, res) => {
+router.post('/forgot-password', validateForgotPassword, async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -133,7 +139,7 @@ router.post('/forgot-password', async (req, res) => {
 
 // ROUTE: POST /api/sellers/reset-password/:token
 // PURPOSE: To set a new password using a valid token
-router.post('/reset-password/:token', async (req, res) => {
+router.post('/reset-password/:token', validateResetPassword, async (req, res) => {
   try {
     const { token } = req.params;
     const { password } = req.body;

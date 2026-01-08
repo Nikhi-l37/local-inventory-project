@@ -3,6 +3,12 @@ const router = express.Router();
 const pool = require('./db');
 const auth = require('./middleware/auth'); // Import our auth middleware
 const upload = require('./middleware/uploadMiddleware'); // Import upload middleware
+const {
+  validateCreateShop,
+  validateUpdateShopDetails,
+  validateUpdateShopLocation,
+  validateUpdateShopStatus
+} = require('./middleware/validation');
 
 // ROUTE: POST /api/shops
 // PURPOSE: To create a new shop for a logged-in seller
@@ -13,7 +19,7 @@ const upload = require('./middleware/uploadMiddleware'); // Import upload middle
 // ROUTE: POST /api/shops
 // PURPOSE: To create a new shop for a logged-in seller (NOW WITH FULL ADDRESS & IMAGE & HOURS)
 // ACCESS: Private (requires token)
-router.post('/', [auth, upload.single('image')], async (req, res) => {
+router.post('/', [auth, validateCreateShop, upload.single('image')], async (req, res) => {
   try {
     const {
       name,
@@ -107,10 +113,7 @@ router.get('/my-shop', auth, async (req, res) => {
 // ROUTE: PATCH /api/shops/status
 // PURPOSE: To update the shop's 'is_open' status
 // ACCESS: Private (requires token)
-// ROUTE: PATCH /api/shops/status
-// PURPOSE: To update the shop's 'is_open' status
-// ACCESS: Private (requires token)
-router.patch('/status', auth, async (req, res) => {
+router.patch('/status', [auth, validateUpdateShopStatus], async (req, res) => {
   try {
     const { is_open } = req.body;
     const sellerId = req.sellerId;
@@ -173,7 +176,7 @@ router.get('/my-shop/products', auth, async (req, res) => {
 });
 
 
-router.patch('/update-details', [auth, upload.single('image')], async (req, res) => {
+router.patch('/update-details', [auth, validateUpdateShopDetails, upload.single('image')], async (req, res) => {
   try {
     const { name, category, description, opening_time, closing_time } = req.body;
     const sellerId = req.sellerId;
@@ -233,7 +236,7 @@ router.patch('/update-details', [auth, upload.single('image')], async (req, res)
 // ROUTE: PATCH /api/shops/update-location
 // PURPOSE: Update shop location and address
 // ACCESS: Private (Seller)
-router.patch('/update-location', auth, async (req, res) => {
+router.patch('/update-location', [auth, validateUpdateShopLocation], async (req, res) => {
   try {
     const { latitude, longitude, town_village, mandal, district, state } = req.body;
     const sellerId = req.sellerId;

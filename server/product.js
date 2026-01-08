@@ -3,11 +3,17 @@ const router = express.Router();
 const pool = require('./db');
 const auth = require('./middleware/auth'); // Our auth middleware
 const upload = require('./middleware/uploadMiddleware'); // Import upload middleware
+const {
+  validateCreateProduct,
+  validateUpdateProduct,
+  validateToggleProductAvailability,
+  validateIdParam
+} = require('./middleware/validation');
 
 // ROUTE: POST /api/products
 // PURPOSE: To add a new product to a seller's shop
 // ACCESS: Private (requires token)
-router.post('/', [auth, upload.single('image')], async (req, res) => {
+router.post('/', [auth, validateCreateProduct, upload.single('image')], async (req, res) => {
   try {
     const { name, category, category_id, price, description } = req.body;
     const sellerId = req.sellerId;
@@ -40,7 +46,7 @@ router.post('/', [auth, upload.single('image')], async (req, res) => {
 // ROUTE: PATCH /api/products/:productId/details
 // PURPOSE: To update product details (name, price, etc.)
 // ACCESS: Private (requires token)
-router.patch('/:productId/details', [auth, upload.single('image')], async (req, res) => {
+router.patch('/:productId/details', [auth, validateIdParam('productId'), validateUpdateProduct, upload.single('image')], async (req, res) => {
   try {
     const { productId } = req.params;
     const { name, category, category_id, price, description, is_available } = req.body;
@@ -91,7 +97,7 @@ router.patch('/:productId/details', [auth, upload.single('image')], async (req, 
 // ROUTE: PATCH /api/products/:productId
 // PURPOSE: To update a product's availability (Legacy/Simple Toggle)
 // ACCESS: Private (requires token)
-router.patch('/:productId', auth, async (req, res) => {
+router.patch('/:productId', [auth, validateIdParam('productId'), validateToggleProductAvailability], async (req, res) => {
   try {
     const { productId } = req.params;
     const { is_available } = req.body; // The new status (true or false)
@@ -125,7 +131,7 @@ router.patch('/:productId', auth, async (req, res) => {
 // ROUTE: GET /api/products/shop/:shopId
 // PURPOSE: To get all AVAILABLE products for a specific shop
 // ACCESS: Public
-router.get('/shop/:shopId', async (req, res) => {
+router.get('/shop/:shopId', validateIdParam('shopId'), async (req, res) => {
   try {
     const { shopId } = req.params;
 
@@ -154,7 +160,7 @@ router.get('/shop/:shopId', async (req, res) => {
 // ROUTE: DELETE /api/products/:productId
 // PURPOSE: To delete a product
 // ACCESS: Private (requires token)
-router.delete('/:productId', auth, async (req, res) => {
+router.delete('/:productId', [auth, validateIdParam('productId')], async (req, res) => {
   try {
     const { productId } = req.params;
     const sellerId = req.sellerId;

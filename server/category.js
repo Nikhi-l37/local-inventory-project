@@ -3,11 +3,15 @@ const router = express.Router();
 const pool = require('./db');
 const auth = require('./middleware/auth');
 const upload = require('./middleware/uploadMiddleware');
+const {
+  validateCreateCategory,
+  validateIdParam
+} = require('./middleware/validation');
 
 // ROUTE: POST /api/categories
 // PURPOSE: Create a new category for a shop
 // ACCESS: Private (Seller)
-router.post('/', [auth, upload.single('image')], async (req, res) => {
+router.post('/', [auth, validateCreateCategory, upload.single('image')], async (req, res) => {
     try {
         const { name, description } = req.body;
         const sellerId = req.sellerId;
@@ -38,7 +42,7 @@ router.post('/', [auth, upload.single('image')], async (req, res) => {
 // ROUTE: GET /api/categories/shop/:shopId
 // PURPOSE: Get all categories for a specific shop
 // ACCESS: Public
-router.get('/shop/:shopId', async (req, res) => {
+router.get('/shop/:shopId', validateIdParam('shopId'), async (req, res) => {
     try {
         const { shopId } = req.params;
         const categories = await pool.query(
@@ -80,7 +84,7 @@ router.get('/my-shop', auth, async (req, res) => {
 // ROUTE: DELETE /api/categories/:id
 // PURPOSE: Delete a category
 // ACCESS: Private (Seller)
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', [auth, validateIdParam('id')], async (req, res) => {
     try {
         const { id } = req.params;
         const sellerId = req.sellerId;
