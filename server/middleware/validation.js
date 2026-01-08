@@ -1,5 +1,8 @@
 // Validation middleware for input sanitization and validation
 
+// Constants for validation limits
+const MAX_PRICE = 999999999; // Maximum allowed price for products
+
 /**
  * Validates email format
  */
@@ -329,12 +332,12 @@ const validateCreateProduct = (req, res, next) => {
   }
 
   // Validate price
-  if (!isValidNumber(price, 0, 999999999)) {
+  if (!isValidNumber(price, 0, MAX_PRICE)) {
     return res.status(400).json({ msg: 'Price must be a valid positive number.' });
   }
 
   // Validate optional fields
-  if (category && !isValidString(category, 1, 100)) {
+  if (category !== undefined && category !== null && !isValidString(category, 1, 100)) {
     return res.status(400).json({ msg: 'Category must be between 1 and 100 characters.' });
   }
 
@@ -342,7 +345,7 @@ const validateCreateProduct = (req, res, next) => {
     return res.status(400).json({ msg: 'Description must be less than 1000 characters.' });
   }
 
-  if (category_id !== undefined && !isValidNumber(category_id, 1)) {
+  if (category_id !== undefined && category_id !== null && !isValidNumber(category_id, 1)) {
     return res.status(400).json({ msg: 'Invalid category ID.' });
   }
 
@@ -365,7 +368,7 @@ const validateUpdateProduct = (req, res, next) => {
     return res.status(400).json({ msg: 'Product name must be between 1 and 200 characters.' });
   }
 
-  if (price !== undefined && !isValidNumber(price, 0, 999999999)) {
+  if (price !== undefined && !isValidNumber(price, 0, MAX_PRICE)) {
     return res.status(400).json({ msg: 'Price must be a valid positive number.' });
   }
 
@@ -381,7 +384,7 @@ const validateUpdateProduct = (req, res, next) => {
     return res.status(400).json({ msg: 'Description must be less than 1000 characters.' });
   }
 
-  if (category_id !== undefined && !isValidNumber(category_id, 1)) {
+  if (category_id !== undefined && category_id !== null && !isValidNumber(category_id, 1)) {
     return res.status(400).json({ msg: 'Invalid category ID.' });
   }
 
