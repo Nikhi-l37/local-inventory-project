@@ -202,7 +202,8 @@ const validateCreateShop = (req, res, next) => {
   }
 
   // Validate optional description
-  if (req.body.description && !isValidString(req.body.description, 0, 1000)) {
+  const { description } = req.body;
+  if (description !== undefined && description !== null && !isValidString(description, 0, 1000)) {
     return res.status(400).json({ msg: 'Description must be less than 1000 characters.' });
   }
 
@@ -222,10 +223,10 @@ const validateCreateShop = (req, res, next) => {
  * Middleware: Validate shop update details
  */
 const validateUpdateShopDetails = (req, res, next) => {
-  const { name, category, opening_time, closing_time } = req.body;
+  const { name, category, opening_time, closing_time, description } = req.body;
 
   // At least one field should be present
-  if (!name && !category && !opening_time && !closing_time && !req.body.description) {
+  if (!name && !category && !opening_time && !closing_time && description === undefined) {
     return res.status(400).json({ msg: 'At least one field must be provided for update.' });
   }
 
@@ -238,7 +239,7 @@ const validateUpdateShopDetails = (req, res, next) => {
     return res.status(400).json({ msg: 'Category must be between 1 and 100 characters.' });
   }
 
-  if (req.body.description && !isValidString(req.body.description, 0, 1000)) {
+  if (description !== undefined && description !== null && !isValidString(description, 0, 1000)) {
     return res.status(400).json({ msg: 'Description must be less than 1000 characters.' });
   }
 
@@ -315,7 +316,7 @@ const validateUpdateShopStatus = (req, res, next) => {
  * Middleware: Validate product creation
  */
 const validateCreateProduct = (req, res, next) => {
-  const { name, price } = req.body;
+  const { name, price, category, description, category_id } = req.body;
 
   // Required fields
   if (!name || price === undefined || price === null) {
@@ -333,15 +334,15 @@ const validateCreateProduct = (req, res, next) => {
   }
 
   // Validate optional fields
-  if (req.body.category && !isValidString(req.body.category, 1, 100)) {
+  if (category && !isValidString(category, 1, 100)) {
     return res.status(400).json({ msg: 'Category must be between 1 and 100 characters.' });
   }
 
-  if (req.body.description && !isValidString(req.body.description, 0, 1000)) {
+  if (description !== undefined && description !== null && !isValidString(description, 0, 1000)) {
     return res.status(400).json({ msg: 'Description must be less than 1000 characters.' });
   }
 
-  if (req.body.category_id && !isValidNumber(req.body.category_id, 1)) {
+  if (category_id !== undefined && !isValidNumber(category_id, 1)) {
     return res.status(400).json({ msg: 'Invalid category ID.' });
   }
 
@@ -355,7 +356,7 @@ const validateUpdateProduct = (req, res, next) => {
   const { name, price, is_available, category, description, category_id } = req.body;
 
   // At least one field should be provided
-  if (!name && price === undefined && is_available === undefined && !category && !description && !category_id) {
+  if (!name && price === undefined && is_available === undefined && !category && !description && category_id === undefined) {
     return res.status(400).json({ msg: 'At least one field must be provided for update.' });
   }
 
@@ -376,11 +377,11 @@ const validateUpdateProduct = (req, res, next) => {
     return res.status(400).json({ msg: 'Category must be between 1 and 100 characters.' });
   }
 
-  if (description && !isValidString(description, 0, 1000)) {
+  if (description !== undefined && description !== null && !isValidString(description, 0, 1000)) {
     return res.status(400).json({ msg: 'Description must be less than 1000 characters.' });
   }
 
-  if (category_id && !isValidNumber(category_id, 1)) {
+  if (category_id !== undefined && !isValidNumber(category_id, 1)) {
     return res.status(400).json({ msg: 'Invalid category ID.' });
   }
 
@@ -408,7 +409,7 @@ const validateToggleProductAvailability = (req, res, next) => {
  * Middleware: Validate category creation
  */
 const validateCreateCategory = (req, res, next) => {
-  const { name } = req.body;
+  const { name, description } = req.body;
 
   if (!name) {
     return res.status(400).json({ msg: 'Category name is required.' });
@@ -418,7 +419,7 @@ const validateCreateCategory = (req, res, next) => {
     return res.status(400).json({ msg: 'Category name must be between 1 and 100 characters.' });
   }
 
-  if (req.body.description && !isValidString(req.body.description, 0, 500)) {
+  if (description !== undefined && description !== null && !isValidString(description, 0, 500)) {
     return res.status(400).json({ msg: 'Description must be less than 500 characters.' });
   }
 
