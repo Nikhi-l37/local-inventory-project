@@ -22,8 +22,10 @@ const isValidPassword = (password) => {
  * Validates string field (not empty, proper type)
  */
 const isValidString = (str, minLength = 1, maxLength = 500) => {
-  if (!str || typeof str !== 'string') return false;
+  if (str === null || str === undefined || typeof str !== 'string') return false;
   const trimmed = str.trim();
+  // Allow empty strings only if minLength is 0
+  if (minLength === 0 && trimmed.length === 0) return true;
   return trimmed.length >= minLength && trimmed.length <= maxLength;
 };
 
@@ -350,10 +352,10 @@ const validateCreateProduct = (req, res, next) => {
  * Middleware: Validate product update
  */
 const validateUpdateProduct = (req, res, next) => {
-  const { name, price, is_available } = req.body;
+  const { name, price, is_available, category, description, category_id } = req.body;
 
   // At least one field should be provided
-  if (!name && price === undefined && is_available === undefined && !req.body.category && !req.body.description) {
+  if (!name && price === undefined && is_available === undefined && !category && !description && !category_id) {
     return res.status(400).json({ msg: 'At least one field must be provided for update.' });
   }
 
@@ -370,15 +372,15 @@ const validateUpdateProduct = (req, res, next) => {
     return res.status(400).json({ msg: 'Availability must be a boolean value.' });
   }
 
-  if (req.body.category && !isValidString(req.body.category, 1, 100)) {
+  if (category && !isValidString(category, 1, 100)) {
     return res.status(400).json({ msg: 'Category must be between 1 and 100 characters.' });
   }
 
-  if (req.body.description && !isValidString(req.body.description, 0, 1000)) {
+  if (description && !isValidString(description, 0, 1000)) {
     return res.status(400).json({ msg: 'Description must be less than 1000 characters.' });
   }
 
-  if (req.body.category_id && !isValidNumber(req.body.category_id, 1)) {
+  if (category_id && !isValidNumber(category_id, 1)) {
     return res.status(400).json({ msg: 'Invalid category ID.' });
   }
 
