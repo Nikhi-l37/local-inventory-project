@@ -226,16 +226,16 @@ const validateUpdateShopDetails = (req, res, next) => {
   const { name, category, opening_time, closing_time, description } = req.body;
 
   // At least one field should be present
-  if (!name && !category && !opening_time && !closing_time && description === undefined) {
+  if (name === undefined && category === undefined && opening_time === undefined && closing_time === undefined && description === undefined) {
     return res.status(400).json({ msg: 'At least one field must be provided for update.' });
   }
 
   // Validate strings if provided
-  if (name && !isValidString(name, 1, 200)) {
+  if (name !== undefined && name !== null && !isValidString(name, 1, 200)) {
     return res.status(400).json({ msg: 'Shop name must be between 1 and 200 characters.' });
   }
 
-  if (category && !isValidString(category, 1, 100)) {
+  if (category !== undefined && category !== null && !isValidString(category, 1, 100)) {
     return res.status(400).json({ msg: 'Category must be between 1 and 100 characters.' });
   }
 
@@ -244,11 +244,11 @@ const validateUpdateShopDetails = (req, res, next) => {
   }
 
   // Validate time fields if provided
-  if (opening_time && !isValidTime(opening_time)) {
+  if (opening_time !== undefined && opening_time !== null && !isValidTime(opening_time)) {
     return res.status(400).json({ msg: 'Invalid opening time format. Use HH:MM.' });
   }
 
-  if (closing_time && !isValidTime(closing_time)) {
+  if (closing_time !== undefined && closing_time !== null && !isValidTime(closing_time)) {
     return res.status(400).json({ msg: 'Invalid closing time format. Use HH:MM.' });
   }
 
@@ -356,12 +356,12 @@ const validateUpdateProduct = (req, res, next) => {
   const { name, price, is_available, category, description, category_id } = req.body;
 
   // At least one field should be provided
-  if (!name && price === undefined && is_available === undefined && !category && !description && category_id === undefined) {
+  if (name === undefined && price === undefined && is_available === undefined && category === undefined && description === undefined && category_id === undefined) {
     return res.status(400).json({ msg: 'At least one field must be provided for update.' });
   }
 
   // Validate fields if provided
-  if (name && !isValidString(name, 1, 200)) {
+  if (name !== undefined && name !== null && !isValidString(name, 1, 200)) {
     return res.status(400).json({ msg: 'Product name must be between 1 and 200 characters.' });
   }
 
@@ -373,7 +373,7 @@ const validateUpdateProduct = (req, res, next) => {
     return res.status(400).json({ msg: 'Availability must be a boolean value.' });
   }
 
-  if (category && !isValidString(category, 1, 100)) {
+  if (category !== undefined && category !== null && !isValidString(category, 1, 100)) {
     return res.status(400).json({ msg: 'Category must be between 1 and 100 characters.' });
   }
 
