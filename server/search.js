@@ -6,7 +6,7 @@ const pool = require('./db');
 router.get('/', async (req, res) => {
   try {
     // 1. Get all params from the query
-    const { q, lat, lon, open_only } = req.query;
+    const { q, lat, lon, open_only, range } = req.query;
 
     // --- FIX: Robust Validation Check ---
     // 1. Check for required search query
@@ -19,11 +19,13 @@ router.get('/', async (req, res) => {
     }
     // --- End of validation ---
 
-    // Set search parameters
-    const searchRadius = 50000; // Increased to 50km
+    // Set search parameters with custom range support
+    // Convert km to meters (range comes in km from frontend)
+    const customRange = range ? parseFloat(range) * 1000 : 5000;
+    const searchRadius = Math.min(Math.max(customRange, 500), 100000); // Min 0.5km, Max 100km
     const userLocation = `POINT(${lon} ${lat})`;
 
-    console.log(`[Search Debug] Query: "${q}", Location: ${userLocation}, OpenOnly: ${open_only}`);
+    console.log(`[Search Debug] Query: "${q}", Location: ${userLocation}, OpenOnly: ${open_only}, Range: ${searchRadius}m`);
 
     // Build WHERE clauses with fuzzy matching
     // $1 = userLocation, $2 = raw query (for similarity), $3 = searchRadius, $4 = %query% (for ILIKE fallback)
@@ -71,7 +73,7 @@ router.get('/', async (req, res) => {
 // ROUTE: GET /api/search/shops (Shop Search)
 router.get('/shops', async (req, res) => {
   try {
-    const { q, lat, lon, open_only } = req.query;
+    const { q, lat, lon, open_only, range } = req.query;
 
     // --- FIX: Robust Validation Check ---
     if (!q) {
@@ -82,10 +84,13 @@ router.get('/shops', async (req, res) => {
     }
     // --- End of validation ---
 
-    const searchRadius = 50000;
+    // Set search parameters with custom range support
+    // Convert km to meters (range comes in km from frontend)
+    const customRange = range ? parseFloat(range) * 1000 : 5000;
+    const searchRadius = Math.min(Math.max(customRange, 500), 100000); // Min 0.5km, Max 100km
     const userLocation = `POINT(${lon} ${lat})`;
 
-    console.log(`[Search Shops Debug] Query: "${q}", Location: ${userLocation}, OpenOnly: ${open_only}`);
+    console.log(`[Search Shops Debug] Query: "${q}", Location: ${userLocation}, OpenOnly: ${open_only}, Range: ${searchRadius}m`);
 
     // Build WHERE clauses with fuzzy matching
     // $1 = userLocation, $2 = raw query (for similarity), $3 = searchRadius, $4 = %query% (for ILIKE fallback)

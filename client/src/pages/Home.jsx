@@ -1,5 +1,5 @@
 // ...existing code...
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
@@ -124,6 +124,7 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchMode, setSearchMode] = useState('product');
   const [openOnly, setOpenOnly] = useState(false);
+  const [searchRange, setSearchRange] = useState(5); // Default 5km
   const [searchResults, setSearchResults] = useState([]);
   const [selectedShop, setSelectedShop] = useState(null);
 
@@ -192,6 +193,7 @@ function Home() {
       lat: selectedLocation.lat,
       lon: selectedLocation.lon,
       open_only: openOnly,
+      range: searchRange,
     };
 
     try {
@@ -351,6 +353,24 @@ function Home() {
                 />
                 <label htmlFor="openOnly">Only show open shops</label>
               </div>
+
+              <div className={styles.rangeFilter}>
+                <label htmlFor="searchRange">Search Range: <strong>{searchRange} km</strong></label>
+                <input
+                  type="range"
+                  id="searchRange"
+                  min="0.5"
+                  max="50"
+                  step="0.5"
+                  value={searchRange}
+                  onChange={(e) => setSearchRange(parseFloat(e.target.value))}
+                  className={styles.rangeSlider}
+                />
+                <div className={styles.rangeLabels}>
+                  <span>0.5 km</span>
+                  <span>50 km</span>
+                </div>
+              </div>
             </div>
           )}
         </form>
@@ -408,16 +428,5 @@ function Home() {
     </div>
   );
 }
-
-// Modal styles (using var() to support themes)
-const modalOverlayStyle = {
-  position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.7)', display: 'flex',
-  justifyContent: 'center', alignItems: 'center', zIndex: 1000,
-};
-const modalContentStyle = {
-  backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)',
-  padding: '20px', borderRadius: '5px', minWidth: '300px', zIndex: 1001,
-};
 
 export default Home;
