@@ -1,31 +1,33 @@
 .formContainer {
-  /* --- Final Medium Size and HSL Styling --- */
   background: var(--bg-secondary); 
   border: 1px solid var(--border-color);
   border-radius: 0.75rem; 
-  box-shadow: 0 4px 15px hsla(222 84% 5% / 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   
-  max-width: 380px; /* FINAL MEDIUM WIDTH */
+  max-width: 380px;
   margin: 100px auto; 
-  padding: 30px;     /* FINAL PADDING */
+  padding: 30px;
   text-align: center;
+  transition: all 0.3s ease;
 }
 
 /* --- BRANDING & HEADER --- */
-/* The Logo component is used here, so we style the wrapper */
 .logoWrapper {
   margin-bottom: 10px;
   color: var(--primary-color);
-  font-size: 1.4em; /* Makes the 'Finder' text larger */
+  font-size: 1.4em;
+  transition: color 0.3s ease;
 }
-/* Hides the old <h2> heading and uses the logo text instead */
+
 .formContainer h2 { 
   display: none; 
 }
+
 .tagline {
   font-size: 0.9em; 
   color: var(--text-color-light);
-  margin-bottom: 25px; /* Reduced space below tagline */
+  margin-bottom: 25px;
+  transition: color 0.3s ease;
 }
 
 /* --- TABS (Sign In / Sign Up) --- */
@@ -35,18 +37,19 @@
   background-color: var(--border-color-input); 
   border-radius: 0.75rem; 
   overflow: hidden;
-  padding: 4px; 
+  padding: 4px;
+  transition: background-color 0.3s ease;
 }
 
 .tabButton {
   flex: 1;
-  padding: 10px 0; /* Reduced vertical padding */
+  padding: 10px 0;
   border: none;
   background-color: transparent;
   color: var(--text-color-light); 
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   border-radius: calc(0.75rem - 4px);
   font-size: 1em;
 }
@@ -54,7 +57,7 @@
 .tabButton.active {
   background-color: var(--bg-secondary); 
   color: var(--text-color); 
-  box-shadow: none; /* Lighter look */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -62,13 +65,16 @@
 .formGroup {
   margin-bottom: 20px;
 }
+
 .formGroup label {
   display: block;
   font-weight: 600; 
   margin-bottom: 8px;
   color: var(--text-color-light); 
-  text-align: left; 
+  text-align: left;
+  transition: color 0.3s ease;
 }
+
 .formInput {
   width: 100%;
   padding: 12px 15px;
@@ -76,25 +82,27 @@
   border-radius: 0.5rem; 
   box-sizing: border-box; 
   
-  background-color: var(--border-color-input); 
+  background-color: var(--bg-inset); 
   color: var(--text-color);
   font-size: 1em;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
 }
+
 .formInput::placeholder { 
   color: var(--text-color-light);
 }
+
 .formInput:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px hsla(var(--primary) / 0.5); 
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
 }
 
 /* --- BUTTON --- */
 .formButton {
   width: 100%;
   background-color: var(--primary-color); 
-  color: var(--bg-color); /* Contrast text against primary button */
+  color: white;
   padding: 12px 15px;
   border: none;
   border-radius: 0.5rem;
@@ -102,18 +110,19 @@
   cursor: pointer;
   font-size: 16px;
   margin-top: 25px; 
-  transition: background-color 0.2s, transform 0.2s;
+  transition: all 0.3s ease;
 }
 
 .formButton:hover {
   background-color: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px hsla(222 84% 5% / 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
 }
 
 .formButton:disabled {
   background-color: var(--secondary-color);
   cursor: not-allowed;
+  transform: none;
 }
 
 /* Add a style for the Forgot Password link to match the design */
@@ -121,5 +130,9 @@
   font-size: 0.9em;
   font-weight: 500;
   color: var(--primary-color);
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+}
+
+.formContainer a:hover {
+  color: var(--primary-hover);
 }
