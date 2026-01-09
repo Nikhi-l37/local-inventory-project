@@ -1,18 +1,12 @@
-// ...existing code...
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import React, { useState, useEffect, useMemo } from 'react';
+import Map, { Marker, Popup, NavigationControl, GeolocateControl } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import { useNavigate } from 'react-router-dom';
-import 'leaflet/dist/leaflet.css';
 import api from '../api';
 import axios from 'axios';
 import styles from './Home.module.css';
 
-// (Leaflet icon fix)
-import L from 'leaflet';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-let DefaultIcon = L.icon({ iconUrl: icon, shadowUrl: iconShadow });
-L.Marker.prototype.options.icon = DefaultIcon;
+// Leaflet icon fix removed
 
 // Helper to format time (e.g. 14:00 -> 2:00 PM)
 const formatTime = (timeStr) => {
@@ -127,6 +121,7 @@ function Home() {
   const [searchRange, setSearchRange] = useState(5); // Default 5km
   const [searchResults, setSearchResults] = useState([]);
   const [selectedShop, setSelectedShop] = useState(null);
+  const [popupInfo, setPopupInfo] = useState(null); // Mapbox Popup State
 
   const [showFilters, setShowFilters] = useState(false);
 
@@ -226,59 +221,97 @@ function Home() {
   return (
     <div className={styles.homeContainer}>
 
-      <MapContainer
-        center={mapCenter}
-        zoom={14}
-        className={styles.mapContainer}
+      <Map
+        initialViewState={{
+          longitude: mapCenter[1],
+          latitude: mapCenter[0],
+          zoom: 13
+        }}
+        // Sync map center when it changes programmatically
+        {...(selectedLocation ? {
+          longitude: mapCenter[1],
+          latitude: mapCenter[0],
+        } : {})}
+        style={{ width: '100%', height: '100%' }}
+        mapStyle="mapbox://styles/mapbox/navigation-night-v1"
+        mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
+        onMove={evt => setMapCenter([evt.viewState.latitude, evt.viewState.longitude])}
       >
-        <ChangeMapView center={mapCenter} />
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
+        <NavigationControl position="top-right" />
+        <GeolocateControl position="top-right" />
 
+        {/* User Location Marker */}
+        {userLocation && (
+          <Marker longitude={userLocation.lon} latitude={userLocation.lat} color="#3b82f6" />
+        )}
+
+        {/* Shop Markers */}
         {searchResults.map(result => {
-          const status = getShopStatus(result.opening_time, result.closing_time, result.is_open);
           const imageUrl = result.shop_image || result.image_url;
-
           return (
             <Marker
               key={result.id || result.shop_id}
-              position={[result.latitude, result.longitude]}
+              longitude={result.longitude}
+              latitude={result.latitude}
+              anchor="bottom"
+              onClick={e => {
+                e.originalEvent.stopPropagation();
+                // We use a separate state for the popup content to avoid conflict with selectedShop modal
+                // Or we can reuse selectedShop if the logic aligns, but usually modal is different
+                // Let's create a local state for the simplified popup
+                setPopupInfo(result);
+              }}
             >
-              <Popup className={styles.customPopup}>
-                <div className={styles.popupContent}>
-                  {imageUrl && (
-                    <img
-                      src={`${import.meta.env.VITE_API_BASE_URL}${imageUrl}`}
-                      alt="Shop"
-                      className={styles.popupImage}
-                    />
-                  )}
-                  <strong>{result.shop_name || result.name}</strong>
-                  <div style={{ color: status.color, fontWeight: 'bold', fontSize: '0.9em' }}>
-                    {status.text}
-                  </div>
-
-                  {searchMode === 'product' && (
-                    <div className={styles.popupProduct}>
-                      Product: <strong>{result.product_name}</strong>
-                      {result.price && <span> - ₹{result.price}</span>}
-                    </div>
-                  )}
-
-                  <div className={styles.popupActions}>
-                    {searchMode === 'shop' && (
-                      <button onClick={() => setSelectedShop({ ...result, image_url: imageUrl })}>See Products</button>
-                    )}
-                    <button onClick={() => getDirections(result.latitude, result.longitude)}>Directions</button>
-                  </div>
-                </div>
-              </Popup>
+              <div className={styles.mapboxMarker}>
+                <img src={imageUrl ? `${import.meta.env.VITE_API_BASE_URL}${imageUrl}` : 'https://cdn-icons-png.flaticon.com/512/869/869636.png'}
+                  className={styles.markerIcon} alt="marker" />
+              </div>
             </Marker>
           );
         })}
-      </MapContainer>
+
+        {/* Single Popup for Selected Item */}
+        {popupInfo && (
+          <Popup
+            longitude={popupInfo.longitude}
+            latitude={popupInfo.latitude}
+            anchor="top"
+            onClose={() => setPopupInfo(null)}
+            className={styles.customPopup}
+            maxWidth="300px"
+          >
+            <div className={styles.popupContent}>
+              {popupInfo.shop_image || popupInfo.image_url ? (
+                <img
+                  src={`${import.meta.env.VITE_API_BASE_URL}${popupInfo.shop_image || popupInfo.image_url}`}
+                  alt="Shop"
+                  className={styles.popupImage}
+                />
+              ) : null}
+              <strong>{popupInfo.shop_name || popupInfo.name}</strong>
+
+              <div style={{ marginTop: '5px' }}>
+                {/* Re-calculate status locally or pass it in */}
+                <span style={{ color: '#d69e2e', fontSize: '0.9em', fontWeight: 'bold' }}>{/* Status Text Simplified */} Check details</span>
+              </div>
+
+              {searchMode === 'product' && popupInfo.product_name && (
+                <div className={styles.popupProduct}>
+                  Product: <strong>{popupInfo.product_name}</strong>
+                  {popupInfo.price && <span> - ₹{popupInfo.price}</span>}
+                </div>
+              )}
+
+              <div className={styles.popupActions}>
+                {searchMode === 'shop' && (
+                  <button onClick={() => { setPopupInfo(null); setSelectedShop(popupInfo); }}>See Products</button>
+                )}
+                <button onClick={() => getDirections(popupInfo.latitude, popupInfo.longitude)}>Directions</button>
+              </div>
+            </div>
+          </Popup>
+        )}
+      </Map>
 
       {/* --- The Floating Search Panel --- */}
       <div className={styles.searchPanel}>

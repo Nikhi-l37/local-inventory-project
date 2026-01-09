@@ -34,7 +34,7 @@ function App() {
       {/* Render navbar ONLY if not on search page */}
       {!isSearchPage && (
         <nav className={styles.navbar}>
-          <div style={{ color: 'white' }}>
+          <div>
             <Logo />
           </div>
 
@@ -52,8 +52,9 @@ function App() {
                 </>
               ) : (
                 <>
-                  <Link to="/search">Search</Link>
-                  <Link to="/login">Seller Portal</Link>
+                  {/* Search and Seller Portal - HIDDEN as per request */}
+                  {/* <Link to="/search">Search</Link>
+                  <Link to="/login">Seller Portal</Link> */}
                 </>
               )
             )}
@@ -65,7 +66,7 @@ function App() {
 
       {/* The main content area. This will fill remaining space */}
       {/* We now apply content styles directly here, or not at all for full-screen map */}
-      <div className={(isSearchPage || path.startsWith('/dashboard')) ? styles.fullPageContent : styles.regularContent}>
+      <div className={(isSearchPage || path.startsWith('/dashboard') || path.startsWith('/login') || path.startsWith('/register')) ? styles.fullPageContent : styles.regularContent}>
         <Outlet />
       </div>
     </>

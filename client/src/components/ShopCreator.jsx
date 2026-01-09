@@ -1,33 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api';
 import axios from 'axios'; // To call the geocoding API
-import { MapContainer, TileLayer, Marker, useMapEvents, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+
+import Map, { Marker, NavigationControl, GeolocateControl } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import ImageUpload from './ImageUpload'; // Import ImageUpload
 import styles from './ShopCreator.module.css';
 
-// (Leaflet icon fix)
-import L from 'leaflet';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-let DefaultIcon = L.icon({ iconUrl: icon, shadowUrl: iconShadow });
-L.Marker.prototype.options.icon = DefaultIcon;
+// Leaflet icon fix removed
 
 // Helper component to find location
-function LocationFinder({ position, setPosition }) {
-  const map = useMapEvents({
-    click(e) {
-      setPosition(e.latlng); // e.latlng is { lat, lng }
-      map.flyTo(e.latlng, map.getZoom());
-    },
-  });
-
-  return position === null ? null : (
-    <Marker position={position}>
-      <Popup>Click on the map to move this pin</Popup>
-    </Marker>
-  );
-}
+// LocationFinder removed (not needed for Mapbox)
 
 // Our new ShopCreator
 function ShopCreator({ onShopCreated }) {
@@ -231,16 +214,41 @@ function ShopCreator({ onShopCreated }) {
           </div>
 
           <div className={styles.mapWrapper}>
-            <MapContainer
-              center={position}
-              zoom={15}
-              className={styles.mapContainer}
+            <Map
+              initialViewState={{
+                longitude: position.lng,
+                latitude: position.lat,
+                zoom: 14
+              }}
+              mapStyle="mapbox://styles/mapbox/navigation-night-v1"
+              mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
+              style={{ width: '100%', height: '100%' }}
+              onClick={(e) => {
+                // Handle map click to move marker
+                const newPos = { lat: e.lngLat.lat, lng: e.lngLat.lng };
+                handleMapClick(newPos);
+              }}
+              // Sync view state if position changes externally (like geolocation)
+              {...(position ? {
+                longitude: position.lng,
+                latitude: position.lat
+              } : {})}
+              onMove={evt => { /* Optional: track view state if needed */ }}
             >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              <NavigationControl position="top-right" />
+              <GeolocateControl position="top-right" />
+
+              <Marker
+                longitude={position.lng}
+                latitude={position.lat}
+                draggable
+                onDragEnd={(e) => {
+                  const newPos = { lat: e.lngLat.lat, lng: e.lngLat.lng };
+                  handleMapClick(newPos);
+                }}
+                color="#e53e3e" // Red color for pin
               />
-              <LocationFinder position={position} setPosition={handleMapClick} />
-            </MapContainer>
+            </Map>
           </div>
 
           <div className={styles.locationCard}>

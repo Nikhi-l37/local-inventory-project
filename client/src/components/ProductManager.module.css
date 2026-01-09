@@ -1,6 +1,38 @@
 /* Main Container */
 .managerContainer {
   width: 100%;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Search Section */
+.searchContainer {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: var(--bg-secondary);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.searchIcon {
+  font-size: 1.2em;
+  color: var(--text-color-light);
+}
+
+.searchInput {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1em;
+  font-family: inherit;
+}
+
+.searchInput:focus {
+  outline: none;
 }
 
 /* Header Section */
@@ -13,7 +45,7 @@
 
 .managerHeader h2 {
   margin: 0;
-  font-size: 1.5em;
+  font-size: 1.8em;
   color: var(--text-color);
 }
 
@@ -24,44 +56,66 @@
 }
 
 .addBtn {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
   color: white;
-  padding: 10px 20px;
+  padding: 10px 24px;
   border-radius: 8px;
   border: none;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.1s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
 }
 
 .addBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  background-color: var(--primary-hover);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
-
 
 /* Product Grid */
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  /* Slightly wider cards */
+  gap: 25px;
+  padding-bottom: 80px;
+  /* Space for FAB */
 }
 
 .productCard {
   background: var(--bg-secondary);
-  border-radius: 12px;
+  border-radius: 16px;
+  /* More rounded */
   overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--border-color);
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   display: flex;
   flex-direction: column;
+  animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation-fill-mode: both;
+}
+
+/* Stagger animation delay if possible, or just global bounce */
+.productCard:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.productCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.productCard:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.productCard:nth-child(4) {
+  animation-delay: 0.4s;
 }
 
 .productCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
   border-color: var(--primary-color);
 }
 
@@ -241,11 +295,86 @@
   /* Pushes actions down */
 
   /* Truncate text */
+  /* Truncate text */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.viewDetailsBtn {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: auto;
+}
+
+.viewDetailsBtn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* FAB (Floating Action Button) */
+.fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff00cc, #333399);
+  /* Pink/Purple gradient from Ref */
+  color: white;
+  border: none;
+  font-size: 2em;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fab span {
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+}
+
+.fab:hover span {
+  transform: rotate(360deg);
+  /* 360 degree rotation on hover as requested */
+}
+
+/* Keyframes */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(20px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-5px);
+  }
+
+  70% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Action Buttons (Icons) */

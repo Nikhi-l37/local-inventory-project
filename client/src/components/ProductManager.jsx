@@ -24,10 +24,15 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
     fetchProducts();
   }, [shop.id]);
 
-  // Handle Filtering match
-  const filteredProducts = selectedCategory === 'All'
-    ? products
-    : products.filter(p => p.category_id == selectedCategory || (selectedCategory === 'General' && !p.category_id));
+  // Search State
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Handle Filtering match (Category + Search)
+  const filteredProducts = products.filter(p => {
+    const matchesCategory = selectedCategory === 'All' || p.category_id == selectedCategory || (selectedCategory === 'General' && !p.category_id);
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   // Update Stats Effect
   useEffect(() => {
@@ -134,15 +139,29 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
 
   return (
     <div className={styles.managerContainer}>
+
+      {/* SEARCH BAR (New) */}
+      <div className={styles.searchContainer}>
+        <span className={styles.searchIcon}>🔍</span>
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
+        />
+        {/* Top Add Button (Retained per typical UX, FAB also added) */}
+        <button onClick={() => setShowModal(true)} className={styles.addBtn}>
+          + Add Product
+        </button>
+      </div>
+
       {/* HEADER */}
       <div className={styles.managerHeader}>
         <div>
           <h2>{selectedCategory === 'All' ? 'All Products' : categories.find(c => c.id == selectedCategory)?.name || 'Products'}</h2>
           <p>{filteredProducts.length} items found</p>
         </div>
-        <button onClick={() => setShowModal(true)} className={styles.addBtn}>
-          + Add Product
-        </button>
       </div>
 
       {/* PRODUCT GRID */}
@@ -197,18 +216,31 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
               <h3>{product.name}</h3>
               <p className={styles.desc}>{product.description}</p>
               {/* Bottom Actions Removed as requested */}
+              <button
+                className={styles.viewDetailsBtn}
+                onClick={() => handleEditClick(product)} // Or pure view
+              >
+                View Details
+              </button>
             </div>
           </div>
         ))}
 
         {filteredProducts.length === 0 && (
           <div className={styles.emptyState}>
-            <p>No products found in this category.</p>
-            <button onClick={() => setShowModal(true)}>Add your first product</button>
+            <p>No products found matching "{searchQuery}".</p>
           </div>
         )}
       </div>
 
+      {/* FLOATING ACTION BUTTON (New) */}
+      <button
+        className={styles.fab}
+        onClick={() => setShowModal(true)}
+        title="Add New Product"
+      >
+        <span>+</span>
+      </button>
 
       {/* MODAL */}
       {showModal && (
