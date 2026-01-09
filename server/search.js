@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 
     // Set search parameters with custom range support
     // Convert km to meters (range comes in km from frontend)
-    const customRange = range ? parseFloat(range) * 1000 : 50000;
+    const customRange = range ? parseFloat(range) * 1000 : 5000;
     const searchRadius = Math.min(Math.max(customRange, 500), 100000); // Min 0.5km, Max 100km
     const userLocation = `POINT(${lon} ${lat})`;
 
@@ -86,7 +86,7 @@ router.get('/shops', async (req, res) => {
 
     // Set search parameters with custom range support
     // Convert km to meters (range comes in km from frontend)
-    const customRange = range ? parseFloat(range) * 1000 : 50000;
+    const customRange = range ? parseFloat(range) * 1000 : 5000;
     const searchRadius = Math.min(Math.max(customRange, 500), 100000); // Min 0.5km, Max 100km
     const userLocation = `POINT(${lon} ${lat})`;
 
