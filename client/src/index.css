@@ -59,39 +59,7 @@ body.dark {
   --secondary-hover: #6e7681;
 }
 
-/* --- HSL-BASED PROFESSIONAL THEME (Default) --- */
-body.screen-coach-theme {
-  /* Core HSL Colors */
-  --bg-color: hsl(222 84% 5%);
-  --text-color: hsl(210 40% 98%);
-  --bg-secondary: hsl(222 84% 7%);
-  --heading-color: hsl(210 40% 98%);
 
-  /* Brand Colors */
-  --primary-color: hsl(189 100% 42%);
-  --primary-hover: hsl(189 100% 55%);
-  --primary-color-rgb: 0, 203, 214;
-
-  --secondary-color: hsl(240 6% 20%);
-
-  --text-color-light: hsl(215 20% 65%);
-
-  /* Border/Input Colors */
-  --border-color: hsl(217 33% 17%);
-  --border-color-input: hsl(217 33% 17%);
-
-  /* Status Colors */
-  --success-color: hsl(142 76% 36%);
-  --success-hover: hsl(142 76% 45%);
-  --danger-color: hsl(0 84% 60%);
-  --danger-hover: hsl(0 84% 50%);
-
-  --navbar-bg: hsl(222 84% 5%);
-  --navbar-text: hsl(210 40% 98%);
-  --navbar-link-hover: hsl(189 100% 42%);
-
-  background-image: none;
-}
 
 /* --- CRITICAL FULL-SCREEN LAYOUT --- */
 html,
@@ -107,12 +75,15 @@ body,
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+  font-family: -apple-system, BlinkMacSystemFont, 'Segui UI', Roboto, Helvetica,
     Arial, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
+/* Light theme background gradient */
+body:not(.dark) {
   background-image: linear-gradient(110deg, #e6f0ff 0%, #b3d1ff 100%);
 }
 
@@ -126,6 +97,7 @@ body {
 a {
   text-decoration: none;
   color: var(--primary-color);
+  transition: all 0.3s ease;
 }
 
 a:hover {

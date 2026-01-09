@@ -1,56 +1,51 @@
 /* Navbar styles */
 .navbar {
-  background-color: transparent;
-  /* Was var(--navbar-bg), now transparent/white */
-  background-color: #ffffff;
-  color: #000000;
-  /* Was var(--navbar-text) */
+  background-color: var(--bg-secondary);
+  color: var(--text-color);
   padding: 15px 40px;
-  /* Increased side padding */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: none;
-  /* Remove shadow for cleaner look, or lighter shadow: box-shadow: 0 1px 0 rgba(0,0,0,0.05); */
-  border-bottom: 1px solid #eaeaea;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--border-color);
   z-index: 2000;
   flex-shrink: 0;
   position: sticky;
   top: 0;
   height: 80px;
-  /* Slightly taller */
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
 .navLinks a {
-  color: var(--navbar-text);
+  color: var(--text-color);
   text-decoration: none;
   font-weight: bold;
   margin-left: 20px;
-  transition: color 0.2s ease;
+  transition: color 0.3s ease;
 }
 
 .navLinks a:hover {
-  color: var(--navbar-link-hover);
+  color: var(--primary-color);
   text-decoration: none;
 }
 
 .logoutButton {
   background: none;
   border: none;
-  color: white;
+  color: var(--text-color);
   text-decoration: none;
   font-weight: bold;
   margin-left: 20px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 1em;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.3s ease;
 }
 
 .logoutButton:hover {
   text-decoration: underline;
-  opacity: 0.8;
+  color: var(--primary-color);
 }
 
 /* --- Content Layout --- */
