@@ -124,6 +124,7 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchMode, setSearchMode] = useState('product');
   const [openOnly, setOpenOnly] = useState(false);
+  const [searchRange, setSearchRange] = useState(5); // Default 5km
   const [searchResults, setSearchResults] = useState([]);
   const [selectedShop, setSelectedShop] = useState(null);
 
@@ -192,6 +193,7 @@ function Home() {
       lat: selectedLocation.lat,
       lon: selectedLocation.lon,
       open_only: openOnly,
+      range: searchRange,
     };
 
     try {
@@ -350,6 +352,24 @@ function Home() {
                   onChange={(e) => setOpenOnly(e.target.checked)}
                 />
                 <label htmlFor="openOnly">Only show open shops</label>
+              </div>
+
+              <div className={styles.rangeFilter}>
+                <label htmlFor="searchRange">Search Range: <strong>{searchRange} km</strong></label>
+                <input
+                  type="range"
+                  id="searchRange"
+                  min="0.5"
+                  max="50"
+                  step="0.5"
+                  value={searchRange}
+                  onChange={(e) => setSearchRange(parseFloat(e.target.value))}
+                  className={styles.rangeSlider}
+                />
+                <div className={styles.rangeLabels}>
+                  <span>0.5 km</span>
+                  <span>50 km</span>
+                </div>
               </div>
             </div>
           )}
