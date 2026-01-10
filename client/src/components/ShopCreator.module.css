@@ -173,24 +173,27 @@
 .createButton {
   background-color: var(--primary-color);
   color: white;
-  padding: 12px 30px;
+  padding: 14px 32px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 700;
   font-size: 1em;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.35);
 }
 
 .createButton:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  opacity: 1;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(40, 167, 69, 0.45);
 }
 
 .createButton:disabled {
   background-color: var(--border-color);
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 /* Responsive */

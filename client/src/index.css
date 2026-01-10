@@ -1,18 +1,18 @@
 :root {
-  /* Light theme variables */
-  --primary-color: #007bff;
-  --primary-hover: #0056b3;
-  --primary-color-rgb: 0, 123, 255;
+  /* Light theme variables - Green Primary */
+  --primary-color: #28a745;
+  --primary-hover: #1e7e34;
+  --primary-color-rgb: 40, 167, 69;
   --bg-color: #f8f9fa;
   --bg-secondary: #ffffff;
   --bg-inset: #e9ecef;
-  --text-color: #343a40;
+  --text-color: #212529;
   --text-color-light: #6c757d;
   --border-color: #dee2e6;
   --border-color-input: #ced4da;
-  --navbar-bg: #343a40;
+  --navbar-bg: #1a1a1a;
   --navbar-text: #ffffff;
-  --navbar-link-hover: #adb5bd;
+  --navbar-link-hover: #28a745;
 
   --success-color: #28a745;
   --success-hover: #1e7e34;
@@ -23,30 +23,30 @@
 }
 
 body.dark {
-  /* GitHub Dark Theme Inspired */
-  --primary-color: #58a6ff;
-  --primary-hover: #79c0ff;
-  --primary-color-rgb: 88, 166, 255;
+  /* Dark Theme - Black with Green Accent */
+  --primary-color: #2ea043;
+  --primary-hover: #3fb950;
+  --primary-color-rgb: 46, 160, 67;
 
-  --bg-color: #0d1117;
-  /* GitHub Main Background */
-  --bg-secondary: #161b22;
-  /* GitHub Secondary Background (Cards/Sidebar) */
-  --bg-inset: #21262d;
+  --bg-color: #0d0d0d;
+  /* Deep Black Background */
+  --bg-secondary: #161616;
+  /* Dark Cards/Sidebar */
+  --bg-inset: #1f1f1f;
   /* Input backgrounds */
 
-  --text-color: #c9d1d9;
-  /* GitHub Text Main */
-  --text-color-light: #8b949e;
-  /* GitHub Text Muted */
+  --text-color: #e6e6e6;
+  /* Light Text */
+  --text-color-light: #8b8b8b;
+  /* Muted Text */
 
-  --border-color: #30363d;
-  /* GitHub Borders */
-  --border-color-input: #30363d;
+  --border-color: #2a2a2a;
+  /* Dark Borders */
+  --border-color-input: #3a3a3a;
 
-  --navbar-bg: #161b22;
-  --navbar-text: #f0f6fc;
-  --navbar-link-hover: #58a6ff;
+  --navbar-bg: #0d0d0d;
+  --navbar-text: #f0f0f0;
+  --navbar-link-hover: #2ea043;
 
   background-image: none;
   /* Remove gradient for flat clean look */
@@ -55,8 +55,8 @@ body.dark {
   --success-hover: #2ea043;
   --danger-color: #da3633;
   --danger-hover: #f85149;
-  --secondary-color: #8b949e;
-  --secondary-hover: #6e7681;
+  --secondary-color: #8b8b8b;
+  --secondary-hover: #6e6e6e;
 }
 
 
@@ -75,16 +75,18 @@ body,
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segui UI', Roboto, Helvetica,
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
     Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Light theme background gradient */
+/* Light theme background - Clean white/gray gradient */
 body:not(.dark) {
-  background-image: linear-gradient(110deg, #e6f0ff 0%, #b3d1ff 100%);
+  background-image: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 #root {
