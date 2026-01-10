@@ -2,28 +2,25 @@
   position: relative;
   width: 100%;
   height: 100%;
-  /* Now takes 100% of its parent's height (which is full remaining viewport) */
   overflow: hidden;
 }
 
 .mapContainer {
   width: 100%;
-  /* FIXED: Use 100vh minus the fixed navbar height (approx 60px) */
-  height: calc(100vh - 60px);
+  height: calc(100vh - 64px);
   min-height: 100%;
-  /* Ensure it uses the space */
 }
 
 /* --- Floating Search Card --- */
 .searchPanel {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 350px;
+  top: 16px;
+  left: 16px;
+  width: 340px;
   background-color: var(--bg-secondary);
-  padding: 15px;
+  padding: 16px;
   border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
   z-index: 1000;
   max-height: 90vh;
   display: flex;
@@ -31,14 +28,18 @@
   backdrop-filter: blur(10px);
   border: 1px solid var(--border-color);
   box-sizing: border-box;
-  animation: slideInLeft 0.5s ease-out;
-  transition: all 0.3s ease;
+  animation: slideInLeft 0.4s ease-out;
+  transition: box-shadow var(--transition-normal);
+}
+
+.searchPanel:hover {
+  box-shadow: var(--shadow-xl);
 }
 
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translateX(-50px);
+    transform: translateX(-20px);
   }
 
   to {
@@ -51,49 +52,51 @@
 .locationInput,
 .searchInput {
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 12px;
   border: 1px solid var(--border-color-input);
-  border-radius: 8px;
+  border-radius: 6px;
   box-sizing: border-box;
   background-color: var(--bg-inset);
   color: var(--text-color);
-  font-size: 1em;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  font-size: 0.9em;
+  transition: border-color var(--transition-fast), 
+              box-shadow var(--transition-fast);
 }
 
 .locationInput:focus,
 .searchInput:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.15);
 }
 
 /* Location Suggestions */
 .locationGroup {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .suggestionsList {
   list-style: none;
   padding: 0;
-  margin: 5px 0 0 0;
+  margin: 4px 0 0 0;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 6px;
   position: absolute;
   width: 100%;
   z-index: 1001;
   max-height: 200px;
   overflow-y: auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .suggestionItem {
-  padding: 12px 15px;
+  padding: 10px 12px;
   cursor: pointer;
   color: var(--text-color);
-  transition: background-color 0.2s;
+  font-size: 0.9em;
+  transition: background-color var(--transition-fast);
 }
 
 .suggestionItem:hover {
@@ -103,71 +106,50 @@
 /* Main Search Input and Button */
 .searchMain {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .searchButton {
   background-color: var(--primary-color);
   color: white;
-  padding: 12px 15px;
+  padding: 10px 14px;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 1.1em;
-  transition: all 0.3s ease;
+  font-size: 1em;
+  transition: background-color var(--transition-fast), 
+              transform var(--transition-fast);
   flex-shrink: 0;
-  /* Prevent button from shrinking */
 }
 
 .searchButton:hover {
   background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4);
+  transform: translateY(-1px);
 }
 
 .searchButton:active {
-  animation: bounce 0.5s ease;
-}
-
-@keyframes bounce {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  25% {
-    transform: translateY(-10px);
-  }
-
-  50% {
-    transform: translateY(-5px);
-  }
-
-  75% {
-    transform: translateY(-7px);
-  }
+  transform: translateY(0);
 }
 
 /* Filter Toggle Button */
 .filterToggle {
   background: none;
   border: none;
-  color: var(--primary-color);
-  font-weight: bold;
+  color: var(--text-color-light);
+  font-weight: 500;
   cursor: pointer;
-  padding: 8px 0;
+  padding: 6px 0;
   width: 100%;
-  text-align: left;
-  font-size: 1em;
-  margin-bottom: 10px;
-  transition: color 0.2s;
+  text-align: right;
+  font-size: 0.85em;
+  margin-bottom: 8px;
+  transition: color var(--transition-fast);
 }
 
 .filterToggle:hover {
-  color: var(--primary-hover);
+  color: var(--primary-color);
 }
 
 .backButton {
@@ -176,11 +158,14 @@
   border: 1px solid var(--border-color);
   cursor: pointer;
   padding: 8px 12px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   text-align: left;
   font-weight: 500;
+  font-size: 0.9em;
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: background-color var(--transition-fast), 
+              border-color var(--transition-fast),
+              color var(--transition-fast);
 }
 
 .backButton:hover {
@@ -190,100 +175,25 @@
 }
 
 .searchGroup {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   position: relative;
 }
 
 .searchGroup label {
   display: block;
-  font-size: 0.85em;
+  font-size: 0.8em;
   color: var(--text-color-light);
   margin-bottom: 4px;
-  transition: color 0.3s ease;
-}
-
-.locationInput,
-.searchInput {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #cbd5e0;
-  border-radius: 6px;
-  font-size: 1em;
-}
-
-.suggestionsList {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1001;
-  transition: all 0.3s ease;
-}
-
-.suggestionItem {
-  padding: 10px;
-  border-bottom: 1px solid var(--border-color);
-  cursor: pointer;
-  font-size: 0.9em;
-  color: var(--text-color);
-  transition: background-color 0.3s ease;
-}
-
-.suggestionItem:hover {
-  background-color: var(--bg-inset);
-}
-
-.searchMain {
-  display: flex;
-  gap: 5px;
-}
-
-.searchButton {
-  padding: 0 15px;
-  background-color: var(--primary-color);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1.2em;
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.searchButton:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(var(--primary-color-rgb), 0.4);
-}
-
-.filterToggle {
-  background: none;
-  border: none;
-  color: var(--text-color-light);
-  font-size: 0.85rem;
-  margin-top: 5px;
-  cursor: pointer;
-  text-align: right;
-  width: 100%;
-  transition: color 0.3s ease;
-}
-
-.filterToggle:hover {
-  color: var(--primary-color);
+  font-weight: 500;
+  transition: color var(--transition-fast);
 }
 
 .filtersContent {
-  margin-top: 10px;
+  margin-top: 8px;
   padding: 10px;
   background: var(--bg-inset);
   border-radius: 6px;
-  transition: all 0.3s ease;
+  transition: background-color var(--transition-fast);
 }
 
 .searchToggles {
@@ -297,9 +207,11 @@
   border: 1px solid var(--border-color);
   background: var(--bg-secondary);
   cursor: pointer;
-  font-size: 0.85em;
+  font-size: 0.8em;
   color: var(--text-color);
-  transition: all 0.3s ease;
+  transition: background-color var(--transition-fast), 
+              color var(--transition-fast),
+              border-color var(--transition-fast);
 }
 
 .searchToggles button:first-child {
@@ -319,10 +231,10 @@
 .filterCheckbox {
   display: flex;
   align-items: center;
-  font-size: 0.9em;
+  font-size: 0.85em;
   color: var(--text-color);
-  margin-bottom: 15px;
-  transition: color 0.3s ease;
+  margin-bottom: 12px;
+  transition: color var(--transition-fast);
 }
 
 .filterCheckbox input {
@@ -331,80 +243,79 @@
 
 /* Range Filter Styles */
 .rangeFilter {
-  margin-top: 15px;
-  padding: 10px 0;
+  margin-top: 12px;
+  padding: 8px 0;
 }
 
 .rangeFilter label {
   display: block;
-  font-size: 0.9em;
+  font-size: 0.85em;
   color: var(--text-color);
-  margin-bottom: 10px;
-  transition: color 0.3s ease;
+  margin-bottom: 8px;
+  transition: color var(--transition-fast);
 }
 
 .rangeSlider {
   width: 100%;
-  height: 6px;
-  border-radius: 5px;
-  background: linear-gradient(to right, var(--primary-color) 0%, var(--primary-hover) 100%);
+  height: 4px;
+  border-radius: 4px;
+  background: var(--border-color);
   outline: none;
   -webkit-appearance: none;
   appearance: none;
-  transition: opacity 0.3s ease;
 }
 
 .rangeSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--primary-color);
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), 
+              box-shadow var(--transition-fast);
 }
 
 .rangeSlider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.5);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
 }
 
 .rangeSlider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--primary-color);
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), 
+              box-shadow var(--transition-fast);
 }
 
 .rangeSlider::-moz-range-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.5);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
 }
 
 .rangeLabels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75em;
+  font-size: 0.7em;
   color: var(--text-color-light);
-  margin-top: 5px;
-  transition: color 0.3s ease;
+  margin-top: 4px;
 }
 
 
 /* --- Results List --- */
 .resultsList {
-  margin-top: 15px;
+  margin-top: 12px;
   overflow-y: auto;
   flex: 1;
   border-top: 1px solid var(--border-color);
-  padding-top: 10px;
-  transition: border-color 0.3s ease;
+  padding-top: 12px;
 }
 
 .resultCard {
@@ -412,93 +323,87 @@
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  animation: fadeInUp 0.5s ease-out;
+  transition: transform var(--transition-fast), 
+              box-shadow var(--transition-fast),
+              border-color var(--transition-fast);
 }
 
 .resultCard:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(var(--primary-color-rgb), 0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
   border-color: var(--primary-color);
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .cardHeader {
   display: flex;
   gap: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .cardImage,
 .cardPlaceholder {
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   border-radius: 6px;
   object-fit: cover;
   background-color: var(--bg-inset);
-  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .cardInfo {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .cardInfo h4 {
   margin: 0;
-  font-size: 1em;
+  font-size: 0.9em;
   color: var(--text-color);
-  transition: color 0.3s ease;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .distance {
-  font-size: 0.8em;
+  font-size: 0.75em;
   color: var(--text-color-light);
-  transition: color 0.3s ease;
 }
 
 .cardProduct {
-  background: #f0fff4;
-  padding: 5px 8px;
+  background: rgba(var(--success-color), 0.1);
+  padding: 4px 8px;
   border-radius: 4px;
-  font-size: 0.9em;
-  margin-bottom: 8px;
+  font-size: 0.8em;
+  margin-bottom: 6px;
   display: flex;
   justify-content: space-between;
 }
 
 .cardPrice {
-  color: #2f855a;
-  font-weight: bold;
+  color: var(--success-color);
+  font-weight: 600;
 }
 
 .cardActions {
   display: flex;
-  gap: 5px;
+  gap: 4px;
 }
 
 .cardActions button {
   flex: 1;
-  padding: 5px;
-  font-size: 0.85em;
+  padding: 6px;
+  font-size: 0.8em;
   border: 1px solid var(--border-color);
   background: var(--bg-inset);
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color var(--transition-fast), 
+              color var(--transition-fast),
+              border-color var(--transition-fast);
   color: var(--text-color);
 }
 
@@ -506,24 +411,6 @@
   background: var(--primary-color);
   color: white;
   border-color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(var(--primary-color-rgb), 0.3);
-}
-
-.cardActions button:active {
-  animation: buttonPulse 0.3s ease;
-}
-
-@keyframes buttonPulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.95);
-  }
 }
 
 /* --- Map Popup Overrides --- */
@@ -548,7 +435,7 @@
 .mapboxMarker {
   cursor: pointer;
   z-index: 10;
-  transition: transform 0.2s;
+  transition: transform var(--transition-fast);
 }
 
 .mapboxMarker:hover {
@@ -557,21 +444,19 @@
 }
 
 .markerIcon {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 2px solid white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-md);
   object-fit: cover;
   background-color: white;
 }
 
 .popupImage {
   width: 100%;
-  max-width: 250px;
-  /* Constrain max width */
-  height: 120px;
-  /* Fixed height */
+  max-width: 220px;
+  height: 100px;
   object-fit: cover;
   border-radius: 6px;
   margin-bottom: 8px;
@@ -579,22 +464,20 @@
 }
 
 .popupContent strong {
-  font-size: 1.1em;
+  font-size: 1em;
   color: var(--text-color);
-  transition: color 0.3s ease;
 }
 
 .popupProduct {
-  margin-top: 5px;
-  font-size: 0.9em;
+  margin-top: 4px;
+  font-size: 0.85em;
   color: var(--text-color-light);
-  transition: color 0.3s ease;
 }
 
 .popupActions {
   display: flex;
-  gap: 5px;
-  margin-top: 10px;
+  gap: 4px;
+  margin-top: 8px;
 }
 
 .popupActions button {
@@ -602,21 +485,15 @@
   background: var(--primary-color);
   color: white;
   border: none;
-  padding: 5px;
+  padding: 6px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.85em;
-  transition: all 0.3s ease;
+  font-size: 0.8em;
+  transition: background-color var(--transition-fast);
 }
 
 .popupActions button:hover {
   background: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(var(--primary-color-rgb), 0.4);
-}
-
-.popupActions button:active {
-  animation: buttonPulse 0.3s ease;
 }
 
 /* --- Modal --- */
@@ -626,13 +503,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
-  backdrop-filter: blur(2px);
-  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
 }
 
 @keyframes fadeIn {
@@ -648,21 +525,20 @@
 .modalContent {
   background-color: var(--bg-secondary);
   width: 90%;
-  max-width: 500px;
+  max-width: 480px;
   max-height: 80vh;
   border-radius: 12px;
   padding: 20px;
   overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  animation: modalSlideIn 0.4s ease;
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-xl);
+  animation: modalSlideIn 0.25s ease-out;
   border: 1px solid var(--border-color);
 }
 
 @keyframes modalSlideIn {
   from {
     opacity: 0;
-    transform: translateY(-50px) scale(0.9);
+    transform: translateY(-20px) scale(0.98);
   }
 
   to {
@@ -675,22 +551,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .modalHeader h3 {
   margin: 0;
   color: var(--text-color);
-  transition: color 0.3s ease;
+  font-size: 1.1em;
+  font-weight: 600;
 }
 
 .closeButton {
   background: none;
   border: none;
-  font-size: 1.5em;
+  font-size: 1.4em;
   cursor: pointer;
   color: var(--text-color-light);
-  transition: color 0.3s ease;
+  transition: color var(--transition-fast);
+  padding: 4px;
 }
 
 .closeButton:hover {
@@ -699,23 +577,22 @@
 
 .modalShopImage {
   width: 100%;
-  height: 150px;
+  height: 140px;
   object-fit: cover;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .modalSubtitle {
   color: var(--text-color-light);
-  font-size: 0.9em;
-  margin-bottom: 10px;
-  transition: color 0.3s ease;
+  font-size: 0.85em;
+  margin-bottom: 12px;
 }
 
 .modalProductList {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .modalProductItem {
@@ -723,8 +600,7 @@
   align-items: center;
   gap: 10px;
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 10px;
-  transition: border-color 0.3s ease;
+  padding-bottom: 8px;
 }
 
 .modalProductInfo {
@@ -734,26 +610,24 @@
 }
 
 .productThumb {
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   border-radius: 6px;
   object-fit: cover;
   background-color: var(--bg-inset);
   border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
 }
 
 .placeholderThumb {
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   border-radius: 6px;
   background-color: var(--bg-inset);
   border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
 }
 
 .statusBadge {
-  font-size: 0.75em;
+  font-size: 0.7em;
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: 600;
@@ -761,7 +635,7 @@
 
 .modalContent h3 {
   margin-top: 0;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   color: var(--text-color);
 }
 
@@ -769,10 +643,11 @@
   background: var(--primary-color);
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
+  padding: 8px 14px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 0.9em;
+  transition: background-color var(--transition-fast);
 }
 
 .modalContent button:hover {
@@ -782,15 +657,25 @@
 .modalContent ul {
   list-style: none;
   padding: 0;
-  margin: 15px 0 0 0;
+  margin: 12px 0 0 0;
 }
 
 .modalContent li {
   padding: 8px 0;
   border-bottom: 1px solid var(--border-color);
+  font-size: 0.9em;
 }
 
 .modalContent li:last-child {
   border-bottom: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .searchPanel {
+    width: calc(100% - 32px);
+    left: 16px;
+    right: 16px;
+  }
 }
 

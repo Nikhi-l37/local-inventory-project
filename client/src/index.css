@@ -1,25 +1,36 @@
 :root {
-  /* Light theme variables */
-  --primary-color: #007bff;
-  --primary-hover: #0056b3;
-  --primary-color-rgb: 0, 123, 255;
-  --bg-color: #f8f9fa;
+  /* Light theme variables - GitHub-inspired */
+  --primary-color: #0969da;
+  --primary-hover: #0550ae;
+  --primary-color-rgb: 9, 105, 218;
+  --bg-color: #f6f8fa;
   --bg-secondary: #ffffff;
-  --bg-inset: #e9ecef;
-  --text-color: #343a40;
-  --text-color-light: #6c757d;
-  --border-color: #dee2e6;
-  --border-color-input: #ced4da;
-  --navbar-bg: #343a40;
+  --bg-inset: #f0f3f6;
+  --text-color: #24292f;
+  --text-color-light: #57606a;
+  --border-color: #d0d7de;
+  --border-color-input: #d0d7de;
+  --navbar-bg: #24292f;
   --navbar-text: #ffffff;
-  --navbar-link-hover: #adb5bd;
+  --navbar-link-hover: #0969da;
 
-  --success-color: #28a745;
-  --success-hover: #1e7e34;
-  --danger-color: #dc3545;
-  --danger-hover: #bd2130;
-  --secondary-color: #6c757d;
-  --secondary-hover: #5a6268;
+  --success-color: #1a7f37;
+  --success-hover: #2da44e;
+  --danger-color: #cf222e;
+  --danger-hover: #a40e26;
+  --secondary-color: #6e7781;
+  --secondary-hover: #57606a;
+  
+  /* Animation timing */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s ease;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 0 rgba(27, 31, 36, 0.04);
+  --shadow-md: 0 3px 6px rgba(140, 149, 159, 0.15);
+  --shadow-lg: 0 8px 24px rgba(140, 149, 159, 0.2);
+  --shadow-xl: 0 12px 28px rgba(140, 149, 159, 0.3);
 }
 
 body.dark {
@@ -57,6 +68,12 @@ body.dark {
   --danger-hover: #f85149;
   --secondary-color: #8b949e;
   --secondary-hover: #6e7681;
+  
+  /* Dark mode shadows */
+  --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 12px 28px rgba(0, 0, 0, 0.5);
 }
 
 
@@ -69,22 +86,28 @@ body,
   padding: 0;
   height: 100%;
   width: 100%;
-  height: 100%;
-  width: 100%;
   box-sizing: border-box;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segui UI', Roboto, Helvetica,
-    Arial, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
-/* Light theme background gradient */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Light theme background gradient - subtle and modern */
 body:not(.dark) {
-  background-image: linear-gradient(110deg, #e6f0ff 0%, #b3d1ff 100%);
+  background: linear-gradient(180deg, #f6f8fa 0%, #ffffff 100%);
 }
 
 #root {
@@ -93,16 +116,35 @@ body:not(.dark) {
   min-height: 100vh;
 }
 
-/* Global Link Styling (rest of file...) */
+/* Global Link Styling */
 a {
   text-decoration: none;
   color: var(--primary-color);
-  transition: all 0.3s ease;
+  transition: color var(--transition-fast);
 }
 
 a:hover {
   text-decoration: underline;
   color: var(--primary-hover);
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Selection styling */
+::selection {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--text-color);
 }
 
 /* Helper Classes (e.g., for spacing) */
@@ -112,4 +154,25 @@ a:hover {
 
 .mb-15 {
   margin-bottom: 15px;
+}
+
+/* Skeleton loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-inset) 0%,
+    var(--bg-secondary) 50%,
+    var(--bg-inset) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }

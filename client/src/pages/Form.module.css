@@ -1,22 +1,40 @@
 .formContainer {
   background: var(--bg-secondary); 
   border: 1px solid var(--border-color);
-  border-radius: 0.75rem; 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px; 
+  box-shadow: var(--shadow-lg);
   
   max-width: 380px;
-  margin: 100px auto; 
-  padding: 30px;
+  margin: 80px auto; 
+  padding: 32px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: box-shadow var(--transition-normal), 
+              border-color var(--transition-normal),
+              background-color var(--transition-normal);
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.formContainer:hover {
+  box-shadow: var(--shadow-xl);
 }
 
 /* --- BRANDING & HEADER --- */
 .logoWrapper {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: var(--primary-color);
   font-size: 1.4em;
-  transition: color 0.3s ease;
+  transition: color var(--transition-normal);
 }
 
 .formContainer h2 { 
@@ -26,19 +44,20 @@
 .tagline {
   font-size: 0.9em; 
   color: var(--text-color-light);
-  margin-bottom: 25px;
-  transition: color 0.3s ease;
+  margin-bottom: 24px;
+  line-height: 1.5;
+  transition: color var(--transition-normal);
 }
 
 /* --- TABS (Sign In / Sign Up) --- */
 .tabContainer {
   display: flex;
-  margin-bottom: 25px; 
-  background-color: var(--border-color-input); 
-  border-radius: 0.75rem; 
+  margin-bottom: 24px; 
+  background-color: var(--bg-inset); 
+  border-radius: 8px; 
   overflow: hidden;
   padding: 4px;
-  transition: background-color 0.3s ease;
+  transition: background-color var(--transition-normal);
 }
 
 .tabButton {
@@ -49,43 +68,56 @@
   color: var(--text-color-light); 
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: calc(0.75rem - 4px);
-  font-size: 1em;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              box-shadow var(--transition-fast);
+  border-radius: 6px;
+  font-size: 0.95em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabButton:hover {
+  color: var(--text-color);
 }
 
 .tabButton.active {
   background-color: var(--bg-secondary); 
   color: var(--text-color); 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 
 /* --- FORM ELEMENTS --- */
 .formGroup {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .formGroup label {
   display: block;
   font-weight: 600; 
   margin-bottom: 8px;
-  color: var(--text-color-light); 
+  color: var(--text-color); 
   text-align: left;
-  transition: color 0.3s ease;
+  font-size: 0.9em;
+  transition: color var(--transition-normal);
 }
 
 .formInput {
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 14px;
   border: 1px solid var(--border-color-input);
-  border-radius: 0.5rem; 
+  border-radius: 6px; 
   box-sizing: border-box; 
   
   background-color: var(--bg-inset); 
   color: var(--text-color);
-  font-size: 1em;
-  transition: all 0.3s ease;
+  font-size: 0.95em;
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast),
+              background-color var(--transition-fast);
 }
 
 .formInput::placeholder { 
@@ -95,7 +127,8 @@
 .formInput:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.15);
+  background-color: var(--bg-secondary);
 }
 
 /* --- BUTTON --- */
@@ -103,20 +136,27 @@
   width: 100%;
   background-color: var(--primary-color); 
   color: white;
-  padding: 12px 15px;
+  padding: 12px 16px;
   border: none;
-  border-radius: 0.5rem;
-  font-weight: bold;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  margin-top: 25px; 
-  transition: all 0.3s ease;
+  font-size: 0.95em;
+  margin-top: 24px; 
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast),
+              box-shadow var(--transition-fast);
 }
 
 .formButton:hover {
   background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.formButton:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .formButton:disabled {
@@ -130,7 +170,7 @@
   font-size: 0.9em;
   font-weight: 500;
   color: var(--primary-color);
-  transition: all 0.3s ease;
+  transition: color var(--transition-fast);
 }
 
 .formContainer a:hover {
