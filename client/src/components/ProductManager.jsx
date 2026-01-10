@@ -178,6 +178,8 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
                 {product.is_available ? 'In Stock' : 'Out of Stock'}
               </span>
 
+              <span className={styles.priceTag}>₹{product.price}</span>
+
               {/* Top Right Pencil Menu */}
               <div className={styles.menuContainer}>
                 <button
@@ -211,7 +213,6 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
             <div className={styles.cardContent}>
               <div className={styles.cardHeaderRow}>
                 <span className={styles.catBadge}>{product.category}</span>
-                <span className={styles.priceTag}>₹{product.price}</span>
               </div>
               <h3>{product.name}</h3>
               <p className={styles.desc}>{product.description}</p>

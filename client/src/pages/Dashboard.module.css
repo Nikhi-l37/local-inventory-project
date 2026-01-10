@@ -26,11 +26,10 @@
 /* --- SIDEBAR STYLES --- */
 .sidebar {
   background: var(--bg-secondary);
-  /* Themed */
+  /* Dark theme background */
   border-right: 1px solid var(--border-color);
-  /* Themed */
   padding: 24px 20px;
-  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.4);
   height: calc(100vh - 64px);
   /* Account for Header Height */
   position: sticky;
@@ -47,16 +46,14 @@
 
 /* Sidebar Cards (Profile, Location, etc.) */
 .sidebarCard {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-inset) 100%);
-  /* Themed */
+  background: var(--bg-secondary);
   padding: 20px;
   padding-bottom: 24px;
   border-radius: 16px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   animation: bounceInCard 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  /* Themed */
 }
 
 @keyframes bounceInCard {
@@ -78,7 +75,7 @@
 
 .sidebarCard:hover {
   transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   border-color: var(--primary-color);
 }
 
@@ -118,7 +115,7 @@
 
 .avatar:hover {
   transform: scale(1.08);
-  box-shadow: 0 8px 24px rgba(40, 167, 69, 0.35);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
 }
 
 .placeholderAvatar {
@@ -132,13 +129,13 @@
   justify-content: center;
   font-size: 2.2em;
   font-weight: 700;
-  box-shadow: 0 4px 16px rgba(40, 167, 69, 0.35);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .placeholderAvatar:hover {
   transform: scale(1.08);
-  box-shadow: 0 8px 24px rgba(40, 167, 69, 0.45);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
 }
 
 .editIconBtn {
@@ -156,13 +153,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .editIconBtn:hover {
   transform: scale(1.15) rotate(15deg);
-  box-shadow: 0 6px 18px rgba(40, 167, 69, 0.5);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
 }
 
 .profileInfo h3 {
@@ -217,7 +214,7 @@
 }
 
 .statusOpen {
-  background-color: rgba(40, 167, 69, 0.2);
+  background-color: rgba(16, 185, 129, 0.2);
   color: var(--success-color);
   border: 1px solid var(--success-color);
 }
@@ -249,17 +246,16 @@
 .statsRow {
   display: flex;
   justify-content: space-between;
-  background: linear-gradient(135deg, var(--bg-inset) 0%, var(--bg-secondary) 100%);
-  /* Themed Inset */
+  background: var(--bg-inset);
   border-radius: 14px;
   padding: 18px 14px;
   border: 1px solid var(--border-color);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .statsRow:hover {
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   transform: scale(1.01);
 }
 
@@ -317,7 +313,7 @@
 }
 
 .iconBtn {
-  background: linear-gradient(135deg, var(--bg-inset) 0%, var(--bg-secondary) 100%);
+  background: var(--bg-inset);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 8px 12px;
@@ -325,14 +321,14 @@
   font-size: 1.1em;
   color: var(--text-color-light);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .iconBtn:hover {
   background: var(--primary-color);
   color: white;
   transform: translateY(-3px) rotate(5deg) scale(1.05);
-  box-shadow: 0 6px 18px rgba(40, 167, 69, 0.35);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
 }
 
 
@@ -351,7 +347,7 @@
 
 .categoryNav button {
   text-align: left;
-  background: linear-gradient(135deg, transparent 0%, var(--bg-inset) 100%);
+  background: transparent;
   border: 1px solid transparent;
   padding: 12px 16px;
   border-radius: 10px;
@@ -377,11 +373,11 @@
 }
 
 .categoryNav button:hover {
-  background: linear-gradient(135deg, var(--bg-inset) 0%, var(--bg-secondary) 100%);
+  background: var(--bg-inset);
   color: var(--primary-color);
   border-color: var(--border-color);
   transform: translateX(6px) scale(1.02);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .categoryNav button:hover::before {
@@ -389,11 +385,11 @@
 }
 
 .categoryNav button.activeCat {
-  background: linear-gradient(135deg, rgba(40, 167, 69, 0.15) 0%, rgba(40, 167, 69, 0.05) 100%);
+  background: rgba(16, 185, 129, 0.15);
   color: var(--primary-color);
   font-weight: 700;
   border-color: var(--primary-color);
-  box-shadow: 0 4px 16px rgba(40, 167, 69, 0.2);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
 }
 
 .categoryNav button.activeCat::before {
@@ -407,7 +403,7 @@
   overflow-y: auto;
   height: calc(100vh - 64px);
   /* Scroll independently */
-  background: linear-gradient(180deg, transparent 0%, rgba(40, 167, 69, 0.02) 100%);
+  background: var(--bg-color);
   animation: fadeInContent 0.6s ease-out;
 }
 
@@ -431,7 +427,7 @@
   font-size: 1.3em;
   font-weight: 600;
   color: var(--text-color);
-  background: linear-gradient(135deg, var(--bg-color) 0%, var(--bg-secondary) 100%);
+  background: var(--bg-color);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -466,7 +462,7 @@
 }
 
 .addressPreview {
-  background: linear-gradient(135deg, var(--bg-inset) 0%, var(--bg-secondary) 100%);
+  background: var(--bg-inset);
   padding: 14px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -474,7 +470,7 @@
   color: var(--text-color);
   border: 2px solid var(--border-color-input);
   font-weight: 500;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Modals (Shared) */
@@ -570,7 +566,7 @@
   outline: none;
   border-color: var(--primary-color);
   background: var(--bg-secondary);
-  box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.15);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
   transform: translateY(-2px);
 }
 
@@ -602,17 +598,17 @@
   font-weight: 600;
   font-size: 1em;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 16px rgba(40, 167, 69, 0.35);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
 }
 
 .primaryButton:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(40, 167, 69, 0.45);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
 }
 
 .primaryButton:active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
 .secondaryButton {
@@ -657,14 +653,14 @@
 }
 
 .categoryCard {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-inset) 100%);
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 14px;
   padding: 16px;
   text-align: center;
   color: var(--text-color);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   animation: bounceInCard 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   animation-fill-mode: both;
@@ -672,7 +668,7 @@
 
 .categoryCard:hover {
   transform: translateY(-6px) scale(1.04);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
   border-color: var(--primary-color);
 }
 
@@ -694,14 +690,14 @@
 .catCardPlaceholder {
   width: 100%;
   height: 90px;
-  background: linear-gradient(135deg, var(--bg-inset) 0%, var(--bg-secondary) 100%);
+  background: var(--bg-inset);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.4em;
   border-radius: 10px;
   margin-bottom: 12px;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -709,7 +705,7 @@
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
   color: white;
   transform: scale(1.08);
-  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.35);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
 
 .deleteBtn {
@@ -734,7 +730,7 @@
 
 .addCategoryCard {
   border: 2px dashed var(--border-color);
-  background: linear-gradient(135deg, var(--bg-inset) 0%, var(--bg-secondary) 100%);
+  background: var(--bg-inset);
   border-radius: 14px;
   padding: 20px;
   display: flex;
@@ -748,7 +744,7 @@
   border-color: var(--primary-color);
   background: var(--bg-secondary);
   transform: scale(1.03);
-  box-shadow: 0 8px 24px rgba(40, 167, 69, 0.15);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
 }
 
 .inputField,
@@ -767,7 +763,7 @@
 .fileInput:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.15);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
 }
 
 .actionBtn {
@@ -780,12 +776,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.35);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
 .actionBtn:hover {
   transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.45);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
 }
 
 .actionBtn:active {
