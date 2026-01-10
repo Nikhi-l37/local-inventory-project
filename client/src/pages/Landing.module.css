@@ -86,16 +86,16 @@
    background-color: var(--primary-color);
    color: white;
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(40, 167, 69, 0.4);
   animation: pulse 1s ease infinite;
 }
 
 @keyframes pulse {
   0%, 100% {
-    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    box-shadow: 0 8px 24px rgba(40, 167, 69, 0.4);
   }
   50% {
-    box-shadow: 0 8px 30px rgba(0, 123, 255, 0.6);
+    box-shadow: 0 10px 32px rgba(40, 167, 69, 0.6);
   }
 }
 
@@ -109,7 +109,7 @@
   background-color: var(--primary-color);
   color: white;
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(40, 167, 69, 0.4);
 }
 
 .aboutSection {
