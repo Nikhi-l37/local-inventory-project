@@ -22,41 +22,68 @@
   --secondary-hover: #5a6268;
 }
 
-body.dark {
-  /* Dark Theme - Black with Green Accent */
-  --primary-color: #2ea043;
-  --primary-hover: #3fb950;
-  --primary-color-rgb: 46, 160, 67;
+body {
+  /* Apply dark theme by default */
+  --primary-color: #10b981;
+  --primary-hover: #2dd4bf;
+  --primary-color-rgb: 16, 185, 129;
 
-  --bg-color: #0d0d0d;
-  /* Deep Black Background */
-  --bg-secondary: #161616;
-  /* Dark Cards/Sidebar */
+  --bg-color: #0d1117;
+  /* Deep dark blue/black background */
+  --bg-secondary: #161b22;
+  /* Slightly lighter dark for cards */
   --bg-inset: #1f1f1f;
   /* Input backgrounds */
 
-  --text-color: #e6e6e6;
-  /* Light Text */
-  --text-color-light: #8b8b8b;
-  /* Muted Text */
+  --text-color: #e6edf3;
+  /* White/Off-white text */
+  --text-color-light: #8b949e;
+  /* Muted text */
 
-  --border-color: #2a2a2a;
-  /* Dark Borders */
+  --border-color: #30363d;
+  /* Dark borders */
   --border-color-input: #3a3a3a;
 
-  --navbar-bg: #0d0d0d;
-  --navbar-text: #f0f0f0;
-  --navbar-link-hover: #2ea043;
+  --navbar-bg: #0d1117;
+  --navbar-text: #e6edf3;
+  --navbar-link-hover: #10b981;
+
+  --success-color: #10b981;
+  --success-hover: #2dd4bf;
+  --danger-color: #f85149;
+  --danger-hover: #ff6b6b;
+  --secondary-color: #8b949e;
+  --secondary-hover: #6e7681;
+}
+
+body.dark {
+  /* Legacy dark theme toggle support - inherits from body */
+  --primary-color: #10b981;
+  --primary-hover: #2dd4bf;
+  --primary-color-rgb: 16, 185, 129;
+
+  --bg-color: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-inset: #1f1f1f;
+
+  --text-color: #e6edf3;
+  --text-color-light: #8b949e;
+
+  --border-color: #30363d;
+  --border-color-input: #3a3a3a;
+
+  --navbar-bg: #0d1117;
+  --navbar-text: #e6edf3;
+  --navbar-link-hover: #10b981;
 
   background-image: none;
-  /* Remove gradient for flat clean look */
 
-  --success-color: #238636;
-  --success-hover: #2ea043;
-  --danger-color: #da3633;
-  --danger-hover: #f85149;
-  --secondary-color: #8b8b8b;
-  --secondary-hover: #6e6e6e;
+  --success-color: #10b981;
+  --success-hover: #2dd4bf;
+  --danger-color: #f85149;
+  --danger-hover: #ff6b6b;
+  --secondary-color: #8b949e;
+  --secondary-hover: #6e7681;
 }
 
 
@@ -86,6 +113,26 @@ body {
 
 /* Light theme background - Clean white/gray gradient */
 body:not(.dark) {
+  /* Override for light theme if toggle exists */
+  --primary-color: #28a745;
+  --primary-hover: #1e7e34;
+  --primary-color-rgb: 40, 167, 69;
+  --bg-color: #f8f9fa;
+  --bg-secondary: #ffffff;
+  --bg-inset: #e9ecef;
+  --text-color: #212529;
+  --text-color-light: #6c757d;
+  --border-color: #dee2e6;
+  --border-color-input: #ced4da;
+  --navbar-bg: #1a1a1a;
+  --navbar-text: #ffffff;
+  --navbar-link-hover: #28a745;
+  --success-color: #28a745;
+  --success-hover: #1e7e34;
+  --danger-color: #dc3545;
+  --danger-hover: #bd2130;
+  --secondary-color: #6c757d;
+  --secondary-hover: #5a6268;
   background-image: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
