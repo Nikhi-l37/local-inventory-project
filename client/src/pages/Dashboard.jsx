@@ -5,6 +5,7 @@ import ShopStatus from '../components/ShopStatus.jsx';
 import ProductManager from '../components/ProductManager.jsx';
 import CategoryManager from '../components/CategoryManager.jsx';
 import styles from './Dashboard.module.css';
+import { useEscapeKey } from '../hooks/useEscapeKey.js';
 
 // Components
 import ImageUpload from '../components/ImageUpload.jsx';
@@ -72,19 +73,8 @@ function SellerProfile({ initialShop, onShopUpdated }) {
     setClosingTime(initialShop.closing_time || '21:00');
   }, [initialShop]);
 
-  // Add keyboard navigation for modal
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape' && isEditing) {
-        setIsEditing(false);
-      }
-    };
-    
-    if (isEditing) {
-      document.addEventListener('keydown', handleEscape);
-      return () => document.removeEventListener('keydown', handleEscape);
-    }
-  }, [isEditing]);
+  // Add keyboard navigation for modal - using custom hook
+  useEscapeKey(isEditing, () => setIsEditing(false));
 
   const handleSave = async () => {
     setLoading(true);
@@ -257,19 +247,8 @@ function LocationManager({ shop, onShopUpdated }) {
   });
   const [loading, setLoading] = useState(false);
 
-  // Add keyboard navigation for modal
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape' && isEditing) {
-        setIsEditing(false);
-      }
-    };
-    
-    if (isEditing) {
-      document.addEventListener('keydown', handleEscape);
-      return () => document.removeEventListener('keydown', handleEscape);
-    }
-  }, [isEditing]);
+  // Add keyboard navigation for modal - using custom hook
+  useEscapeKey(isEditing, () => setIsEditing(false));
 
   // Map Click Handler
   function LocationMarker() {
