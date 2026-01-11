@@ -14,12 +14,36 @@ import styles from './ShopCreator.module.css';
 
 // Our new ShopCreator
 function ShopCreator({ onShopCreated }) {
+  // Shop form state
   const [name, setName] = useState('');
   const [category, setCategory] = useState('Grocery');
+  const [description, setDescription] = useState('');
+  const [openingTime, setOpeningTime] = useState('09:00');
+  const [closingTime, setClosingTime] = useState('21:00');
+  const [image, setImage] = useState(null);
+  
+  // Location state
   const [position, setPosition] = useState(null); // The pin's lat/lng
-  const [address, setAddress] = useState(null); // The new address state
-  const [loading, setLoading] = useState(false);
+  const [address, setAddress] = useState(null); // The address from geocoding
   const [addressLoading, setAddressLoading] = useState(false);
+  
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchTimeoutRef = useRef(null);
+  
+  // Loading state
+  const [loading, setLoading] = useState(false);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // 1. Get user's GPS location on load to center map
   useEffect(() => {
@@ -131,19 +155,6 @@ function ShopCreator({ onShopCreated }) {
     setPosition(latlng);
     fetchAddress(latlng);
   };
-
-  // NEW STATE: Image, Description, Hours
-  const [image, setImage] = useState(null);
-  const [description, setDescription] = useState('');
-  const [openingTime, setOpeningTime] = useState('09:00');
-  const [closingTime, setClosingTime] = useState('21:00');
-  
-  // Search state
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const searchTimeoutRef = useRef(null);
-
 
   // 4. Handle the final form submission
   const handleSubmit = async () => {
