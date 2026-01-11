@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../api';
 import axios from 'axios'; // To call the geocoding API
 
@@ -36,12 +36,64 @@ function ShopCreator({ onShopCreated }) {
         fetchAddress(defaultCoords); // Find address for default location
       }
     );
-  }, []); // Runs once
+  }, []);
 
-  // 2. *** THIS IS THE FIXED FUNCTION ***
-  // It now uses the Nominatim API
-  // 2. *** THIS IS THE FIXED FUNCTION ***
-  // It now requests English
+  // Search for locations using Mapbox Geocoding API
+  const searchLocation = async (query) => {
+    if (!query || query.trim().length < 3) {
+      setSearchResults([]);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const response = await axios.get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json`,
+        {
+          params: {
+            access_token: import.meta.env.VITE_MAPBOX_TOKEN,
+            limit: 5,
+            types: 'place,locality,neighborhood,address'
+          }
+        }
+      );
+
+      setSearchResults(response.data.features || []);
+    } catch (err) {
+      console.error('Error searching location:', err);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Handle search input change with debounce
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // Clear previous timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    // Set new timeout for search
+    searchTimeoutRef.current = setTimeout(() => {
+      searchLocation(query);
+    }, 500); // Wait 500ms after user stops typing
+  };
+
+  // Handle selecting a search result
+  const handleSelectSearchResult = (result) => {
+    const [lng, lat] = result.center;
+    const newPos = { lat, lng };
+    setPosition(newPos);
+    fetchAddress(newPos);
+    setSearchQuery(result.place_name);
+    setSearchResults([]); // Clear results after selection
+  };
+
+  // Fetch address from coordinates using Nominatim API
   const fetchAddress = useCallback(async ({ lat, lng }) => {
     setAddressLoading(true);
     setAddress(null); // Clear old address
@@ -51,14 +103,21 @@ function ShopCreator({ onShopCreated }) {
         `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=en`
       );
 
+      // Check if we have valid data
+      if (!response.data || !response.data.address) {
+        console.warn('No address data returned from geocoding API');
+        setAddress(null);
+        return;
+      }
+
       const addr = response.data.address;
 
-      // Parse the new address format
+      // Parse the address format - set to null if not available instead of 'N/A'
       setAddress({
-        town_village: addr.village || addr.town || addr.city_district || 'N/A',
-        mandal: addr.county || addr.subdistrict || 'N/A',
-        district: addr.state_district || 'N/A',
-        state: addr.state || 'N/A',
+        town_village: addr.village || addr.town || addr.city || addr.city_district || addr.suburb || null,
+        mandal: addr.county || addr.subdistrict || addr.municipality || null,
+        district: addr.state_district || addr.district || null,
+        state: addr.state || null,
       });
     } catch (err) {
       console.error('Error fetching address:', err);
@@ -66,7 +125,7 @@ function ShopCreator({ onShopCreated }) {
     } finally {
       setAddressLoading(false);
     }
-  }, []); // We pass 'fetchAddress' as a dependency
+  }, []);
   // 3. Update position AND fetch new address when map is clicked
   const handleMapClick = (latlng) => {
     setPosition(latlng);
@@ -78,6 +137,12 @@ function ShopCreator({ onShopCreated }) {
   const [description, setDescription] = useState('');
   const [openingTime, setOpeningTime] = useState('09:00');
   const [closingTime, setClosingTime] = useState('21:00');
+  
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchTimeoutRef = useRef(null);
 
 
   // 4. Handle the final form submission
@@ -92,28 +157,18 @@ function ShopCreator({ onShopCreated }) {
 
     setLoading(true);
 
-    const addressData = address ? {
-      town_village: address.town_village,
-      mandal: address.mandal,
-      district: address.district,
-      state: address.state,
-    } : {
-      town_village: null,
-      mandal: null,
-      district: null,
-      state: null,
-    };
-
     // Use FormData for file upload
     const formData = new FormData();
     formData.append('name', name);
     formData.append('category', category);
     formData.append('latitude', position.lat);
     formData.append('longitude', position.lng);
-    formData.append('town_village', addressData.town_village || '');
-    formData.append('mandal', addressData.mandal || '');
-    formData.append('district', addressData.district || '');
-    formData.append('state', addressData.state || '');
+    
+    // Send address fields - use 'Unknown' as fallback for required fields
+    formData.append('town_village', (address && address.town_village) || 'Unknown');
+    formData.append('mandal', (address && address.mandal) || 'Unknown');
+    formData.append('district', (address && address.district) || 'Unknown');
+    formData.append('state', (address && address.state) || 'Unknown');
 
     // Append new fields
     formData.append('description', description);
@@ -130,7 +185,9 @@ function ShopCreator({ onShopCreated }) {
       onShopCreated(response.data);
     } catch (err) {
       console.error('Error creating shop:', err);
-      alert('Error creating shop.');
+      // Show more detailed error message if available
+      const errorMsg = err.response?.data?.msg || err.response?.data?.error || 'Error creating shop. Please try again.';
+      alert(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -210,7 +267,60 @@ function ShopCreator({ onShopCreated }) {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <h3>📍 Location & Map</h3>
-            <span className={styles.subText}>Click on the map to set your shop location</span>
+            <span className={styles.subText}>Search, click on the map, or use your current location</span>
+          </div>
+
+          {/* Search Location Input */}
+          <div className={styles.formGroup} style={{ position: 'relative' }}>
+            <label>Search Location</label>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className={styles.formInput}
+              placeholder="Search for a place or address..."
+            />
+            {isSearching && (
+              <div style={{ padding: '8px', fontSize: '0.9em', color: 'var(--text-muted)' }}>
+                Searching...
+              </div>
+            )}
+            {searchResults.length > 0 && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                backgroundColor: 'var(--card-bg)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '8px',
+                marginTop: '4px',
+                maxHeight: '200px',
+                overflowY: 'auto',
+                zIndex: 1000,
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+              }}>
+                {searchResults.map((result, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleSelectSearchResult(result)}
+                    style={{
+                      padding: '10px 12px',
+                      cursor: 'pointer',
+                      borderBottom: index < searchResults.length - 1 ? '1px solid var(--border-color)' : 'none',
+                      fontSize: '0.9em'
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--hover-bg)'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                  >
+                    <div style={{ fontWeight: '500' }}>{result.text}</div>
+                    <div style={{ fontSize: '0.85em', color: 'var(--text-muted)', marginTop: '2px' }}>
+                      {result.place_name}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className={styles.mapWrapper}>
@@ -258,7 +368,11 @@ function ShopCreator({ onShopCreated }) {
             <div>
               <strong>Current Location:</strong>
               <p style={{ margin: '5px 0 0', fontSize: '0.9em', color: 'var(--text-color)' }}>
-                {addressLoading ? 'Finding address...' : (address ? `${address.town_village}, ${address.mandal}, ${address.district}` : 'Click map to select')}
+                {addressLoading ? 'Finding address...' : (
+                  address && address.town_village ? 
+                    `${address.town_village}, ${address.mandal}, ${address.district}` : 
+                    'Address not available (shop will be created with coordinates only)'
+                )}
               </p>
             </div>
           </div>
