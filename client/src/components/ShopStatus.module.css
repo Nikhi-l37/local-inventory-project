@@ -1,50 +1,72 @@
 .statusContainer {
-  padding: 25px;
+  padding: 20px;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 8px;
   background-color: var(--bg-secondary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast);
 }
+
+.statusContainer:hover {
+  box-shadow: var(--shadow-md);
+}
+
 .statusText {
-  font-size: 1.2em;
+  font-size: 1.1em;
   margin: 0;
   color: var(--text-color);
 }
+
 .statusText .open {
   color: var(--success-color);
-  font-weight: bold;
+  font-weight: 600;
 }
+
 .statusText .closed {
   color: var(--danger-color);
-  font-weight: bold;
+  font-weight: 600;
 }
+
 .toggleButton {
-  margin-top: 15px;
+  margin-top: 12px;
   width: 100%;
   color: white;
-  padding: 12px 15px;
+  padding: 10px 14px;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s, transform 0.2s;
+  font-size: 0.95em;
+  transition: background-color var(--transition-fast), 
+              transform var(--transition-fast);
 }
+
 .toggleButton:hover {
   transform: translateY(-1px);
 }
+
+.toggleButton:active {
+  transform: translateY(0);
+}
+
 .toggleButton.open {
   background-color: var(--danger-color);
 }
+
 .toggleButton.open:hover {
   background-color: var(--danger-hover);
 }
+
 .toggleButton.closed {
   background-color: var(--success-color);
 }
+
 .toggleButton.closed:hover {
   background-color: var(--success-hover);
 }
+
 .toggleButton:disabled {
   background-color: var(--secondary-color);
+  cursor: not-allowed;
+  transform: none;
 }

@@ -4,21 +4,38 @@
   animation: fadeIn 0.4s ease-out;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 /* Search Section */
 .searchContainer {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
   background: var(--bg-secondary);
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 25px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast), 
+              border-color var(--transition-fast);
+}
+
+.searchContainer:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
 }
 
 .searchIcon {
-  font-size: 1.2em;
+  font-size: 1.1em;
   color: var(--text-color-light);
 }
 
@@ -27,7 +44,7 @@
   background: none;
   border: none;
   color: var(--text-color);
-  font-size: 1em;
+  font-size: 0.95em;
   font-family: inherit;
 }
 
@@ -35,87 +52,79 @@
   outline: none;
 }
 
+.searchInput::placeholder {
+  color: var(--text-color-light);
+}
+
 /* Header Section */
 .managerHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .managerHeader h2 {
   margin: 0;
-  font-size: 1.8em;
+  font-size: 1.5em;
   color: var(--text-color);
+  font-weight: 600;
 }
 
 .managerHeader p {
   margin: 4px 0 0;
   color: var(--text-color-light);
-  font-size: 0.9em;
+  font-size: 0.85em;
 }
 
 .addBtn {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  background: var(--primary-color);
   color: white;
-  padding: 10px 24px;
-  border-radius: 8px;
+  padding: 8px 20px;
+  border-radius: 6px;
   border: none;
   font-weight: 600;
+  font-size: 0.9em;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
+  transition: background-color var(--transition-fast), 
+              transform var(--transition-fast),
+              box-shadow var(--transition-fast);
 }
 
 .addBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.addBtn:active {
+  transform: translateY(0);
 }
 
 /* Product Grid */
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  /* Slightly wider cards */
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
   padding-bottom: 80px;
-  /* Space for FAB */
 }
 
 .productCard {
   background: var(--bg-secondary);
-  border-radius: 16px;
-  /* More rounded */
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform var(--transition-fast), 
+              box-shadow var(--transition-fast),
+              border-color var(--transition-fast);
   display: flex;
   flex-direction: column;
-  animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  animation-fill-mode: both;
-}
-
-/* Stagger animation delay if possible, or just global bounce */
-.productCard:nth-child(1) {
-  animation-delay: 0.1s;
-}
-
-.productCard:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.productCard:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.productCard:nth-child(4) {
-  animation-delay: 0.4s;
 }
 
 .productCard:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
   border-color: var(--primary-color);
 }
 
@@ -123,7 +132,7 @@
 .cardImageContainer {
   position: relative;
   width: 100%;
-  height: 160px;
+  height: 140px;
   background: var(--bg-inset);
 }
 
@@ -131,6 +140,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.productCard:hover .cardImageContainer img {
+  transform: scale(1.02);
 }
 
 .cardNoImage {
@@ -141,69 +155,79 @@
   justify-content: center;
   color: var(--text-color-light);
   font-weight: 500;
+  font-size: 0.9em;
 }
 
 /* Menu Dropdown */
 .menuContainer {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  /* Instead of status badge at top right, we might need to move status badge */
+  top: 8px;
+  right: 8px;
   z-index: 10;
 }
 
-/* Adjust Status Badge to Top Left or keep it, user said "at top right it should diplay pencil" */
-/* So I will move Status Badge to Top LEFT */
 .statusBadge {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 8px;
+  left: 8px;
   right: auto;
-  font-size: 0.7em;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 20px;
+  font-size: 0.65em;
+  font-weight: 600;
+  padding: 3px 6px;
+  border-radius: 12px;
   text-transform: uppercase;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
 }
 
 .menuTrigger {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
-  color: #333;
-  /* Pencil always visible */
+  font-size: 0.85em;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), 
+              background-color var(--transition-fast);
+  color: var(--text-color);
 }
 
 .menuTrigger:hover {
-  transform: scale(1.1);
-  background: white;
+  transform: scale(1.05);
+  background: var(--bg-inset);
 }
 
 .dropdownMenu {
   position: absolute;
   top: 110%;
   right: 0;
-  width: 180px;
+  width: 160px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
-  padding: 5px;
+  padding: 4px;
   z-index: 20;
-  animation: fadeIn 0.1s ease-out;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dropdownMenu button {
@@ -215,7 +239,8 @@
   font-size: 0.85em;
   cursor: pointer;
   border-radius: 4px;
-  transition: background 0.1s;
+  transition: background-color var(--transition-fast), 
+              color var(--transition-fast);
 }
 
 .dropdownMenu button:hover {
@@ -225,36 +250,24 @@
 
 .dropdownMenu button.dangerItem:hover {
   color: var(--danger-color);
-  background: rgba(220, 53, 69, 0.1);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  background: rgba(var(--danger-color), 0.1);
 }
 
 .inStock {
-  background: rgba(40, 167, 69, 0.2);
+  background: rgba(var(--success-color), 0.1);
   color: var(--success-color);
   border-color: var(--success-color);
 }
 
 .outOfStock {
-  background: rgba(220, 53, 69, 0.2);
+  background: rgba(var(--danger-color), 0.1);
   color: var(--danger-color);
   border-color: var(--danger-color);
 }
 
 /* Content Section */
 .cardContent {
-  padding: 16px;
+  padding: 14px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -263,11 +276,11 @@
 .cardHeaderRow {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .catBadge {
-  font-size: 0.75em;
+  font-size: 0.7em;
   background: var(--bg-inset);
   color: var(--text-color-light);
   padding: 2px 6px;
@@ -275,27 +288,25 @@
 }
 
 .priceTag {
-  font-weight: 700;
-  font-size: 1.1em;
+  font-weight: 600;
+  font-size: 1em;
   color: var(--primary-color);
 }
 
 .cardContent h3 {
-  margin: 0 0 6px 0;
-  font-size: 1em;
+  margin: 0 0 4px 0;
+  font-size: 0.95em;
   color: var(--text-color);
   line-height: 1.4;
+  font-weight: 600;
 }
 
 .desc {
-  font-size: 0.85em;
+  font-size: 0.8em;
   color: var(--text-color-light);
-  margin: 0 0 16px 0;
+  margin: 0 0 12px 0;
   flex: 1;
-  /* Pushes actions down */
-
-  /* Truncate text */
-  /* Truncate text */
+  line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -308,11 +319,12 @@
   background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 8px;
+  border-radius: 6px;
   font-weight: 600;
+  font-size: 0.85em;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-fast);
   margin-top: auto;
 }
 
@@ -323,81 +335,64 @@
 /* FAB (Floating Action Button) */
 .fab {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 60px;
-  height: 60px;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff00cc, #333399);
-  /* Pink/Purple gradient from Ref */
+  background: var(--primary-color);
   color: white;
   border: none;
-  font-size: 2em;
+  font-size: 1.8em;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform var(--transition-fast), 
+              box-shadow var(--transition-fast),
+              background-color var(--transition-fast);
 }
 
 .fab span {
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.3s ease;
 }
 
 .fab:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-xl);
+  background: var(--primary-hover);
 }
 
 .fab:hover span {
-  transform: rotate(360deg);
-  /* 360 degree rotation on hover as requested */
-}
-
-/* Keyframes */
-@keyframes bounceIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.3) translateY(20px);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.05) translateY(-5px);
-  }
-
-  70% {
-    transform: scale(0.9);
-  }
-
-  100% {
-    transform: scale(1);
-  }
+  transform: rotate(90deg);
 }
 
 /* Action Buttons (Icons) */
 .cardActions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 6px;
   border-top: 1px solid var(--border-color);
-  padding-top: 12px;
+  padding-top: 10px;
 }
 
 .cardActions button {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 0.9em;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.1s;
+  transition: background-color var(--transition-fast), 
+              color var(--transition-fast),
+              border-color var(--transition-fast);
   color: var(--text-color-light);
 }
 
@@ -407,7 +402,7 @@
 }
 
 .delBtn:hover {
-  background: rgba(220, 53, 69, 0.1);
+  background: rgba(var(--danger-color), 0.1);
   border-color: var(--danger-color);
   color: var(--danger-color) !important;
 }
@@ -420,102 +415,124 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  /* Increased to fix overlap/bleed-through issues */
+  animation: fadeIn 0.2s ease-out;
 }
 
 .modalContent {
   background: var(--bg-secondary);
-  width: 600px;
+  width: 520px;
   max-width: 95%;
   border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-  animation: slideUp 0.3s ease-out;
+  padding: 24px;
+  box-shadow: var(--shadow-xl);
+  animation: modalSlideUp 0.25s ease-out;
   border: 1px solid var(--border-color);
   color: var(--text-color);
 }
 
-@keyframes slideUp {
+@keyframes modalSlideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px) scale(0.98);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .modalContent h3 {
   margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 1.4em;
+  margin-bottom: 16px;
+  font-size: 1.2em;
   color: var(--text-color);
+  font-weight: 600;
 }
 
 .modalForm {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
 .fieldsWrapper {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .fieldsWrapper input,
 .fieldsWrapper select,
 .fieldsWrapper textarea {
-  padding: 10px;
+  padding: 10px 12px;
   border: 1px solid var(--border-color-input);
   border-radius: 6px;
   font-family: inherit;
-  font-size: 0.95em;
+  font-size: 0.9em;
   width: 100%;
   box-sizing: border-box;
   background: var(--bg-inset);
   color: var(--text-color);
+  transition: border-color var(--transition-fast), 
+              box-shadow var(--transition-fast);
+}
+
+.fieldsWrapper input:focus,
+.fieldsWrapper select:focus,
+.fieldsWrapper textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
 }
 
 .fieldsWrapper textarea {
   resize: vertical;
+  min-height: 80px;
 }
 
 .modalActions {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 10px;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .primaryButton {
   background: var(--primary-color);
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 0.9em;
+  transition: background-color var(--transition-fast);
+}
+
+.primaryButton:hover {
+  background: var(--primary-hover);
 }
 
 .secondaryButton {
   background: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-color);
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color var(--transition-fast), 
+              border-color var(--transition-fast);
 }
 
 .secondaryButton:hover {
   background: var(--bg-inset);
+  border-color: var(--text-color-light);
 }

@@ -1,33 +1,35 @@
 .uploadContainer {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     display: flex;
     flex-direction: column;
 }
 
 .label {
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 8px;
     color: var(--text-color);
+    font-size: 0.9em;
 }
 
 .previewArea {
-    width: 120px;
-    height: 120px;
-    background-color: #f7f9fc;
-    border: 2px dashed #cbd5e0;
-    border-radius: 12px;
+    width: 100px;
+    height: 100px;
+    background-color: var(--bg-inset);
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color var(--transition-fast), 
+                background-color var(--transition-fast);
 }
 
 .previewArea:hover {
-    border-color: #4299e1;
-    background-color: #ebf8ff;
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb), 0.05);
 }
 
 .previewImage {
@@ -37,10 +39,13 @@
 }
 
 .placeholder {
-    color: #888;
-    font-size: 0.9em;
+    color: var(--text-color-light);
+    font-size: 0.85em;
+    text-align: center;
 }
 
 .fileInput {
-    padding: 5px;
+    padding: 4px;
+    font-size: 0.85em;
+    color: var(--text-color);
 }

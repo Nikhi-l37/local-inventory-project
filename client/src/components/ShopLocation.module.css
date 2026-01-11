@@ -1,43 +1,50 @@
 .locationContainer {
-  /* This creates the card "section" */
-  padding: 25px;
+  padding: 20px;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 8px;
   background-color: var(--bg-secondary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast);
+}
+
+.locationContainer:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .locationContainer h4 {
   margin-top: 0;
-  font-size: 1.2em;
-  color: var(--heading-color);
+  font-size: 1.1em;
+  color: var(--text-color);
+  font-weight: 600;
 }
 
 .locationContainer p {
   color: var(--text-color-light);
+  font-size: 0.9em;
 }
 
 .mapContainer {
-  height: 250px;
+  height: 220px;
   width: 100%; 
-  border-radius: 8px; 
-  margin-top: 15px;
+  border-radius: 6px; 
+  margin-top: 12px;
   border: 1px solid var(--border-color);
+  overflow: hidden;
 }
 
 .addressDisplay {
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: 500;
   color: var(--text-color);
-  padding: 12px;
+  padding: 10px;
   background: var(--bg-inset);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 6px;
   margin-top: 10px;
 } 
 
 @media (max-width: 800px) {
   .mapContainer {
-    height: 200px; /* Slightly reduce the map height on mobile */
+    height: 180px;
   }
 }
