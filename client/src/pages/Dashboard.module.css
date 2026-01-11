@@ -52,7 +52,7 @@
   border-radius: 16px;
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .sidebarCard:hover {
@@ -467,7 +467,7 @@
   justify-content: center;
   z-index: 9999;
   /* Boost z-index to stay on top */
-  animation: fadeInOverlay 0.2s ease;
+  animation: fadeInOverlay 0.25s ease;
 }
 
 @keyframes fadeInOverlay {
