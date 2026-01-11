@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import Map, { Marker, Popup, NavigationControl, GeolocateControl } from 'react-map-gl';
+import React, { useState, useEffect } from 'react';
+import Map, { Marker, Popup, NavigationControl, GeolocateControl, useMap } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';

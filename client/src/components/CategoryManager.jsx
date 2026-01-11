@@ -5,12 +5,7 @@ import styles from '../pages/Dashboard.module.css'; // Using Dashboard styles fo
 function CategoryManager({ shop, onCategoriesChange }) {
     const [categories, setCategories] = useState([]);
     const [newCatName, setNewCatName] = useState('');
-    const [newCatImage, setNewCatImage] = useState(null);
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        loadCategories();
-    }, [shop.id]);
 
     const loadCategories = async () => {
         try {
@@ -19,6 +14,11 @@ function CategoryManager({ shop, onCategoriesChange }) {
             if (onCategoriesChange) onCategoriesChange();
         } catch (err) { console.error(err); }
     };
+
+    useEffect(() => {
+        loadCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [shop.id]);
 
     const handleAddCategory = async () => {
         if (!newCatName) return;
