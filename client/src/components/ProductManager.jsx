@@ -178,28 +178,46 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
                 {product.is_available ? 'In Stock' : 'Out of Stock'}
               </span>
 
+              <span className={styles.priceTag}>₹{product.price}</span>
+
               {/* Top Right Pencil Menu */}
               <div className={styles.menuContainer}>
                 <button
                   className={styles.menuTrigger}
                   onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === product.id ? null : product.id); }}
+                  aria-label="Product options menu"
+                  aria-expanded={openMenuId === product.id}
+                  aria-haspopup="true"
                 >
                   ✏️
                 </button>
 
                 {openMenuId === product.id && (
-                  <div className={styles.dropdownMenu}>
-                    <button onClick={() => { setOpenMenuId(null); handleEditClick(product); }}>
+                  <div className={styles.dropdownMenu} role="menu">
+                    <button 
+                      onClick={() => { setOpenMenuId(null); handleEditClick(product); }}
+                      role="menuitem"
+                    >
                       Option: Rename/Edit
                     </button>
-                    <button onClick={() => { setOpenMenuId(null); handleToggleProduct(product.id, product.is_available); }}>
+                    <button 
+                      onClick={() => { setOpenMenuId(null); handleToggleProduct(product.id, product.is_available); }}
+                      role="menuitem"
+                    >
                       Option: {product.is_available ? 'Mark Unavailable' : 'Mark Available'}
                     </button>
                     {/* "Change Image" is part of Edit, but user asked for it specifically. It basically leads to same edit form */}
-                    <button onClick={() => { setOpenMenuId(null); handleEditClick(product); }}>
+                    <button 
+                      onClick={() => { setOpenMenuId(null); handleEditClick(product); }}
+                      role="menuitem"
+                    >
                       Option: Change Image
                     </button>
-                    <button onClick={() => { setOpenMenuId(null); handleDeleteProduct(product.id); }} className={styles.dangerItem}>
+                    <button 
+                      onClick={() => { setOpenMenuId(null); handleDeleteProduct(product.id); }} 
+                      className={styles.dangerItem}
+                      role="menuitem"
+                    >
                       Option: Delete
                     </button>
                   </div>
@@ -211,7 +229,6 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
             <div className={styles.cardContent}>
               <div className={styles.cardHeaderRow}>
                 <span className={styles.catBadge}>{product.category}</span>
-                <span className={styles.priceTag}>₹{product.price}</span>
               </div>
               <h3>{product.name}</h3>
               <p className={styles.desc}>{product.description}</p>

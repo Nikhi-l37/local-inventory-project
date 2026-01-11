@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api';
 import styles from '../pages/Dashboard.module.css'; // Using Dashboard styles for consistency
 
 function CategoryManager({ shop, onCategoriesChange }) {
     const [categories, setCategories] = useState([]);
     const [newCatName, setNewCatName] = useState('');
-    const [newCatImage, setNewCatImage] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        loadCategories();
-    }, [shop.id]);
-
-    const loadCategories = async () => {
+    const loadCategories = useCallback(async () => {
         try {
             const res = await api.get(`/api/categories/shop/${shop.id}`);
             setCategories(res.data);
             if (onCategoriesChange) onCategoriesChange();
         } catch (err) { console.error(err); }
-    };
+    }, [shop.id, onCategoriesChange]);
+
+    useEffect(() => {
+        loadCategories();
+    }, [loadCategories]);
 
     const handleAddCategory = async () => {
         if (!newCatName) return;

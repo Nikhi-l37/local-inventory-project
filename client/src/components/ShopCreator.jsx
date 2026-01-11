@@ -233,7 +233,9 @@ function ShopCreator({ onShopCreated }) {
                 longitude: position.lng,
                 latitude: position.lat
               } : {})}
-              onMove={evt => { /* Optional: track view state if needed */ }}
+              onMove={() => {
+                // Optional: track view state if needed
+              }}
             >
               <NavigationControl position="top-right" />
               <GeolocateControl position="top-right" />

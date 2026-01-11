@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api';
 import ShopCreator from '../components/ShopCreator.jsx';
 import ShopStatus from '../components/ShopStatus.jsx';
 import ProductManager from '../components/ProductManager.jsx';
 import CategoryManager from '../components/CategoryManager.jsx';
 import styles from './Dashboard.module.css';
+import { useEscapeKey } from '../hooks/useEscapeKey.js';
 
 // Components
 import ImageUpload from '../components/ImageUpload.jsx';
@@ -73,6 +73,9 @@ function SellerProfile({ initialShop, onShopUpdated }) {
     setClosingTime(initialShop.closing_time || '21:00');
   }, [initialShop]);
 
+  // Add keyboard navigation for modal - using custom hook
+  useEscapeKey(isEditing, () => setIsEditing(false));
+
   const handleSave = async () => {
     setLoading(true);
     try {
@@ -119,7 +122,14 @@ function SellerProfile({ initialShop, onShopUpdated }) {
             <img src={`${import.meta.env.VITE_API_BASE_URL}${initialShop.image_url}`} alt="Shop Logo" className={styles.avatar} />
           ) : <div className={styles.placeholderAvatar}>{initialShop.name[0]}</div>}
           {/* Edit Overlay */}
-          <button onClick={() => setIsEditing(true)} className={styles.editIconBtn} title="Edit Profile">✏️</button>
+          <button 
+            onClick={() => setIsEditing(true)} 
+            className={styles.editIconBtn} 
+            title="Edit Profile"
+            aria-label="Edit shop profile"
+          >
+            ✏️
+          </button>
         </div>
 
         <div className={styles.profileInfo}>
@@ -145,16 +155,34 @@ function SellerProfile({ initialShop, onShopUpdated }) {
       </div>
 
       {isEditing && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <h3>Edit Shop Profile</h3>
+        <div 
+          className={styles.modalOverlay}
+          onClick={() => setIsEditing(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="edit-profile-title"
+        >
+          <div 
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 id="edit-profile-title">Edit Shop Profile</h3>
             <div className={styles.editForm}>
               <ImageUpload label="Shop Logo" currentImage={initialShop.image_url} onImageSelect={setImage} />
-              <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Shop Name" />
+              <input 
+                type="text" 
+                value={name} 
+                onChange={e => setName(e.target.value)} 
+                placeholder="Shop Name"
+                aria-label="Shop Name"
+              />
 
               {/* Category Selection with Custom Option */}
-              <select value={['Grocery', 'Electronics', 'Pharmacy', 'Fashion'].includes(category) ? category : 'Other'}
-                onChange={e => setCategory(e.target.value)}>
+              <select 
+                value={['Grocery', 'Electronics', 'Pharmacy', 'Fashion'].includes(category) ? category : 'Other'}
+                onChange={e => setCategory(e.target.value)}
+                aria-label="Shop Category"
+              >
                 <option value="Grocery">Grocery</option>
                 <option value="Electronics">Electronics</option>
                 <option value="Pharmacy">Pharmacy</option>
@@ -168,15 +196,32 @@ function SellerProfile({ initialShop, onShopUpdated }) {
                   value={category === 'Other' ? '' : category}
                   onChange={e => setCategory(e.target.value)}
                   placeholder="Enter custom category name"
+                  aria-label="Custom Category Name"
                   autoFocus
                 />
               )}
 
               <div className={styles.row}>
-                <input type="time" value={openingTime} onChange={e => setOpeningTime(e.target.value)} />
-                <input type="time" value={closingTime} onChange={e => setClosingTime(e.target.value)} />
+                <input 
+                  type="time" 
+                  value={openingTime} 
+                  onChange={e => setOpeningTime(e.target.value)}
+                  aria-label="Opening Time"
+                />
+                <input 
+                  type="time" 
+                  value={closingTime} 
+                  onChange={e => setClosingTime(e.target.value)}
+                  aria-label="Closing Time"
+                />
               </div>
-              <textarea value={description} onChange={e => setDescription(e.target.value)} rows="3" placeholder="Description" />
+              <textarea 
+                value={description} 
+                onChange={e => setDescription(e.target.value)} 
+                rows="3" 
+                placeholder="Description"
+                aria-label="Shop Description"
+              />
               <div className={styles.modalActions}>
                 <button onClick={() => setIsEditing(false)} className={styles.secondaryButton}>Cancel</button>
                 <button onClick={handleSave} className={styles.primaryButton} disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
@@ -201,6 +246,9 @@ function LocationManager({ shop, onShopUpdated }) {
     state: shop.state
   });
   const [loading, setLoading] = useState(false);
+
+  // Add keyboard navigation for modal - using custom hook
+  useEscapeKey(isEditing, () => setIsEditing(false));
 
   // Map Click Handler
   function LocationMarker() {
@@ -246,15 +294,31 @@ function LocationManager({ shop, onShopUpdated }) {
     <div className={styles.sidebarCard}>
       <div className={styles.cardHeader}>
         <h4>Location</h4>
-        <button onClick={() => setIsEditing(true)} className={styles.iconBtn}>📍</button>
+        <button 
+          onClick={() => setIsEditing(true)} 
+          className={styles.iconBtn}
+          aria-label="Update shop location"
+          title="Update Location"
+        >
+          📍
+        </button>
       </div>
       <p className={styles.addressText}>
         {shop.town_village}, {shop.mandal}
       </p>
       {isEditing && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <h3>Update Location</h3>
+        <div 
+          className={styles.modalOverlay}
+          onClick={() => setIsEditing(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="update-location-title"
+        >
+          <div 
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 id="update-location-title">Update Location</h3>
             <div className={styles.mapContainer}>
               <MapContainer center={[shop.latitude, shop.longitude]} zoom={13} className={styles.editMap}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -306,6 +370,11 @@ function Dashboard() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [shopStats, setShopStats] = useState({ total: 0, active: 0, inactive: 0 }); // Added inactive
+
+  // Wrap setShopStats in useCallback to prevent unnecessary re-renders
+  const handleStatsUpdate = useCallback((stats) => {
+    setShopStats(stats);
+  }, []);
 
   useEffect(() => {
     fetchShopAndCategories();
@@ -359,7 +428,14 @@ function Dashboard() {
               <div className={styles.cardHeader}>
                 <h4>Categories</h4>
                 {/* Tiny Add Button */}
-                <button className={styles.iconBtn} title="Manage Categories" onClick={() => setSelectedCategory('manage')}>⚙️</button>
+                <button 
+                  className={styles.iconBtn} 
+                  title="Manage Categories" 
+                  onClick={() => setSelectedCategory('manage')}
+                  aria-label="Manage categories"
+                >
+                  ⚙️
+                </button>
               </div>
               <nav className={styles.categoryNav}>
                 <button
@@ -393,7 +469,7 @@ function Dashboard() {
                 categories={categories}
                 selectedCategory={selectedCategory}
                 onCategoriesChange={refreshCategories}
-                onStatsUpdate={setShopStats}
+                onStatsUpdate={handleStatsUpdate}
               />
             )}
           </main>
