@@ -78,12 +78,13 @@ CREATE TABLE IF NOT EXISTS sellers (
 );
 
 -- Shops table with geospatial support
+-- NOTE: Use GEOMETRY type for best compatibility
 CREATE TABLE IF NOT EXISTS shops (
     id SERIAL PRIMARY KEY,
     seller_id INTEGER REFERENCES sellers(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     category VARCHAR(100),
-    location GEOGRAPHY(POINT, 4326),
+    location GEOMETRY(POINT, 4326),
     town_village VARCHAR(255),
     mandal VARCHAR(255),
     district VARCHAR(255),
@@ -115,6 +116,11 @@ CREATE INDEX IF NOT EXISTS idx_shops_location ON shops USING GIST(location);
 CREATE INDEX IF NOT EXISTS idx_products_shop_id ON products(shop_id);
 CREATE INDEX IF NOT EXISTS idx_shops_seller_id ON shops(seller_id);
 ```
+
+**Important Note on Location Column Type:**
+- The application now uses `GEOMETRY(POINT, 4326)` type for the location column
+- This provides better compatibility and performance
+- If you previously created the table with `GEOGRAPHY` type and are experiencing "Error creating shop" issues, run: `npm run fix:location` to convert it
 
 ## Step 5: Test the Connection
 

@@ -2,7 +2,77 @@
 
 This document addresses common issues that occur after migrating from pgAdmin to Supabase.
 
-## Issue 1: Product Search Not Working
+## Issue 1: "Error creating shop" When Signing Up
+
+### Symptoms
+- Shop creation fails with "Error creating shop" message
+- Browser console shows: `Failed to load resource: the server responded with a status of 500 (Internal Server Error)` on `/api/shops`
+- Server may show errors related to `ST_GeomFromText` or location column type mismatch
+
+### Root Cause
+There is a mismatch between the location column type in your Supabase database and what the application expects. This commonly happens when:
+1. The schema was created with `GEOGRAPHY(POINT, 4326)` type but the app code expects `GEOMETRY(POINT, 4326)`, or vice versa
+2. PostGIS extension is not enabled
+
+### Solution
+
+**Step 1: Enable PostGIS Extension**
+1. Go to Supabase Dashboard
+2. Navigate to **Database** → **Extensions**
+3. Search for `postgis`
+4. Click **Enable**
+5. Wait for activation
+
+**Step 2: Fix the Location Column Type**
+
+The application has been updated to work with GEOMETRY type (which is compatible with both GEOMETRY and GEOGRAPHY operations). Run this migration script:
+
+```bash
+cd server
+node scripts/fix_location_column.js
+```
+
+This script will:
+- Check your current location column type
+- Convert GEOGRAPHY to GEOMETRY if needed
+- Ensure spatial indexes are properly set up
+
+**Alternatively**, you can manually update your schema in Supabase SQL Editor:
+
+```sql
+-- Check current type
+SELECT column_name, udt_name, data_type
+FROM information_schema.columns
+WHERE table_name = 'shops' AND column_name = 'location';
+
+-- If it shows 'geography', convert to geometry
+BEGIN;
+
+ALTER TABLE shops ADD COLUMN location_temp GEOMETRY(POINT, 4326);
+UPDATE shops SET location_temp = location::geometry WHERE location IS NOT NULL;
+ALTER TABLE shops DROP COLUMN location;
+ALTER TABLE shops RENAME COLUMN location_temp TO location;
+
+-- Recreate spatial index
+DROP INDEX IF EXISTS idx_shops_location;
+CREATE INDEX idx_shops_location ON shops USING GIST(location);
+
+COMMIT;
+```
+
+**Step 3: Restart Your Server**
+```bash
+npm start
+```
+
+### Verification
+1. Try signing up and creating a shop again
+2. The shop creation should now work without errors
+3. Check server logs - they should show successful database operations
+
+---
+
+## Issue 2: Product Search Not Working
 
 ### Symptoms
 - Search returns no results
