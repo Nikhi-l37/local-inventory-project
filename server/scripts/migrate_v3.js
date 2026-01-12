@@ -22,7 +22,8 @@ async function migrate() {
         name VARCHAR(100) NOT NULL,
         description TEXT,
         image_url TEXT,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(shop_id, name)
       );
     `);
 

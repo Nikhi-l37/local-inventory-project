@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS shops (
     seller_id INTEGER REFERENCES sellers(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     category VARCHAR(100) NOT NULL,
-    location GEOMETRY(POINT, 4326), -- PostGIS Geography column
+    location GEOMETRY(POINT, 4326), -- PostGIS Geometry column for lat/long coordinates
     town_village VARCHAR(100),
     mandal VARCHAR(100),
     district VARCHAR(100),
@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS categories (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     image_url TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(shop_id, name) -- Each category name must be unique per shop
 );
 
 -- Index for faster category lookups
@@ -77,7 +78,7 @@ CREATE TABLE IF NOT EXISTS products (
     shop_id INTEGER REFERENCES shops(id) ON DELETE CASCADE,
     category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL, -- Optional link to category table
     name VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
     category VARCHAR(100), -- Legacy column for string-based category
     description TEXT,
     image_url TEXT,
