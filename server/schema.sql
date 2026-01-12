@@ -5,46 +5,48 @@
 -- ============================================
 -- 1. Enable Required Extensions
 -- ============================================
+-- Enable PostGIS for location features
 CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 -- ============================================
--- 2. Create Sellers Table
+-- 2. Create Sellers Table (Authentication)
 -- ============================================
 CREATE TABLE IF NOT EXISTS sellers (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Index for faster email lookups
 CREATE INDEX IF NOT EXISTS idx_sellers_email ON sellers(email);
 
 -- ============================================
--- 3. Create Shops Table
+-- 3. Create Shops Table (Stores shop details and location)
 -- ============================================
 CREATE TABLE IF NOT EXISTS shops (
     id SERIAL PRIMARY KEY,
-    seller_id INTEGER NOT NULL REFERENCES sellers(id) ON DELETE CASCADE,
+    seller_id INTEGER REFERENCES sellers(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
-    category VARCHAR(100),
-    location GEOMETRY(POINT, 4326), -- PostGIS geometry type for lat/long (compatible with both GEOMETRY and GEOGRAPHY operations)
-    town_village VARCHAR(255),
-    mandal VARCHAR(255),
-    district VARCHAR(255),
-    state VARCHAR(255),
+    category VARCHAR(100) NOT NULL,
+    location GEOMETRY(POINT, 4326), -- PostGIS Geometry column for lat/long coordinates
+    town_village VARCHAR(100),
+    mandal VARCHAR(100),
+    district VARCHAR(100),
+    state VARCHAR(100),
     description TEXT,
     opening_time TIME,
     closing_time TIME,
-    image_url VARCHAR(255),
-    is_open BOOLEAN DEFAULT true,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    image_url TEXT,
+    is_open BOOLEAN DEFAULT false,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Indexes for shops
 CREATE INDEX IF NOT EXISTS idx_shops_seller_id ON shops(seller_id);
-CREATE INDEX IF NOT EXISTS idx_shops_location ON shops USING GIST(location);
+-- Create a spatial index for faster location searches
+CREATE INDEX IF NOT EXISTS shops_location_idx ON shops USING GIST(location);
 CREATE INDEX IF NOT EXISTS idx_shops_category ON shops(category);
 CREATE INDEX IF NOT EXISTS idx_shops_name ON shops(name);
 
@@ -53,15 +55,15 @@ CREATE INDEX IF NOT EXISTS idx_shops_name_trgm ON shops USING GIN (name gin_trgm
 CREATE INDEX IF NOT EXISTS idx_shops_category_trgm ON shops USING GIN (category gin_trgm_ops);
 
 -- ============================================
--- 4. Create Categories Table
+-- 4. Create Categories Table (Shop-specific categories)
 -- ============================================
 CREATE TABLE IF NOT EXISTS categories (
     id SERIAL PRIMARY KEY,
-    shop_id INTEGER NOT NULL REFERENCES shops(id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL,
-    image_url VARCHAR(255),
+    shop_id INTEGER REFERENCES shops(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
     description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    image_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(shop_id, name) -- Each category name must be unique per shop
 );
 
@@ -73,16 +75,16 @@ CREATE INDEX IF NOT EXISTS idx_categories_shop_id ON categories(shop_id);
 -- ============================================
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
-    shop_id INTEGER NOT NULL REFERENCES shops(id) ON DELETE CASCADE,
+    shop_id INTEGER REFERENCES shops(id) ON DELETE CASCADE,
+    category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL, -- Optional link to category table
     name VARCHAR(255) NOT NULL,
-    category VARCHAR(100), -- Legacy category field (kept for backward compatibility)
-    category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL, -- New category reference
-    price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
+    category VARCHAR(100), -- Legacy column for string-based category
     description TEXT,
-    image_url VARCHAR(255),
+    image_url TEXT,
     is_available BOOLEAN DEFAULT true,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Indexes for products

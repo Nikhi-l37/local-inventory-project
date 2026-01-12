@@ -19,10 +19,11 @@ async function migrate() {
       CREATE TABLE IF NOT EXISTS categories (
         id SERIAL PRIMARY KEY,
         shop_id INTEGER REFERENCES shops(id) ON DELETE CASCADE,
-        name VARCHAR(255) NOT NULL,
-        image_url VARCHAR(255),
+        name VARCHAR(100) NOT NULL,
         description TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        image_url TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(shop_id, name)
       );
     `);
 

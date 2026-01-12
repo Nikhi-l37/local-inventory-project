@@ -78,10 +78,10 @@ async function fixLocationColumn() {
         // Recreate spatial index
         console.log('   4. Recreating spatial index...');
         await pool.query(`
-          DROP INDEX IF EXISTS idx_shops_location
+          DROP INDEX IF EXISTS shops_location_idx
         `);
         await pool.query(`
-          CREATE INDEX idx_shops_location ON shops USING GIST(location)
+          CREATE INDEX shops_location_idx ON shops USING GIST(location)
         `);
 
         // Commit transaction
@@ -100,13 +100,13 @@ async function fixLocationColumn() {
       const checkIndex = await pool.query(`
         SELECT indexname 
         FROM pg_indexes 
-        WHERE tablename = 'shops' AND indexname = 'idx_shops_location'
+        WHERE tablename = 'shops' AND indexname = 'shops_location_idx'
       `);
 
       if (checkIndex.rows.length === 0) {
         console.log('   Creating missing spatial index...');
         await pool.query(`
-          CREATE INDEX idx_shops_location ON shops USING GIST(location)
+          CREATE INDEX shops_location_idx ON shops USING GIST(location)
         `);
         console.log('   ✅ Spatial index created!');
       } else {
