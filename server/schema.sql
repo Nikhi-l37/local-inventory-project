@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS shops (
     seller_id INTEGER NOT NULL REFERENCES sellers(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     category VARCHAR(100),
-    location GEOGRAPHY(POINT, 4326), -- PostGIS geography type for lat/long
+    location GEOMETRY(POINT, 4326), -- PostGIS geometry type for lat/long (compatible with both GEOMETRY and GEOGRAPHY operations)
     town_village VARCHAR(255),
     mandal VARCHAR(255),
     district VARCHAR(255),
