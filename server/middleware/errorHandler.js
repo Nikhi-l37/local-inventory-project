@@ -97,8 +97,10 @@ const errorHandler = (err, req, res, next) => {
     return next(err);
   }
 
-  // Check if it's a database error
-  if (err.code || err.name === 'QueryFailedError') {
+  // Check if it's a database error by checking for common PostgreSQL error properties
+  const isDatabaseError = err.code || err.severity || err.routine;
+  
+  if (isDatabaseError) {
     return handleDatabaseError(err, req, res, next);
   }
 

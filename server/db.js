@@ -39,18 +39,23 @@ const pool = new Pool(poolConfig);
 
 // Handle pool errors gracefully
 pool.on('error', (err, client) => {
+  // Use console.error for error logging - consider using a logging library in production
   console.error('Unexpected database error on idle client:', err.message);
   // Don't crash the application on connection errors
 });
 
 // Add connection event for debugging
 pool.on('connect', (client) => {
-  console.log('New database connection established');
+  if (process.env.NODE_ENV === 'development') {
+    console.log('New database connection established');
+  }
 });
 
 // Add remove event for debugging
 pool.on('remove', (client) => {
-  console.log('Database connection removed from pool');
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Database connection removed from pool');
+  }
 });
 
 module.exports = pool;

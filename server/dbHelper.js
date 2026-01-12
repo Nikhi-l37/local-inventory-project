@@ -1,6 +1,13 @@
 // Database helper functions for better error handling with Supabase
 const pool = require('./db');
 
+// Retry configuration constants
+const RETRY_CONFIG = {
+  BASE_DELAY_MS: 1000,
+  MAX_DELAY_MS: 5000,
+  DEFAULT_MAX_RETRIES: 2
+};
+
 /**
  * Execute a query with automatic retry logic for transient errors
  * @param {string} queryText - SQL query string
@@ -8,7 +15,7 @@ const pool = require('./db');
  * @param {number} maxRetries - Maximum number of retries (default: 2)
  * @returns {Promise} Query result
  */
-async function queryWithRetry(queryText, params = [], maxRetries = 2) {
+async function queryWithRetry(queryText, params = [], maxRetries = RETRY_CONFIG.DEFAULT_MAX_RETRIES) {
   let lastError;
   
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -32,7 +39,10 @@ async function queryWithRetry(queryText, params = [], maxRetries = 2) {
       }
       
       // Wait before retrying (exponential backoff)
-      const delay = Math.min(1000 * Math.pow(2, attempt), 5000);
+      const delay = Math.min(
+        RETRY_CONFIG.BASE_DELAY_MS * Math.pow(2, attempt),
+        RETRY_CONFIG.MAX_DELAY_MS
+      );
       console.log(`Query failed, retrying in ${delay}ms... (attempt ${attempt + 1}/${maxRetries})`);
       await new Promise(resolve => setTimeout(resolve, delay));
     }
