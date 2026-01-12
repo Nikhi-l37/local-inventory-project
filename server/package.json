@@ -10,6 +10,7 @@
     "troubleshoot": "node troubleshoot.js",
     "migrate:v3": "node scripts/migrate_v3.js",
     "migrate:search": "node scripts/migrate_search.js",
+    "fix:location": "node scripts/fix_location_column.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

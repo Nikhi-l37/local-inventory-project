@@ -21,17 +21,16 @@ router.get('/', async (req, res) => {
 
     // Set search parameters
     const searchRadius = 50000; // Increased to 50km
-    const userLocation = `POINT(${lon} ${lat})`;
 
-    console.log(`[Search Debug] Query: "${q}", Location: ${userLocation}, OpenOnly: ${open_only}`);
+    console.log(`[Search Debug] Query: "${q}", Location: POINT(${lon} ${lat}), OpenOnly: ${open_only}`);
 
     // Build WHERE clauses with fuzzy matching
-    // $1 = userLocation, $2 = raw query (for similarity), $3 = searchRadius, $4 = %query% (for ILIKE fallback)
-    const params = [userLocation, q, searchRadius, `%${q}%`];
+    // $1 = longitude, $2 = latitude, $3 = raw query (for similarity), $4 = searchRadius, $5 = %query% (for ILIKE fallback)
+    const params = [lon, lat, q, searchRadius, `%${q}%`];
     const whereClauses = [
       "p.is_available = true",
-      "(similarity(p.name, $2) > 0.1 OR p.name ILIKE $4)", // Fuzzy match OR exact substring
-      "ST_DWithin(s.location, ST_GeomFromText($1, 4326)::geography, $3)"
+      "(similarity(p.name, $3) > 0.1 OR p.name ILIKE $5)", // Fuzzy match OR exact substring
+      "ST_DWithin(s.location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography, $4)"
     ];
 
     // Add open_only filter (SMART TIME LOGIC)
@@ -45,10 +44,10 @@ router.get('/', async (req, res) => {
       SELECT
         s.id AS shop_id, s.name AS shop_name, s.is_open, s.opening_time, s.closing_time, s.image_url AS shop_image,
         p.name AS product_name, p.category, p.price, p.description, p.image_url AS product_image, p.last_updated,
-        ST_Distance(s.location, ST_GeomFromText($1, 4326)::geography) AS distance_meters,
+        ST_Distance(s.location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography) AS distance_meters,
         ST_Y(s.location::geometry) AS latitude,
         ST_X(s.location::geometry) AS longitude,
-        similarity(p.name, $2) AS match_score
+        similarity(p.name, $3) AS match_score
       FROM products p
       JOIN shops s ON p.shop_id = s.id
       WHERE ${whereClauses.join(' AND ')}
@@ -83,18 +82,17 @@ router.get('/shops', async (req, res) => {
     // --- End of validation ---
 
     const searchRadius = 50000;
-    const userLocation = `POINT(${lon} ${lat})`;
 
-    console.log(`[Search Shops Debug] Query: "${q}", Location: ${userLocation}, OpenOnly: ${open_only}`);
+    console.log(`[Search Shops Debug] Query: "${q}", Location: POINT(${lon} ${lat}), OpenOnly: ${open_only}`);
 
     // Build WHERE clauses with fuzzy matching
-    // $1 = userLocation, $2 = raw query (for similarity), $3 = searchRadius, $4 = %query% (for ILIKE fallback)
-    const params = [userLocation, q, searchRadius, `%${q}%`];
+    // $1 = longitude, $2 = latitude, $3 = raw query (for similarity), $4 = searchRadius, $5 = %query% (for ILIKE fallback)
+    const params = [lon, lat, q, searchRadius, `%${q}%`];
 
     // Fuzzy search by shop name OR category
     const whereClauses = [
-      "(similarity(name, $2) > 0.1 OR similarity(category, $2) > 0.1 OR name ILIKE $4 OR category ILIKE $4)",
-      "ST_DWithin(location, ST_GeomFromText($1, 4326)::geography, $3)"
+      "(similarity(name, $3) > 0.1 OR similarity(category, $3) > 0.1 OR name ILIKE $5 OR category ILIKE $5)",
+      "ST_DWithin(location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography, $4)"
     ];
 
     // Add open_only filter (SMART TIME LOGIC)
@@ -107,10 +105,10 @@ router.get('/shops', async (req, res) => {
     const queryString = `
       SELECT
         id, name, category, is_open, opening_time, closing_time, image_url, description,
-        ST_Distance(location, ST_GeomFromText($1, 4326)::geography) AS distance_meters,
+        ST_Distance(location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography) AS distance_meters,
         ST_Y(location::geometry) AS latitude,
         ST_X(location::geometry) AS longitude,
-        GREATEST(similarity(name, $2), similarity(category, $2)) AS match_score
+        GREATEST(similarity(name, $3), similarity(category, $3)) AS match_score
       FROM shops
       WHERE ${whereClauses.join(' AND ')}
       ORDER BY match_score DESC, distance_meters ASC;

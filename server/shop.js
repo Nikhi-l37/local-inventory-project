@@ -39,7 +39,6 @@ router.post('/', [auth, validateCreateShop, upload.single('image')], async (req,
     const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
     const sellerId = req.sellerId;
-    const locationString = `POINT(${longitude} ${latitude})`;
 
     const newShop = await pool.query(
       `INSERT INTO shops (
@@ -47,7 +46,7 @@ router.post('/', [auth, validateCreateShop, upload.single('image')], async (req,
          town_village, mandal, district, state,
          description, opening_time, closing_time, image_url
        ) 
-       VALUES ($1, $2, $3, ST_GeomFromText($4, 4326), $5, $6, $7, $8, $9, $10, $11, $12) 
+       VALUES ($1, $2, $3, ST_SetSRID(ST_MakePoint($4, $5), 4326), $6, $7, $8, $9, $10, $11, $12, $13) 
        RETURNING 
          id, seller_id, name, category, is_open,
          ST_Y(location::geometry) AS latitude,
@@ -56,7 +55,7 @@ router.post('/', [auth, validateCreateShop, upload.single('image')], async (req,
          description, opening_time, closing_time, image_url
       `,
       [
-        sellerId, name, category, locationString,
+        sellerId, name, category, longitude, latitude,
         town_village, mandal, district, state,
         description, opening_time, closing_time, image_url
       ]
@@ -240,14 +239,13 @@ router.patch('/update-location', [auth, validateUpdateShopLocation], async (req,
   try {
     const { latitude, longitude, town_village, mandal, district, state } = req.body;
     const sellerId = req.sellerId;
-    const locationString = `POINT(${longitude} ${latitude})`;
 
     await pool.query(
       `UPDATE shops 
-       SET location = ST_GeomFromText($1, 4326),
-           town_village = $2, mandal = $3, district = $4, state = $5
-       WHERE seller_id = $6`,
-      [locationString, town_village, mandal, district, state, sellerId]
+       SET location = ST_SetSRID(ST_MakePoint($1, $2), 4326),
+           town_village = $3, mandal = $4, district = $5, state = $6
+       WHERE seller_id = $7`,
+      [longitude, latitude, town_village, mandal, district, state, sellerId]
     );
 
     // Return updated shop
