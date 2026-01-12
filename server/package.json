@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "vite --host",
     "start": "nodemon index.js",
+    "setup": "node setup-check.js",
+    "troubleshoot": "node troubleshoot.js",
+    "migrate:v3": "node scripts/migrate_v3.js",
+    "migrate:search": "node scripts/migrate_search.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
