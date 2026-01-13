@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import api from '../api'; 
-import { Link } from 'react-router-dom'; 
-import Logo from '../components/Logo.jsx'; 
-    
+import api from '../api';
+import { Link } from 'react-router-dom';
+import Logo from '../components/Logo.jsx';
+
 import styles from './Form.module.css';
 
 function Register() {
@@ -11,7 +11,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newUser = { email, password };
+    const newUser = { email: email.trim(), password: password.trim() };
     try {
       const response = await api.post('/api/sellers/register', newUser);
       console.log('Registration successful! Token:', response.data.token);
@@ -21,10 +21,10 @@ function Register() {
       alert('Registration failed: ' + err.response.data);
     }
   };
-      
+
   return (
     <div className={styles.formContainer}>
-      
+
       {/* --- Project Branding --- */}
       <div className={styles.logoWrapper}>
         <Logo simple={true} />

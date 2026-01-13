@@ -1,94 +1,69 @@
+/* Light Theme (GitHub Style) */
 :root {
-  /* Light theme variables */
-  --primary-color: #007bff;
-  --primary-hover: #0056b3;
-  --primary-color-rgb: 0, 123, 255;
-  --bg-color: #f8f9fa;
-  --bg-secondary: #ffffff;
-  --bg-inset: #e9ecef;
-  --text-color: #343a40;
-  --text-color-light: #6c757d;
-  --border-color: #dee2e6;
-  --border-color-input: #ced4da;
-  --navbar-bg: #343a40;
-  --navbar-text: #ffffff;
-  --navbar-link-hover: #adb5bd;
+  --primary-color: #0969da;
+  --primary-hover: #0a568c;
+  --primary-color-rgb: 9, 105, 218;
 
-  --success-color: #28a745;
-  --success-hover: #1e7e34;
-  --danger-color: #dc3545;
-  --danger-hover: #bd2130;
-  --secondary-color: #6c757d;
-  --secondary-hover: #5a6268;
+  --bg-color: #f6f8fa;
+  /* GitHub Page BG */
+  --bg-secondary: #ffffff;
+  /* GitHub Card BG */
+  --bg-inset: #ffffff;
+  /* Input BG */
+
+  --text-color: #24292f;
+  --text-color-light: #57606a;
+
+  --border-color: #d0d7de;
+  --border-color-input: #d0d7de;
+
+  --navbar-bg: #24292f;
+  --navbar-text: #ffffff;
+  --navbar-link-hover: #ffffff;
+
+  --success-color: #2da44e;
+  --success-hover: #2c974b;
+  --danger-color: #cf222e;
+  --danger-hover: #a40e26;
+  --secondary-color: #57606a;
+
+  /* Shared Button Color (Blue) */
+  --auth-button-bg: #0969da;
+  --auth-button-hover: #0a568c;
+  --auth-button-text: #ffffff;
 }
 
 body.dark {
-  /* GitHub Dark Theme Inspired */
+  /* GitHub Dark Theme */
   --primary-color: #58a6ff;
   --primary-hover: #79c0ff;
   --primary-color-rgb: 88, 166, 255;
 
   --bg-color: #0d1117;
-  /* GitHub Main Background */
+  /* GitHub Dark Page BG */
   --bg-secondary: #161b22;
-  /* GitHub Secondary Background (Cards/Sidebar) */
-  --bg-inset: #21262d;
-  /* Input backgrounds */
+  /* GitHub Dark Card BG */
+  --bg-inset: #0d1117;
+  /* Dark Input BG */
 
   --text-color: #c9d1d9;
-  /* GitHub Text Main */
   --text-color-light: #8b949e;
-  /* GitHub Text Muted */
 
   --border-color: #30363d;
-  /* GitHub Borders */
-  --border-color-input: #30363d;
+  --border-color-input: #21262d;
 
   --navbar-bg: #161b22;
   --navbar-text: #f0f6fc;
   --navbar-link-hover: #58a6ff;
 
-  background-image: none;
-  /* Remove gradient for flat clean look */
-
   --success-color: #238636;
   --success-hover: #2ea043;
   --danger-color: #da3633;
-  --danger-hover: #f85149;
-  --secondary-color: #8b949e;
-  --secondary-hover: #6e7681;
-}
 
-/* --- HSL-BASED PROFESSIONAL THEME (Default) --- */
-body.screen-coach-theme {
-  /* Core HSL Colors */
-  --bg-color: hsl(222 84% 5%);
-  --text-color: hsl(210 40% 98%);
-  --bg-secondary: hsl(222 84% 7%);
-  --heading-color: hsl(210 40% 98%);
-
-  /* Brand Colors */
-  --primary-color: hsl(189 100% 42%);
-  --primary-hover: hsl(189 100% 55%);
-  --primary-color-rgb: 0, 203, 214;
-
-  --secondary-color: hsl(240 6% 20%);
-
-  --text-color-light: hsl(215 20% 65%);
-
-  /* Border/Input Colors */
-  --border-color: hsl(217 33% 17%);
-  --border-color-input: hsl(217 33% 17%);
-
-  /* Status Colors */
-  --success-color: hsl(142 76% 36%);
-  --success-hover: hsl(142 76% 45%);
-  --danger-color: hsl(0 84% 60%);
-  --danger-hover: hsl(0 84% 50%);
-
-  --navbar-bg: hsl(222 84% 5%);
-  --navbar-text: hsl(210 40% 98%);
-  --navbar-link-hover: hsl(189 100% 42%);
+  /* Shared Button Color (Blue for Dark Mode) */
+  --auth-button-bg: #1f6feb;
+  --auth-button-hover: #388bfd;
+  --auth-button-text: #ffffff;
 
   background-image: none;
 }
@@ -101,8 +76,8 @@ body,
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
   box-sizing: border-box;
+  /* overflow: hidden removed to allow scrolling */
 }
 
 body {

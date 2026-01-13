@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { ThemeProvider } from './context/ThemeContext.jsx'; 
+import { ThemeProvider } from './context/ThemeContext.jsx';
 
 import './index.css';
 import App from './App.jsx';
-import Register from './pages/Register.jsx';
-import Login from './pages/Login.jsx';
-import Dashboard from './pages/Dashboard.jsx'; 
-import ProtectedRoute from './ProtectedRoute.jsx'; 
+import Auth from './pages/Auth.jsx'; // <--- 1. NEW IMPORT
+import Dashboard from './pages/Dashboard.jsx';
+import ProtectedRoute from './ProtectedRoute.jsx';
 import Home from './pages/Home.jsx'; // This is our map page
 import Landing from './pages/Landing.jsx'; // <--- 1. IMPORT NEW PAGE
 import ForgotPassword from './pages/ForgotPassword.jsx'; // <--- 1. IMPORT
@@ -19,21 +18,21 @@ const router = createBrowserRouter([
     path: '/',
     element: <App />,
     children: [
-      { 
+      {
         path: '/', // <--- 2. UPDATE HOME PATH
         element: <Landing />, // <--- 3. USE LANDING COMPONENT
       },
-      { 
+      {
         path: '/search', // <--- 4. CREATE SEARCH PATH
         element: <Home />, // <--- 5. USE MAP COMPONENT HERE
       },
       {
         path: '/register',
-        element: <Register />,
+        element: <Auth />, // Use unified Auth page
       },
       {
         path: '/login',
-        element: <Login />,
+        element: <Auth />, // Use unified Auth page
       },
 
       { // <--- 2. ADD THIS NEW ROUTE BLOCK
@@ -46,7 +45,7 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
       },
 
-      { 
+      {
         path: '/dashboard',
         element: (
           <ProtectedRoute>

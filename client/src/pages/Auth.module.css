@@ -1,0 +1,157 @@
+/* GitHub-Style Auth Page CSS (Exact Replica) */
+
+.authContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    /* Actually GitHub usually has it at the top with margin, but flexible center is fine for us */
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    padding: 24px;
+}
+
+.logoSection {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.logoSection svg {
+    fill: var(--text-color);
+    height: 48px;
+    width: 48px;
+}
+
+.authTitle {
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    margin-bottom: 15px;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.authCard {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 20px;
+    width: 100%;
+    max-width: 308px;
+    /* Precise width from GitHub */
+    margin-top: 16px;
+}
+
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+    font-weight: 400;
+    /* Regular weight, not bold */
+}
+
+.labelRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.formGroup input {
+    width: 100%;
+    padding: 5px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    border: 1px solid var(--border-color-input);
+    border-radius: 6px;
+    background-color: var(--bg-inset);
+    color: var(--text-color);
+    outline: none;
+    box-shadow: var(--input-shadow, inset 0 1px 2px rgba(0, 0, 0, 0.075));
+    transition: .2s cubic-bezier(.3, 0, .5, 1);
+    box-sizing: border-box;
+    min-height: 32px;
+}
+
+.formGroup input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.forgotLink {
+    font-size: 12px;
+    color: var(--primary-color);
+    text-decoration: none;
+    float: right;
+    /* Use float/flex to Position correctly */
+}
+
+.forgotLink:hover {
+    text-decoration: underline;
+}
+
+.submitButton {
+    width: 100%;
+    background-color: var(--auth-button-bg);
+    color: var(--auth-button-text);
+    padding: 5px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.2s;
+    min-height: 35px;
+    font-family: inherit;
+}
+
+.submitButton:hover {
+    background-color: var(--auth-button-hover);
+}
+
+.submitButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.authFooter {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin-top: 16px;
+    width: 100%;
+    max-width: 308px;
+    text-align: center;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+.authFooter p {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.linkButton {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.linkButton:hover {
+    text-decoration: underline;
+}   
+
+

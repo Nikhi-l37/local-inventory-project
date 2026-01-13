@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import api from '../api'; 
+import api from '../api';
 import { useNavigate, Link } from 'react-router-dom';
-import Logo from '../components/Logo.jsx'; 
-    
+import Logo from '../components/Logo.jsx';
+
 import styles from './Form.module.css';
 
 function Login() {
@@ -12,7 +12,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = { email, password };
+    const user = { email: email.trim(), password: password.trim() };
     try {
       const response = await api.post('/api/sellers/login', user);
       localStorage.setItem('token', response.data.token);
@@ -25,7 +25,7 @@ function Login() {
 
   return (
     <div className={styles.formContainer}>
-      
+
       {/* --- Project Branding --- */}
       <div className={styles.logoWrapper}>
         <Logo simple={true} />

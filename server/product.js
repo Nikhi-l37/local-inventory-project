@@ -13,7 +13,7 @@ const {
 // ROUTE: POST /api/products
 // PURPOSE: To add a new product to a seller's shop
 // ACCESS: Private (requires token)
-router.post('/', [auth, validateCreateProduct, upload.single('image')], async (req, res) => {
+router.post('/', [auth, upload.single('image'), validateCreateProduct], async (req, res) => {
   try {
     const { name, category, category_id, price, description } = req.body;
     const sellerId = req.sellerId;
@@ -46,7 +46,7 @@ router.post('/', [auth, validateCreateProduct, upload.single('image')], async (r
 // ROUTE: PATCH /api/products/:productId/details
 // PURPOSE: To update product details (name, price, etc.)
 // ACCESS: Private (requires token)
-router.patch('/:productId/details', [auth, validateIdParam('productId'), validateUpdateProduct, upload.single('image')], async (req, res) => {
+router.patch('/:productId/details', [auth, validateIdParam('productId'), upload.single('image'), validateUpdateProduct], async (req, res) => {
   try {
     const { productId } = req.params;
     const { name, category, category_id, price, description, is_available } = req.body;

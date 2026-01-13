@@ -4,14 +4,14 @@ const pool = require('./db');
 const auth = require('./middleware/auth');
 const upload = require('./middleware/uploadMiddleware');
 const {
-  validateCreateCategory,
-  validateIdParam
+    validateCreateCategory,
+    validateIdParam
 } = require('./middleware/validation');
 
 // ROUTE: POST /api/categories
 // PURPOSE: Create a new category for a shop
 // ACCESS: Private (Seller)
-router.post('/', [auth, validateCreateCategory, upload.single('image')], async (req, res) => {
+router.post('/', [auth, upload.single('image'), validateCreateCategory], async (req, res) => {
     try {
         const { name, description } = req.body;
         const sellerId = req.sellerId;

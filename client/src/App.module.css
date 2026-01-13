@@ -55,7 +55,9 @@
   margin: 0 auto;
   box-sizing: border-box;
   /* Allows scrolling on content that exceeds height (like Dashboard) */
-  overflow-y: auto;
+  /* overflow-y: auto; REMOVED to fix scrollbar position */
+  width: 100%;
+  /* Ensure it can take up width */
 }
 
 .fullPageContent {

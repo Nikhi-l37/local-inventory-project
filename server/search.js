@@ -6,7 +6,7 @@ const pool = require('./db');
 router.get('/', async (req, res) => {
   try {
     // 1. Get all params from the query
-    const { q, lat, lon, open_only } = req.query;
+    const { q, lat, lon, open_only, radius } = req.query;
 
     // --- FIX: Robust Validation Check ---
     // 1. Check for required search query
@@ -19,10 +19,10 @@ router.get('/', async (req, res) => {
     }
     // --- End of validation ---
 
-    // Set search parameters
-    const searchRadius = 50000; // Increased to 50km
+    // Set search parameters (Default to 50km if not provided)
+    const searchRadius = radius ? parseInt(radius) : 50000;
 
-    console.log(`[Search Debug] Query: "${q}", Location: POINT(${lon} ${lat}), OpenOnly: ${open_only}`);
+    console.log(`[Search Debug] Query: "${q}", Radius: ${searchRadius}m, Location: POINT(${lon} ${lat}), OpenOnly: ${open_only}`);
 
     // Build WHERE clauses with fuzzy matching
     // $1 = longitude, $2 = latitude, $3 = raw query (for similarity), $4 = searchRadius, $5 = %query% (for ILIKE fallback)
@@ -70,7 +70,7 @@ router.get('/', async (req, res) => {
 // ROUTE: GET /api/search/shops (Shop Search)
 router.get('/shops', async (req, res) => {
   try {
-    const { q, lat, lon, open_only } = req.query;
+    const { q, lat, lon, open_only, radius } = req.query;
 
     // --- FIX: Robust Validation Check ---
     if (!q) {
@@ -81,9 +81,9 @@ router.get('/shops', async (req, res) => {
     }
     // --- End of validation ---
 
-    const searchRadius = 50000;
+    const searchRadius = radius ? parseInt(radius) : 50000;
 
-    console.log(`[Search Shops Debug] Query: "${q}", Location: POINT(${lon} ${lat}), OpenOnly: ${open_only}`);
+    console.log(`[Search Shops Debug] Query: "${q}", Radius: ${searchRadius}m, Location: POINT(${lon} ${lat}), OpenOnly: ${open_only}`);
 
     // Build WHERE clauses with fuzzy matching
     // $1 = longitude, $2 = latitude, $3 = raw query (for similarity), $4 = searchRadius, $5 = %query% (for ILIKE fallback)

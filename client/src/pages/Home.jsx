@@ -124,6 +124,7 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchMode, setSearchMode] = useState('product');
   const [openOnly, setOpenOnly] = useState(false);
+  const [searchRadius, setSearchRadius] = useState(10000); // Default 10km
   const [searchResults, setSearchResults] = useState([]);
   const [selectedShop, setSelectedShop] = useState(null);
 
@@ -192,6 +193,7 @@ function Home() {
       lat: selectedLocation.lat,
       lon: selectedLocation.lon,
       open_only: openOnly,
+      radius: searchRadius,
     };
 
     try {
@@ -322,36 +324,50 @@ function Home() {
             {showFilters ? 'Hide Filters ▴' : 'Show Filters ▾'}
           </button>
 
-          {/* Collapsible Filters */}
-          {showFilters && (
-            <div className={styles.filtersContent}>
-              <div className={styles.searchToggles}>
-                <button
-                  type="button"
-                  onClick={() => setSearchMode('product')}
-                  className={searchMode === 'product' ? styles.active : ''}
-                >
-                  Search by Product
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSearchMode('shop')}
-                  className={searchMode === 'shop' ? styles.active : ''}
-                >
-                  Search by Shop
-                </button>
-              </div>
-
-              <div className={styles.filterCheckbox}>
-                <input
-                  type="checkbox"
-                  id="openOnly"
-                  checked={openOnly}
-                  onChange={(e) => setOpenOnly(e.target.checked)}
-                />
-                <label htmlFor="openOnly">Only show open shops</label>
-              </div>
+          <div className={styles.filtersContent}>
+            <div className={styles.searchToggles}>
+              <button
+                type="button"
+                onClick={() => setSearchMode('product')}
+                className={searchMode === 'product' ? styles.active : ''}
+              >
+                Search by Product
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearchMode('shop')}
+                className={searchMode === 'shop' ? styles.active : ''}
+              >
+                Search by Shop
+              </button>
             </div>
+
+            {/* Radius Filter */}
+            <div className={styles.radiusControl} style={{ marginTop: '10px', marginBottom: '10px' }}>
+              <label style={{ display: 'block', fontSize: '0.9em', marginBottom: '5px', fontWeight: '600' }}>Search Radius</label>
+              <select
+                value={searchRadius}
+                onChange={(e) => setSearchRadius(parseInt(e.target.value))}
+                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+              >
+                <option value={5000}>5 km</option>
+                <option value={10000}>10 km</option>
+                <option value={20000}>20 km</option>
+                <option value={50000}>50 km</option>
+                <option value={100000}>100 km</option>
+              </select>
+            </div>
+
+            <div className={styles.filterCheckbox}>
+              <input
+                type="checkbox"
+                id="openOnly"
+                checked={openOnly}
+                onChange={(e) => setOpenOnly(e.target.checked)}
+              />
+              <label htmlFor="openOnly">Only show open shops</label>
+            </div>
+          </div>
           )}
         </form>
 

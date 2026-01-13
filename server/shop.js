@@ -19,7 +19,7 @@ const {
 // ROUTE: POST /api/shops
 // PURPOSE: To create a new shop for a logged-in seller (NOW WITH FULL ADDRESS & IMAGE & HOURS)
 // ACCESS: Private (requires token)
-router.post('/', [auth, validateCreateShop, upload.single('image')], async (req, res) => {
+router.post('/', [auth, upload.single('image'), validateCreateShop], async (req, res) => {
   try {
     const {
       name,
@@ -175,7 +175,7 @@ router.get('/my-shop/products', auth, async (req, res) => {
 });
 
 
-router.patch('/update-details', [auth, validateUpdateShopDetails, upload.single('image')], async (req, res) => {
+router.patch('/update-details', [auth, upload.single('image'), validateUpdateShopDetails], async (req, res) => {
   try {
     const { name, category, description, opening_time, closing_time } = req.body;
     const sellerId = req.sellerId;

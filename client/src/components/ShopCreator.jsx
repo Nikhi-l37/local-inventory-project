@@ -37,6 +37,7 @@ function ShopCreator({ onShopCreated }) {
   const [address, setAddress] = useState(null); // The new address state
   const [loading, setLoading] = useState(false);
   const [addressLoading, setAddressLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(''); // New state for search
 
   // 1. Get user's GPS location on load to center map
   useEffect(() => {
@@ -90,6 +91,28 @@ function ShopCreator({ onShopCreated }) {
     fetchAddress(latlng);
   };
 
+
+  // 4. Handle Search Location (Forward Geocoding)
+  const handleSearchLocation = async () => {
+    if (!searchQuery.trim()) return;
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`
+      );
+      if (response.data && response.data.length > 0) {
+        const result = response.data[0];
+        const newPos = { lat: parseFloat(result.lat), lng: parseFloat(result.lon) };
+        setPosition(newPos);
+        fetchAddress(newPos); // Get the full address details for this location
+      } else {
+        alert('Location not found. Please try a more specific name.');
+      }
+    } catch (err) {
+      console.error('Error searching location:', err);
+      alert('Error searching for location.');
+    }
+  };
+
   // NEW STATE: Image, Description, Hours
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState('');
@@ -138,6 +161,11 @@ function ShopCreator({ onShopCreated }) {
     formData.append('closing_time', closingTime);
     if (image) {
       formData.append('image', image);
+    }
+
+    // Log FormData entries for debugging
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
     }
 
     try {
@@ -231,6 +259,24 @@ function ShopCreator({ onShopCreated }) {
           </div>
 
           <div className={styles.mapWrapper}>
+            {/* SEARCH BAR OVERLAY */}
+            <div style={{ padding: '10px', display: 'flex', gap: '5px' }}>
+              <input
+                type="text"
+                placeholder="Search places (e.g. Nellore, Gandhi Statue)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ flex: 1, padding: '8px', border: '1px solid #444', borderRadius: '4px', background: '#222', color: '#fff' }}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearchLocation()}
+              />
+              <button
+                onClick={handleSearchLocation}
+                style={{ cursor: 'pointer', padding: '0 15px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}
+              >
+                Search
+              </button>
+            </div>
+
             <MapContainer
               center={position}
               zoom={15}

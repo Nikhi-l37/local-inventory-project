@@ -88,10 +88,17 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
         const cat = categories.find(c => c.id == categoryId);
         if (cat) formData.append('category', cat.name);
       } else {
+        // If no category ID selected, send explicit null or don't send category_id
         formData.append('category', 'General');
       }
 
-      formData.append('price', price);
+      // Ensure price is a number
+      if (price) {
+        formData.append('price', price.toString());
+      } else {
+        formData.append('price', '0'); // Default to 0 if empty
+      }
+
       formData.append('description', description);
       if (image) formData.append('image', image);
 
@@ -216,9 +223,7 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
           <div className={styles.modalContent}>
             <h3>{isEditing ? 'Edit Product' : 'Add New Product'}</h3>
             <form onSubmit={handleSaveProduct} className={styles.modalForm}>
-              <div className={styles.imageUploadWrapper}>
-                <ImageUpload label="Product Image" currentImage={null} onImageSelect={setImage} />
-              </div>
+
               <div className={styles.fieldsWrapper}>
                 <input type="text" placeholder="Product Name" value={name} onChange={e => setName(e.target.value)} required />
                 <select value={categoryId} onChange={e => setCategoryId(e.target.value)}>

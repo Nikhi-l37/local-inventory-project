@@ -12,16 +12,14 @@ export const ThemeProvider = ({ children }) => {
   const toggleTheme = () => {
     // Cycle through all three themes, but start the cycle at dark
     setTheme((prevTheme) => {
-      if (prevTheme === 'dark') return 'light';
-      if (prevTheme === 'light') return 'screen-coach-theme';
-      return 'dark'; 
+      return prevTheme === 'dark' ? 'light' : 'dark';
     });
   };
 
   // 4. This effect adds the theme name as a class to the <body>
   useEffect(() => {
-    document.body.className = ''; 
-    document.body.classList.add(theme); 
+    document.body.className = '';
+    document.body.classList.add(theme);
   }, [theme]);
 
   return (

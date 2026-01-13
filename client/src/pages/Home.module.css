@@ -1,593 +1,537 @@
+/* --- Premium Map Search UI --- */
+
+/* Base Container */
 .homeContainer {
   position: relative;
   width: 100%;
   height: 100%;
-  /* Now takes 100% of its parent's height (which is full remaining viewport) */
   overflow: hidden;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  color: #333;
 }
 
 .mapContainer {
   width: 100%;
-  /* FIXED: Use 100vh minus the fixed navbar height (approx 60px) */
   height: calc(100vh - 60px);
   min-height: 100%;
-  /* Ensure it uses the space */
+  z-index: 1;
 }
 
-/* --- Floating Search Card --- */
-.searchPanel {
-  /* ... (rest of file remains the same) ... */
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  /* transform: translate(-50%, -50%); */
-  /* <- DELETE THIS LINE */
-  z-index: 1000;
-  background: rgba(var(--bg-secondary-rgb), 0.9);
-  /* Slightly transparent background */
-  backdrop-filter: blur(8px);
-  /* Frosted glass effect */
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  /* Stronger shadow */
-  width: 400px;
-  /* Fixed width for desktop */
-  max-width: 90%;
-  /* Responsive for smaller screens */
-  border: 1px solid var(--border-color);
-  box-sizing: border-box;
-  /* Include padding in width */
-}
-
-/* Input Field Styles */
-.locationInput,
-.searchInput {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid var(--border-color-input);
-  border-radius: 8px;
-  box-sizing: border-box;
-  background-color: var(--bg-inset);
-  color: var(--text-color);
-  font-size: 1em;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.locationInput:focus,
-.searchInput:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
-}
-
-/* Location Suggestions */
-.locationGroup {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.suggestionsList {
-  list-style: none;
-  padding: 0;
-  margin: 5px 0 0 0;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  position: absolute;
-  width: 100%;
-  z-index: 1001;
-  max-height: 200px;
-  overflow-y: auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.suggestionItem {
-  padding: 12px 15px;
-  cursor: pointer;
-  color: var(--text-color);
-  transition: background-color 0.2s;
-}
-
-.suggestionItem:hover {
-  background-color: var(--bg-inset);
-}
-
-/* Main Search Input and Button */
-.searchMain {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.searchButton {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 12px 15px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 1.1em;
-  transition: background-color 0.2s, transform 0.2s;
-  flex-shrink: 0;
-  /* Prevent button from shrinking */
-}
-
-.searchButton:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px);
-}
-
-/* Filter Toggle Button */
-.filterToggle {
-  background: none;
-  border: none;
-  color: var(--primary-color);
-  font-weight: bold;
-  cursor: pointer;
-  padding: 8px 0;
-  width: 100%;
-  text-align: left;
-  font-size: 1em;
-  margin-bottom: 10px;
-  transition: color 0.2s;
-}
-
-.filterToggle:hover {
-  color: var(--primary-hover);
-}
-
-/* Collapsible Filters Area */
-/* --- Search Panel Side --- */
+/* --- Floating Glass Panel --- */
 .searchPanel {
   position: absolute;
   top: 20px;
   left: 20px;
-  width: 350px;
-  background-color: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 380px;
+  max-width: 90vw;
+  max-height: calc(100vh - 100px);
   z-index: 1000;
-  /* Above map */
-  max-height: 90vh;
-  /* Allow scrolling if list is long */
+
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 24px;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease;
 }
 
+/* Back Button */
 .backButton {
-  background: none;
+  background: transparent;
   border: none;
-  color: #2b6cb0;
+  color: #555;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  padding: 0;
-  margin-bottom: 10px;
-  text-align: left;
-  font-weight: 500;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  width: fit-content;
 }
 
+.backButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #000;
+}
+
+/* Inputs & Labels */
 .searchGroup {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   position: relative;
 }
 
 .searchGroup label {
   display: block;
-  font-size: 0.85em;
-  color: #718096;
-  margin-bottom: 4px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
 .locationInput,
 .searchInput {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #cbd5e0;
-  border-radius: 6px;
-  font-size: 1em;
+  padding: 14px 16px;
+  font-size: 1rem;
+  border: 2px solid transparent;
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  color: #1f2937;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
+.locationInput:focus,
+.searchInput:focus {
+  outline: none;
+  background-color: #fff;
+  border-color: #4f46e5;
+  /* Premium Indigo */
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+/* Suggestions Dropdown */
 .suggestionsList {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 5px);
   left: 0;
   right: 0;
   background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  margin: 0;
+  border-radius: 12px;
   padding: 0;
+  margin: 0;
   list-style: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1001;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 1002;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
 
 .suggestionItem {
-  padding: 10px;
-  border-bottom: 1px solid #edf2f7;
+  padding: 12px 16px;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 0.95rem;
+  color: #444;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+}
+
+.suggestionItem:last-child {
+  border-bottom: none;
 }
 
 .suggestionItem:hover {
-  background-color: #f7fafc;
+  background-color: #f9fafb;
+  color: #000;
 }
 
+/* Main Search Flex */
 .searchMain {
   display: flex;
-  gap: 5px;
+  gap: 12px;
+  margin-bottom: 15px;
 }
 
 .searchButton {
-  padding: 0 15px;
-  background-color: #3182ce;
+  min-width: 54px;
+  background: linear-gradient(135deg, #4f46e5, #3b82f6);
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
+  color: white;
+  font-size: 1.2rem;
   cursor: pointer;
-  font-size: 1.2em;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
+.searchButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+}
+
+/* Filter Toggle */
 .filterToggle {
   background: none;
   border: none;
-  color: #718096;
+  color: #6b7280;
   font-size: 0.85rem;
-  margin-top: 5px;
+  font-weight: 600;
   cursor: pointer;
-  text-align: right;
   width: 100%;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s;
 }
 
+.filterToggle:hover {
+  color: #4f46e5;
+  background: rgba(79, 70, 229, 0.05);
+}
+
+/* Filters Area */
 .filtersContent {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 16px;
   margin-top: 10px;
-  padding: 10px;
-  background: #f7fafc;
-  border-radius: 6px;
+  border: 1px solid #e5e7eb;
 }
 
+/* Segmented Control for Toggles */
 .searchToggles {
   display: flex;
-  margin-bottom: 10px;
+  background: #e5e7eb;
+  /* Track color */
+  padding: 4px;
+  border-radius: 10px;
+  margin-bottom: 16px;
 }
 
 .searchToggles button {
   flex: 1;
-  padding: 6px;
-  border: 1px solid #cbd5e0;
-  background: white;
+  border: none;
+  background: transparent;
+  padding: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 0.85em;
-}
-
-.searchToggles button:first-child {
-  border-radius: 4px 0 0 4px;
-}
-
-.searchToggles button:last-child {
-  border-radius: 0 4px 4px 0;
+  transition: all 0.2s ease;
 }
 
 .searchToggles button.active {
-  background-color: #3182ce;
-  color: white;
-  border-color: #3182ce;
+  background: white;
+  color: #1f2937;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Radius & Checkbox */
+.radiusControl {
+  margin-bottom: 12px;
+}
+
+.radiusControl label {
+  color: #374151;
+}
+
+.radiusControl select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.radiusControl select:focus {
+  outline: none;
+  border-color: #4f46e5;
 }
 
 .filterCheckbox {
   display: flex;
   align-items: center;
-  font-size: 0.9em;
-  color: #4a5568;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #374151;
+  cursor: pointer;
 }
 
 .filterCheckbox input {
-  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #4f46e5;
 }
 
 
 /* --- Results List --- */
 .resultsList {
-  margin-top: 15px;
-  overflow-y: auto;
   flex: 1;
-  /* Take remaining space */
-  border-top: 1px solid #e2e8f0;
-  padding-top: 10px;
+  overflow-y: auto;
+  margin-top: 15px;
+  padding-right: 5px;
+  /* for scrollbar spacing */
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+}
+
+/* Custom Scrollbar */
+.resultsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.resultsList::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 10px;
 }
 
 .resultCard {
   background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
   cursor: pointer;
-  transition: transform 0.1s, box-shadow 0.1s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .resultCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border-color: #4f46e5;
 }
 
 .cardHeader {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  align-items: center;
   margin-bottom: 8px;
 }
 
 .cardImage,
 .cardPlaceholder {
-  width: 50px;
-  height: 50px;
-  border-radius: 6px;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
   object-fit: cover;
-  background-color: #eee;
+  background-color: #f3f4f6;
+  flex-shrink: 0;
 }
 
 .cardInfo {
-  display: flex;
-  flex-direction: column;
+  flex: 1;
 }
 
 .cardInfo h4 {
-  margin: 0;
-  font-size: 1em;
-  color: #2d3748;
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
 }
 
 .distance {
-  font-size: 0.8em;
-  color: #718096;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-left: 8px;
 }
 
+/* Product Hits within Card */
 .cardProduct {
-  background: #f0fff4;
-  padding: 5px 8px;
-  border-radius: 4px;
-  font-size: 0.9em;
-  margin-bottom: 8px;
+  background: linear-gradient(to right, #ecfdf5, #f0fdf4);
+  color: #065f46;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  border: 1px solid #d1fae5;
 }
 
 .cardPrice {
-  color: #2f855a;
-  font-weight: bold;
+  font-weight: 700;
+  color: #059669;
 }
 
+/* Action Buttons in Card */
 .cardActions {
   display: flex;
-  gap: 5px;
+  gap: 8px;
 }
 
 .cardActions button {
   flex: 1;
-  padding: 5px;
-  font-size: 0.85em;
-  border: 1px solid #cbd5e0;
-  background: #f7fafc;
-  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4b5563;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .cardActions button:hover {
-  background: #edf2f7;
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #111827;
 }
 
-/* --- Map Popup Overrides --- */
+/* --- Map Popups --- */
 .customPopup :global(.leaflet-popup-content-wrapper) {
-  border-radius: 8px;
-  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   overflow: hidden;
+  padding: 0;
 }
 
 .customPopup :global(.leaflet-popup-content) {
+  width: 240px !important;
   margin: 0;
-  width: 200px;
 }
 
 .popupContent {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
+  padding: 0;
 }
 
 .popupImage {
   width: 100%;
-  height: 100px;
+  height: 120px;
   object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 8px;
 }
 
-.popupContent strong {
-  font-size: 1.1em;
-  color: #2d3748;
-}
-
-.popupProduct {
-  margin-top: 5px;
-  font-size: 0.9em;
-  color: #4a5568;
+.popupDetails {
+  padding: 12px;
 }
 
 .popupActions {
   display: flex;
-  gap: 5px;
+  gap: 8px;
   margin-top: 10px;
 }
 
 .popupActions button {
   flex: 1;
-  background: #3182ce;
-  color: white;
+  padding: 6px;
+  border-radius: 6px;
   border: none;
-  padding: 5px;
-  border-radius: 4px;
+  background: #4f46e5;
+  color: white;
+  font-size: 0.8rem;
   cursor: pointer;
-  font-size: 0.85em;
 }
 
 /* --- Modal --- */
 .modalOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
-  backdrop-filter: blur(2px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .modalContent {
-  background-color: white;
+  background: white;
   width: 90%;
   max-width: 500px;
-  max-height: 80vh;
-  border-radius: 12px;
-  padding: 20px;
+  max-height: 85vh;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  padding: 24px;
   overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
 .modalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .modalHeader h3 {
+  font-size: 1.5rem;
+  color: #111827;
   margin: 0;
-  color: #2d3748;
 }
 
 .closeButton {
-  background: none;
+  background: #f3f4f6;
   border: none;
-  font-size: 1.5em;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: #6b7280;
   cursor: pointer;
-  color: #718096;
-}
-
-.modalShopImage {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.modalSubtitle {
-  color: #718096;
-  font-size: 0.9em;
-  margin-bottom: 10px;
-}
-
-.modalProductList {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: #e5e7eb;
+  color: #111827;
 }
 
 .modalProductItem {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid #edf2f7;
-  padding-bottom: 10px;
+  gap: 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid #f3f4f6;
 }
 
-.modalProductInfo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.productThumb {
-  width: 50px;
-  height: 50px;
-  border-radius: 6px;
-  object-fit: cover;
-  background-color: #f7fafc;
-  border: 1px solid #edf2f7;
-}
-
-.placeholderThumb {
-  width: 50px;
-  height: 50px;
-  border-radius: 6px;
-  background-color: #edf2f7;
-  border: 1px solid #e2e8f0;
-}
-
-.statusBadge {
-  font-size: 0.75em;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.modalContent h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  color: var(--text-color);
-}
-
-.modalContent button {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.modalContent button:hover {
-  background-color: var(--primary-hover);
-}
-
-.modalContent ul {
-  list-style: none;
-  padding: 0;
-  margin: 15px 0 0 0;
-}
-
-.modalContent li {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.modalContent li:last-child {
+.modalProductItem:last-child {
   border-bottom: none;
 }
 
-.backButton {
-  background: var(--bg-inset);
-  color: var(--text-color-light);
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  width: auto;
-  height: auto;
-  padding: 8px 15px;
-  font-size: 1em;
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 15px;
-  /* Add space below it */
-  transition: all 0.2s;
+.productThumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
-.backButton:hover {
-  background: var(--bg-color);
-  border-color: var(--primary-color);
-  color: var(--primary-color);
+.statusBadge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+
+/* Dark Mode Support (Optional if user prefers dark app) */
+@media (prefers-color-scheme: dark) {
+  /* You can add dark mode overrides here if needed, 
+     but keeping the panel light/glass usually looks best on maps */
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .searchPanel {
+    width: calc(100% - 30px);
+    left: 15px;
+    top: 15px;
+    max-height: 60vh;
+    /* Make smaller on mobile */
+  }
 }
