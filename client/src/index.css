@@ -11,8 +11,10 @@
   --bg-inset: #ffffff;
   /* Input BG */
 
-  --text-color: #24292f;
-  --text-color-light: #57606a;
+  --text-color: #1f2328;
+  /* Improved contrast from #24292f */
+  --text-color-light: #59636e;
+  /* Improved contrast from #57606a */
 
   --border-color: #d0d7de;
   --border-color-input: #d0d7de;
@@ -21,11 +23,12 @@
   --navbar-text: #ffffff;
   --navbar-link-hover: #ffffff;
 
-  --success-color: #2da44e;
+  --success-color: #1a7f37;
+  /* Improved contrast from #2da44e */
   --success-hover: #2c974b;
   --danger-color: #cf222e;
   --danger-hover: #a40e26;
-  --secondary-color: #57606a;
+  --secondary-color: #59636e;
 
   /* Shared Button Color (Blue) */
   --auth-button-bg: #0969da;
@@ -46,8 +49,10 @@ body.dark {
   --bg-inset: #0d1117;
   /* Dark Input BG */
 
-  --text-color: #c9d1d9;
-  --text-color-light: #8b949e;
+  --text-color: #e6edf3;
+  /* Improved contrast from #c9d1d9 */
+  --text-color-light: #9198a1;
+  /* Improved contrast from #8b949e */
 
   --border-color: #30363d;
   --border-color-input: #21262d;
@@ -56,9 +61,11 @@ body.dark {
   --navbar-text: #f0f6fc;
   --navbar-link-hover: #58a6ff;
 
-  --success-color: #238636;
+  --success-color: #3fb950;
+  /* Improved contrast from #238636 */
   --success-hover: #2ea043;
-  --danger-color: #da3633;
+  --danger-color: #f85149;
+  /* Improved contrast from #da3633 */
 
   /* Shared Button Color (Blue for Dark Mode) */
   --auth-button-bg: #1f6feb;

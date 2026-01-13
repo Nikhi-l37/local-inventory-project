@@ -139,6 +139,18 @@
   z-index: 1002;
   border: 1px solid rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  animation: slideDownFade 0.3s ease-out;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .suggestionItem {
@@ -147,7 +159,7 @@
   font-size: 0.95rem;
   color: #444;
   border-bottom: 1px solid #f0f0f0;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
 .suggestionItem:last-child {
@@ -157,6 +169,7 @@
 .suggestionItem:hover {
   background-color: #f9fafb;
   color: #000;
+  padding-left: 20px;
 }
 
 /* Main Search Flex */
@@ -217,6 +230,25 @@
   padding: 16px;
   margin-top: 10px;
   border: 1px solid #e5e7eb;
+  overflow: hidden;
+  max-height: 500px;
+  animation: expandDown 0.3s ease-out;
+  transform-origin: top;
+}
+
+@keyframes expandDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
 }
 
 /* Segmented Control for Toggles */
@@ -362,6 +394,11 @@
   object-fit: cover;
   background-color: #f3f4f6;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.cardImage:hover {
+  transform: scale(1.1);
 }
 
 .cardInfo {
@@ -416,13 +453,19 @@
   font-weight: 600;
   color: #4b5563;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cardActions button:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
-  color: #111827;
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+.cardActions button:active {
+  transform: translateY(0);
 }
 
 /* --- Map Popups --- */
@@ -556,12 +599,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 }
 
 .closeButton:hover {
   background: #e5e7eb;
   color: #111827;
+  transform: rotate(90deg) scale(1.1);
+}
+
+.closeButton:active {
+  transform: rotate(90deg) scale(0.95);
 }
 
 .modalProductItem {
@@ -589,6 +637,23 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 700;
+  transition: all 0.3s ease;
+  animation: fadeInScale 0.4s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.statusBadge:hover {
+  transform: scale(1.05);
 }
 
 /* Dark Mode Support (Optional if user prefers dark app) */
