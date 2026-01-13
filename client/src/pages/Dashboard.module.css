@@ -10,6 +10,16 @@
   /* Clear Sticky Navbar */
   box-sizing: border-box;
   /* Themed */
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Sidebar + Content Grid */
@@ -49,7 +59,24 @@
   padding-bottom: 20px;
   border-bottom: 1px solid var(--border-color);
   /* Themed */
+  animation: slideInLeft 0.4s ease-out;
+  animation-fill-mode: both;
 }
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidebarCard:nth-child(1) { animation-delay: 0.1s; }
+.sidebarCard:nth-child(2) { animation-delay: 0.2s; }
+.sidebarCard:nth-child(3) { animation-delay: 0.3s; }
 
 .sidebarCard:last-child {
   border-bottom: none;
@@ -149,7 +176,7 @@
   width: 100%;
   max-width: 140px;
   /* Limit width */
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .statusOpen {
@@ -161,6 +188,8 @@
 .statusOpen:hover {
   background-color: var(--success-color);
   color: white;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
 }
 
 .statusClosed {
@@ -172,6 +201,8 @@
 .statusClosed:hover {
   background-color: var(--danger-color);
   color: white;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
 }
 
 .statusDetail {
@@ -405,6 +436,18 @@
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+}
+
+.primaryButton:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.primaryButton:active {
+  transform: translateY(0);
 }
 
 .secondaryButton {
@@ -414,6 +457,18 @@
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+}
+
+.secondaryButton:hover {
+  background: var(--border-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.secondaryButton:active {
+  transform: translateY(0);
 }
 
 /* Category Manager Styles (Embedded) */

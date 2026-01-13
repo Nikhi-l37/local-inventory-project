@@ -1,5 +1,5 @@
 // ...existing code...
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
@@ -324,50 +324,51 @@ function Home() {
             {showFilters ? 'Hide Filters ▴' : 'Show Filters ▾'}
           </button>
 
-          <div className={styles.filtersContent}>
-            <div className={styles.searchToggles}>
-              <button
-                type="button"
-                onClick={() => setSearchMode('product')}
-                className={searchMode === 'product' ? styles.active : ''}
-              >
-                Search by Product
-              </button>
-              <button
-                type="button"
-                onClick={() => setSearchMode('shop')}
-                className={searchMode === 'shop' ? styles.active : ''}
-              >
-                Search by Shop
-              </button>
-            </div>
+          {showFilters && (
+            <div className={styles.filtersContent}>
+              <div className={styles.searchToggles}>
+                <button
+                  type="button"
+                  onClick={() => setSearchMode('product')}
+                  className={searchMode === 'product' ? styles.active : ''}
+                >
+                  Search by Product
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSearchMode('shop')}
+                  className={searchMode === 'shop' ? styles.active : ''}
+                >
+                  Search by Shop
+                </button>
+              </div>
 
-            {/* Radius Filter */}
-            <div className={styles.radiusControl} style={{ marginTop: '10px', marginBottom: '10px' }}>
-              <label style={{ display: 'block', fontSize: '0.9em', marginBottom: '5px', fontWeight: '600' }}>Search Radius</label>
-              <select
-                value={searchRadius}
-                onChange={(e) => setSearchRadius(parseInt(e.target.value))}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-              >
-                <option value={5000}>5 km</option>
-                <option value={10000}>10 km</option>
-                <option value={20000}>20 km</option>
-                <option value={50000}>50 km</option>
-                <option value={100000}>100 km</option>
-              </select>
-            </div>
+              {/* Radius Filter */}
+              <div className={styles.radiusControl} style={{ marginTop: '10px', marginBottom: '10px' }}>
+                <label style={{ display: 'block', fontSize: '0.9em', marginBottom: '5px', fontWeight: '600' }}>Search Radius</label>
+                <select
+                  value={searchRadius}
+                  onChange={(e) => setSearchRadius(parseInt(e.target.value))}
+                  style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                >
+                  <option value={5000}>5 km</option>
+                  <option value={10000}>10 km</option>
+                  <option value={20000}>20 km</option>
+                  <option value={50000}>50 km</option>
+                  <option value={100000}>100 km</option>
+                </select>
+              </div>
 
-            <div className={styles.filterCheckbox}>
-              <input
-                type="checkbox"
-                id="openOnly"
-                checked={openOnly}
-                onChange={(e) => setOpenOnly(e.target.checked)}
-              />
-              <label htmlFor="openOnly">Only show open shops</label>
+              <div className={styles.filterCheckbox}>
+                <input
+                  type="checkbox"
+                  id="openOnly"
+                  checked={openOnly}
+                  onChange={(e) => setOpenOnly(e.target.checked)}
+                />
+                <label htmlFor="openOnly">Only show open shops</label>
+              </div>
             </div>
-          </div>
           )}
         </form>
 
@@ -424,16 +425,5 @@ function Home() {
     </div>
   );
 }
-
-// Modal styles (using var() to support themes)
-const modalOverlayStyle = {
-  position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.7)', display: 'flex',
-  justifyContent: 'center', alignItems: 'center', zIndex: 1000,
-};
-const modalContentStyle = {
-  backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)',
-  padding: '20px', borderRadius: '5px', minWidth: '300px', zIndex: 1001,
-};
 
 export default Home;

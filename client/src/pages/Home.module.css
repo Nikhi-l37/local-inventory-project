@@ -8,6 +8,16 @@
   overflow: hidden;
   font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
   color: #333;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .mapContainer {
@@ -39,6 +49,18 @@
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
+  animation: slideInLeft 0.4s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Back Button */
@@ -117,6 +139,18 @@
   z-index: 1002;
   border: 1px solid rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  animation: slideDownFade 0.3s ease-out;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .suggestionItem {
@@ -125,7 +159,7 @@
   font-size: 0.95rem;
   color: #444;
   border-bottom: 1px solid #f0f0f0;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
 .suggestionItem:last-child {
@@ -135,6 +169,7 @@
 .suggestionItem:hover {
   background-color: #f9fafb;
   color: #000;
+  padding-left: 20px;
 }
 
 /* Main Search Flex */
@@ -152,7 +187,7 @@
   color: white;
   font-size: 1.2rem;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,8 +195,12 @@
 }
 
 .searchButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.searchButton:active {
+  transform: translateY(0) scale(1);
 }
 
 /* Filter Toggle */
@@ -191,6 +230,25 @@
   padding: 16px;
   margin-top: 10px;
   border: 1px solid #e5e7eb;
+  overflow: hidden;
+  max-height: 500px;
+  animation: expandDown 0.3s ease-out;
+  transform-origin: top;
+}
+
+@keyframes expandDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
 }
 
 /* Segmented Control for Toggles */
@@ -292,13 +350,32 @@
   padding: 12px;
   margin-bottom: 12px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  animation: slideInUp 0.3s ease-out;
+  animation-fill-mode: both;
 }
 
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.resultCard:nth-child(1) { animation-delay: 0.05s; }
+.resultCard:nth-child(2) { animation-delay: 0.1s; }
+.resultCard:nth-child(3) { animation-delay: 0.15s; }
+.resultCard:nth-child(4) { animation-delay: 0.2s; }
+.resultCard:nth-child(5) { animation-delay: 0.25s; }
+
 .resultCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
   border-color: #4f46e5;
 }
 
@@ -317,6 +394,11 @@
   object-fit: cover;
   background-color: #f3f4f6;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.cardImage:hover {
+  transform: scale(1.1);
 }
 
 .cardInfo {
@@ -371,13 +453,19 @@
   font-weight: 600;
   color: #4b5563;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cardActions button:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
-  color: #111827;
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+.cardActions button:active {
+  transform: translateY(0);
 }
 
 /* --- Map Popups --- */
@@ -394,17 +482,23 @@
 }
 
 .popupContent {
-  padding: 0;
+  padding: 12px;
 }
 
 .popupImage {
   width: 100%;
   height: 120px;
   object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
-.popupDetails {
-  padding: 12px;
+.popupProduct {
+  margin: 8px 0;
+  padding: 6px 10px;
+  background: rgba(79, 70, 229, 0.05);
+  border-radius: 6px;
+  font-size: 0.9em;
 }
 
 .popupActions {
@@ -415,35 +509,44 @@
 
 .popupActions button {
   flex: 1;
-  padding: 6px;
-  border-radius: 6px;
+  padding: 8px;
+  border-radius: 8px;
   border: none;
   background: #4f46e5;
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.popupActions button:hover {
+  background: #3b82f6;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
 }
 
 /* --- Modal --- */
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeInBackdrop 0.3s ease-out;
 }
 
-@keyframes fadeIn {
+@keyframes fadeInBackdrop {
   from {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
-
   to {
     opacity: 1;
+    backdrop-filter: blur(6px);
   }
 }
 
@@ -457,6 +560,18 @@
   padding: 24px;
   overflow-y: auto;
   position: relative;
+  animation: slideInModal 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .modalHeader {
@@ -484,12 +599,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 }
 
 .closeButton:hover {
   background: #e5e7eb;
   color: #111827;
+  transform: rotate(90deg) scale(1.1);
+}
+
+.closeButton:active {
+  transform: rotate(90deg) scale(0.95);
 }
 
 .modalProductItem {
@@ -517,6 +637,23 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 700;
+  transition: all 0.3s ease;
+  animation: fadeInScale 0.4s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.statusBadge:hover {
+  transform: scale(1.05);
 }
 
 /* Dark Mode Support (Optional if user prefers dark app) */
@@ -531,7 +668,36 @@
     width: calc(100% - 30px);
     left: 15px;
     top: 15px;
-    max-height: 60vh;
-    /* Make smaller on mobile */
+    max-height: 70vh;
+    /* Make larger on mobile for better usability */
+    padding: 20px;
+  }
+
+  .searchMain {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .searchButton {
+    width: 100%;
+    min-width: unset;
+    padding: 12px;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .cardImage,
+  .cardPlaceholder {
+    width: 100%;
+    height: 150px;
   }
 }

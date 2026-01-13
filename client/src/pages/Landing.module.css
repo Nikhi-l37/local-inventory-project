@@ -5,12 +5,25 @@
   justify-content: center;
   text-align: center;
   padding: 50px 20px;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .logo {
   /* This style is for the logo on the landing page */
   color: var(--primary-color);
   margin-bottom: 10px;
+  animation: fadeIn 0.6s ease-out 0.2s both;
   /* We wrap the Logo component in this div */
 }
 
@@ -18,11 +31,13 @@
   font-size: 1.2em;
   color: var(--text-color-light);
   margin-bottom: 40px;
+  animation: fadeIn 0.6s ease-out 0.3s both;
 }
 
 .buttonContainer {
   display: flex;
   gap: 50px;
+  animation: fadeIn 0.6s ease-out 0.4s both;
 }
 
 .button {
@@ -32,18 +47,41 @@
   font-weight: bold;
   text-decoration: none;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.button:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .primaryButton {
- background-color: var(--bg-secondary);
+  background-color: var(--bg-secondary);
   color: var(--primary-color);
   border: 2px solid var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
+
 .primaryButton:hover {
-   background-color: var(--primary-color-faded, rgba(0,123,255,0.05));
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.3);
 }
 
 /* --- THIS IS THE FIXED BUTTON STYLE --- */
@@ -51,11 +89,14 @@
   background-color: var(--bg-secondary);
   color: var(--primary-color);
   border: 2px solid var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
+
 .secondaryButton:hover {
-  background-color: var(--primary-color-faded, rgba(0,123,255,0.05));
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.3);
 }
 
 .aboutSection {
@@ -81,4 +122,29 @@
   font-size: 1em;
   line-height: 1.6;
   color: var(--text-color-light);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .buttonContainer {
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .button {
+    width: 100%;
+    padding: 15px 30px;
+    font-size: 1em;
+  }
+
+  .tagline {
+    font-size: 1em;
+    padding: 0 20px;
+  }
+
+  .landingContainer {
+    padding: 30px 15px;
+  }
 }

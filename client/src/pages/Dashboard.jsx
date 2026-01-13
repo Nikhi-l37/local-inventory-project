@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import ShopCreator from '../components/ShopCreator.jsx';
 import ShopStatus from '../components/ShopStatus.jsx';

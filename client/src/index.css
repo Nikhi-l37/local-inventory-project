@@ -11,8 +11,10 @@
   --bg-inset: #ffffff;
   /* Input BG */
 
-  --text-color: #24292f;
-  --text-color-light: #57606a;
+  --text-color: #1f2328;
+  /* Improved contrast from #24292f */
+  --text-color-light: #59636e;
+  /* Improved contrast from #57606a */
 
   --border-color: #d0d7de;
   --border-color-input: #d0d7de;
@@ -21,11 +23,12 @@
   --navbar-text: #ffffff;
   --navbar-link-hover: #ffffff;
 
-  --success-color: #2da44e;
+  --success-color: #1a7f37;
+  /* Improved contrast from #2da44e */
   --success-hover: #2c974b;
   --danger-color: #cf222e;
   --danger-hover: #a40e26;
-  --secondary-color: #57606a;
+  --secondary-color: #59636e;
 
   /* Shared Button Color (Blue) */
   --auth-button-bg: #0969da;
@@ -46,8 +49,10 @@ body.dark {
   --bg-inset: #0d1117;
   /* Dark Input BG */
 
-  --text-color: #c9d1d9;
-  --text-color-light: #8b949e;
+  --text-color: #e6edf3;
+  /* Improved contrast from #c9d1d9 */
+  --text-color-light: #9198a1;
+  /* Improved contrast from #8b949e */
 
   --border-color: #30363d;
   --border-color-input: #21262d;
@@ -56,9 +61,11 @@ body.dark {
   --navbar-text: #f0f6fc;
   --navbar-link-hover: #58a6ff;
 
-  --success-color: #238636;
+  --success-color: #3fb950;
+  /* Improved contrast from #238636 */
   --success-hover: #2ea043;
-  --danger-color: #da3633;
+  --danger-color: #f85149;
+  /* Improved contrast from #da3633 */
 
   /* Shared Button Color (Blue for Dark Mode) */
   --auth-button-bg: #1f6feb;
@@ -80,14 +87,30 @@ body,
   /* overflow: hidden removed to allow scrolling */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.3s ease, color 0.3s ease;
 
   background-image: linear-gradient(110deg, #e6f0ff 0%, #b3d1ff 100%);
+}
+
+/* Add fade-in animation for page loads */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 #root {
@@ -100,11 +123,25 @@ body {
 a {
   text-decoration: none;
   color: var(--primary-color);
+  transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
 a:hover {
   text-decoration: underline;
   color: var(--primary-hover);
+}
+
+/* Global button base styles */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 /* Helper Classes (e.g., for spacing) */
@@ -114,4 +151,25 @@ a:hover {
 
 .mb-15 {
   margin-bottom: 15px;
+}
+
+/* Fade-in utility class */
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Improved focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

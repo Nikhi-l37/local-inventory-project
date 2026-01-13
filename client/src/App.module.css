@@ -14,6 +14,16 @@
   height: 64px;
   /* Explicit height helps with calc() elsewhere */
   box-sizing: border-box;
+  transition: box-shadow 0.3s ease;
+}
+
+.navbar:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
 }
 
 .navLinks a {
@@ -21,12 +31,29 @@
   text-decoration: none;
   font-weight: bold;
   margin-left: 20px;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
+  position: relative;
+}
+
+.navLinks a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--navbar-link-hover);
+  transition: width 0.3s ease;
 }
 
 .navLinks a:hover {
   color: var(--navbar-link-hover);
   text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.navLinks a:hover::after {
+  width: 100%;
 }
 
 .logoutButton {
@@ -39,12 +66,29 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 1em;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.logoutButton::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease;
 }
 
 .logoutButton:hover {
-  text-decoration: underline;
-  opacity: 0.8;
+  text-decoration: none;
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.logoutButton:hover::after {
+  width: 100%;
 }
 
 /* --- Content Layout --- */
@@ -70,13 +114,29 @@
 @media (max-width: 600px) {
   .regularContent {
     /* Reduce side padding significantly on smaller screens */
-    padding: 20px 10px;
+    padding: 20px 15px;
+  }
+
+  .navLinks {
+    gap: 5px;
   }
 
   .navLinks a {
     /* Adjust navbar link spacing for small screens */
     margin-left: 10px;
     font-size: 0.9em;
+  }
 
+  .navLinks a::after {
+    display: none; /* Hide underline animation on mobile for simplicity */
+  }
+
+  .logoutButton {
+    font-size: 0.9em;
+    margin-left: 10px;
+  }
+
+  .logoutButton::after {
+    display: none;
   }
 }

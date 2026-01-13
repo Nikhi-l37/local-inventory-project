@@ -11,11 +11,33 @@
     color: var(--text-color);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     padding: 24px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .logoSection {
     margin-bottom: 24px;
     text-align: center;
+    animation: slideDown 0.5s ease-out 0.1s both;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .logoSection svg {
@@ -31,6 +53,7 @@
     margin-bottom: 15px;
     color: var(--text-color);
     text-align: center;
+    animation: slideDown 0.5s ease-out 0.2s both;
 }
 
 .authCard {
@@ -42,6 +65,24 @@
     max-width: 308px;
     /* Precise width from GitHub */
     margin-top: 16px;
+    animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.authCard:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .formGroup {
@@ -82,6 +123,8 @@
 .formGroup input:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.3);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
 }
 
 .forgotLink {
@@ -108,13 +151,19 @@
     border-radius: 6px;
     cursor: pointer;
     margin-top: 20px;
-    transition: 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     min-height: 35px;
     font-family: inherit;
 }
 
-.submitButton:hover {
+.submitButton:hover:not(:disabled) {
     background-color: var(--auth-button-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.submitButton:active:not(:disabled) {
+    transform: translateY(0);
 }
 
 .submitButton:disabled {
@@ -133,6 +182,18 @@
     font-size: 14px;
     box-sizing: border-box;
     background-color: transparent;
+    animation: slideUp 0.5s ease-out 0.4s both;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .authFooter p {
@@ -148,10 +209,12 @@
     padding: 0;
     font-size: 14px;
     text-decoration: none;
+    transition: all 0.2s ease;
 }
 
 .linkButton:hover {
     text-decoration: underline;
+    color: var(--primary-hover);
 }   
 
 
