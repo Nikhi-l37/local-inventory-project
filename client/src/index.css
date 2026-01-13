@@ -80,14 +80,30 @@ body,
   /* overflow: hidden removed to allow scrolling */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color 0.3s ease, color 0.3s ease;
 
   background-image: linear-gradient(110deg, #e6f0ff 0%, #b3d1ff 100%);
+}
+
+/* Add fade-in animation for page loads */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 #root {
@@ -100,11 +116,25 @@ body {
 a {
   text-decoration: none;
   color: var(--primary-color);
+  transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
 a:hover {
   text-decoration: underline;
   color: var(--primary-hover);
+}
+
+/* Global button base styles */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 /* Helper Classes (e.g., for spacing) */
@@ -114,4 +144,25 @@ a:hover {
 
 .mb-15 {
   margin-bottom: 15px;
+}
+
+/* Fade-in utility class */
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Improved focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

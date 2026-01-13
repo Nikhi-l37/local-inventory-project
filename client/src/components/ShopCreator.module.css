@@ -3,6 +3,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Card Styles */
@@ -12,6 +22,28 @@
   border-radius: 12px;
   padding: 25px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideInUp 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
 }
 
 .cardHeader {
@@ -73,6 +105,7 @@
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+  transform: translateY(-1px);
 }
 
 .row {
@@ -172,18 +205,24 @@
   font-weight: 700;
   font-size: 1em;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.createButton:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+.createButton:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(var(--primary-color-rgb), 0.4);
+}
+
+.createButton:active:not(:disabled) {
+  transform: translateY(0) scale(1);
 }
 
 .createButton:disabled {
   background-color: var(--border-color);
   cursor: not-allowed;
   transform: none;
+  opacity: 0.6;
 }
 
 /* Responsive */

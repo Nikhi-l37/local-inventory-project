@@ -31,13 +31,17 @@
   border: none;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.1s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .addBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(var(--primary-color-rgb), 0.3);
   background-color: var(--primary-hover);
+}
+
+.addBtn:active {
+  transform: translateY(0) scale(1);
 }
 
 
@@ -54,14 +58,34 @@
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--border-color);
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
+  animation: fadeInUp 0.4s ease-out;
+  animation-fill-mode: both;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.productCard:nth-child(1) { animation-delay: 0.05s; }
+.productCard:nth-child(2) { animation-delay: 0.1s; }
+.productCard:nth-child(3) { animation-delay: 0.15s; }
+.productCard:nth-child(4) { animation-delay: 0.2s; }
+.productCard:nth-child(5) { animation-delay: 0.25s; }
+.productCard:nth-child(6) { animation-delay: 0.3s; }
+
 .productCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
   border-color: var(--primary-color);
 }
 
