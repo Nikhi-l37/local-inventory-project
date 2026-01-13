@@ -1,5 +1,5 @@
 // ...existing code...
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
@@ -425,16 +425,5 @@ function Home() {
     </div>
   );
 }
-
-// Modal styles (using var() to support themes)
-const modalOverlayStyle = {
-  position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.7)', display: 'flex',
-  justifyContent: 'center', alignItems: 'center', zIndex: 1000,
-};
-const modalContentStyle = {
-  backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)',
-  padding: '20px', borderRadius: '5px', minWidth: '300px', zIndex: 1001,
-};
 
 export default Home;

@@ -34,7 +34,7 @@ function Auth() {
                 navigate('/dashboard');
             } else {
                 // REGISTER
-                const response = await api.post('/api/sellers/register', payload);
+                await api.post('/api/sellers/register', payload);
                 alert('Registration successful! Logging you in...');
                 // Auto login after register
                 const loginRes = await api.post('/api/sellers/login', payload);
