@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vite --host",
-    "start": "nodemon index.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
     "setup": "node setup-check.js",
     "troubleshoot": "node troubleshoot.js",
     "migrate:v3": "node scripts/migrate_v3.js",
