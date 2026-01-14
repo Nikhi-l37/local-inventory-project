@@ -48,7 +48,7 @@ app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Handle React routing, return all requests to React app
 // (Exclude /api routes so they don't get caught here if missing)
-app.get('*', (req, res, next) => {
+app.get(/.*/, (req, res, next) => {
   if (req.path.startsWith('/api')) {
     return next();
   }
