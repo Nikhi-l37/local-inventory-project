@@ -1,3 +1,9 @@
+const dns = require('node:dns');
+// Force IPv4 to avoid ENETUNREACH with Supabase on some environments (Node 17+)
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first');
+}
+
 const express = require('express');
 const cors = require('cors'); // Import cors
 const pool = require('./db'); // Import our db connection
