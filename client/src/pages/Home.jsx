@@ -25,26 +25,45 @@ const formatTime = (timeStr) => {
 
 // Helper to determine status color and text
 const getShopStatus = (opening, closing, isOpenOverride) => {
-  if (isOpenOverride === false) return { text: 'Closed (Owner Only)', color: '#e53e3e' };
+  // 1. Manual Override Check
+  if (isOpenOverride === false) {
+    return {
+      text: 'Closed', // Simplified as requested
+      color: '#e53e3e', // Red
+      status: 'closed',
+      detail: 'Owner paused orders'
+    };
+  }
 
+  // 2. Data Check
+  if (!opening || !closing) {
+    return {
+      text: 'Closed',
+      color: '#718096',
+      status: 'unknown',
+      detail: 'Hours not set'
+    };
+  }
+
+  // 3. Time Calculation
   const now = new Date();
   const currentTime = now.getHours() * 60 + now.getMinutes();
 
-  if (!opening || !closing) return { text: 'Unknown', color: '#718096' };
-
   const [openH, openM] = opening.split(':').map(Number);
   const [closeH, closeM] = closing.split(':').map(Number);
+
   const openTime = openH * 60 + openM;
   const closeTime = closeH * 60 + closeM;
 
+  // 4. Status Determination
   if (currentTime < openTime) {
-    if (openTime - currentTime <= 60) return { text: `Opening Soon (${formatTime(opening)})`, color: '#d69e2e' }; // Orange
-    return { text: `Closed (Opens ${formatTime(opening)})`, color: '#e53e3e' }; // Red
+    return { text: 'Closed', color: '#e53e3e', status: 'closed', detail: `Opens ${formatTime(opening)}` };
+
   } else if (currentTime >= openTime && currentTime < closeTime) {
-    if (closeTime - currentTime <= 60) return { text: `Closing Soon (${formatTime(closing)})`, color: '#d69e2e' }; // Orange
-    return { text: 'Open Now', color: '#38a169' }; // Green
+    return { text: 'Open', color: '#38a169', status: 'open', detail: `Closes ${formatTime(closing)}` }; // Green
+
   } else {
-    return { text: 'Closed', color: '#e53e3e' };
+    return { text: 'Closed', color: '#e53e3e', status: 'closed', detail: `Closed ${formatTime(closing)}` };
   }
 };
 

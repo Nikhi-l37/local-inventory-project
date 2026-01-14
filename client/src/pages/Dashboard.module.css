@@ -17,6 +17,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -68,15 +69,24 @@
     opacity: 0;
     transform: translateX(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
-.sidebarCard:nth-child(1) { animation-delay: 0.1s; }
-.sidebarCard:nth-child(2) { animation-delay: 0.2s; }
-.sidebarCard:nth-child(3) { animation-delay: 0.3s; }
+.sidebarCard:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.sidebarCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.sidebarCard:nth-child(3) {
+  animation-delay: 0.3s;
+}
 
 .sidebarCard:last-child {
   border-bottom: none;
@@ -380,27 +390,58 @@
 }
 
 /* Edit Form Styles */
+/* Edit Form Styles */
 .editForm {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-top: 15px;
+  /* gap: 15px; removed as groups handle spacing */
+  flex: 1;
+  overflow: hidden;
+  /* Container doesn't scroll, child does */
+}
+
+.editFormScrollable {
+  overflow-y: auto;
+  padding-right: 5px;
+  /* Space for scrollbar */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 60vh;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 6px;
 }
 
 .editForm input,
 .editForm select,
 .editForm textarea {
-  padding: 12px;
-  border-radius: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
   border: 1px solid var(--border-color-input);
   background: var(--bg-inset);
   color: var(--text-color);
   font-family: inherit;
   font-size: 0.95em;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   width: 100%;
   box-sizing: border-box;
-  /* Ensure padding doesn't affect width */
+  min-height: 38px;
+  /* Consistent height */
+}
+
+.editForm textarea {
+  min-height: 80px;
+  resize: vertical;
 }
 
 .editForm input:focus,
@@ -408,7 +449,7 @@
 .editForm textarea:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
 }
 
 .row {
@@ -416,9 +457,8 @@
   gap: 15px;
 }
 
-.row input {
+.row .formGroup {
   flex: 1;
-  /* Equal width for side-by-side inputs */
 }
 
 

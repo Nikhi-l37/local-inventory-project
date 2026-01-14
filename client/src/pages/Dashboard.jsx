@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../api';
 import ShopCreator from '../components/ShopCreator.jsx';
 import ShopStatus from '../components/ShopStatus.jsx';
@@ -29,13 +30,20 @@ const formatTime = (timeStr) => {
 };
 
 const getShopStatus = (opening, closing, is_open_override) => {
-  // If explicitly closed by owner
-  if (is_open_override === false) return { text: '● CLOSED', colorClass: 'statusClosed', detail: '(Owner)' };
+  // 1. Manual Override Check
+  if (is_open_override === false) {
+    return {
+      text: 'Closed', // Simplified
+      colorClass: 'statusClosed',
+      detail: 'Manual Pause'
+    };
+  }
 
+  // 2. Time Check
   const now = new Date();
   const currentTime = now.getHours() * 60 + now.getMinutes();
 
-  if (!opening || !closing) return { text: '● UNKNOWN', colorClass: 'statusClosed', detail: '' };
+  if (!opening || !closing) return { text: 'Closed', colorClass: 'statusClosed', detail: 'No Hours' };
 
   const [openH, openM] = opening.split(':').map(Number);
   const [closeH, closeM] = closing.split(':').map(Number);
@@ -43,11 +51,11 @@ const getShopStatus = (opening, closing, is_open_override) => {
   const closeTime = closeH * 60 + closeM;
 
   if (currentTime < openTime) {
-    return { text: '● CLOSED', colorClass: 'statusClosed', detail: `(Opens ${formatTime(opening)})` };
+    return { text: 'Closed', colorClass: 'statusClosed', detail: `Opens ${formatTime(opening)}` };
   } else if (currentTime >= openTime && currentTime < closeTime) {
-    return { text: '● OPEN', colorClass: 'statusOpen', detail: `(Closes ${formatTime(closing)})` };
+    return { text: 'Open', colorClass: 'statusOpen', detail: `Closes ${formatTime(closing)}` };
   } else {
-    return { text: '● CLOSED', colorClass: 'statusClosed', detail: '(Time)' };
+    return { text: 'Closed', colorClass: 'statusClosed', detail: `Closed ${formatTime(closing)}` };
   }
 };
 
@@ -97,7 +105,10 @@ function SellerProfile({ initialShop, onShopUpdated }) {
   const handleToggleStatus = async () => {
     setStatusLoading(true);
     try {
-      const response = await api.patch('/api/shops/status', { is_open: !initialShop.is_open });
+      // Logic: If currently manually closed (false), switch to true (auto).
+      // If currently auto (true), switch to false (manual close).
+      const newStatus = !initialShop.is_open;
+      const response = await api.patch('/api/shops/status', { is_open: newStatus });
       onShopUpdated(response.data);
     } catch (err) {
       console.error('Error updating status:', err);
@@ -124,65 +135,88 @@ function SellerProfile({ initialShop, onShopUpdated }) {
         <div className={styles.profileInfo}>
           <h3>{initialShop.name}</h3>
 
-          {/* NEW: Status Toggle Button with Smart Status */}
+          {/* STATUS TOGGLE BUTTON */}
           <button
             onClick={handleToggleStatus}
             disabled={statusLoading}
             className={`${styles.statusToggleBtn} ${styles[status.colorClass]}`}
-            title={status.detail} // Show detail on hover
+            title={initialShop.is_open ? "Click to Manually Close" : "Click to Resume Orders"}
           >
-            {statusLoading ? '...' : `${status.text}`}
+            {statusLoading ? '...' : (initialShop.is_open ? `● ${status.text}` : `● ${status.text}`)}
           </button>
-          {/* Optional: Show detail below or next to it? 
-              User asked specifically for the button. The hover title is good, 
-              but maybe the 'Closed (Time)' text is better directly on the button?
-              Let's try to fit it sparingly.
-          */}
-          {status.detail && <span className={styles.statusDetail}>{status.detail}</span>}
+
+          <span className={styles.statusDetail}>
+            {initialShop.is_open ? status.detail : "Click to Enable Shop"}
+          </span>
 
         </div>
       </div>
 
-      {isEditing && (
+      {isEditing && createPortal(
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <h3>Edit Shop Profile</h3>
             <div className={styles.editForm}>
-              <ImageUpload label="Shop Logo" currentImage={initialShop.image_url} onImageSelect={setImage} />
-              <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Shop Name" />
+              <div className={styles.editFormScrollable}>
+                <div className={styles.formGroup}>
+                  <ImageUpload label="Shop Logo" currentImage={initialShop.image_url} onImageSelect={setImage} />
+                </div>
 
-              {/* Category Selection with Custom Option */}
-              <select value={['Grocery', 'Electronics', 'Pharmacy', 'Fashion'].includes(category) ? category : 'Other'}
-                onChange={e => setCategory(e.target.value)}>
-                <option value="Grocery">Grocery</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Pharmacy">Pharmacy</option>
-                <option value="Fashion">Fashion</option>
-                <option value="Other">Other (Custom)</option>
-              </select>
+                <div className={styles.formGroup}>
+                  <label>Shop Name</label>
+                  <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. My Awesome Shop" />
+                </div>
 
-              {(!['Grocery', 'Electronics', 'Pharmacy', 'Fashion'].includes(category)) && (
-                <input
-                  type="text"
-                  value={category === 'Other' ? '' : category}
-                  onChange={e => setCategory(e.target.value)}
-                  placeholder="Enter custom category name"
-                  autoFocus
-                />
-              )}
+                <div className={styles.formGroup}>
+                  <label>Category</label>
+                  <select value={['Grocery', 'Electronics', 'Pharmacy', 'Fashion'].includes(category) ? category : 'Other'}
+                    onChange={e => setCategory(e.target.value)}>
+                    <option value="Grocery">Grocery</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Pharmacy">Pharmacy</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Other">Other (Custom)</option>
+                  </select>
+                </div>
 
-              <div className={styles.row}>
-                <input type="time" value={openingTime} onChange={e => setOpeningTime(e.target.value)} />
-                <input type="time" value={closingTime} onChange={e => setClosingTime(e.target.value)} />
-              </div>
-              <textarea value={description} onChange={e => setDescription(e.target.value)} rows="3" placeholder="Description" />
-              <div className={styles.modalActions}>
-                <button onClick={() => setIsEditing(false)} className={styles.secondaryButton}>Cancel</button>
-                <button onClick={handleSave} className={styles.primaryButton} disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
+                {(!['Grocery', 'Electronics', 'Pharmacy', 'Fashion'].includes(category)) && (
+                  <div className={styles.formGroup}>
+                    <label>Custom Category Name</label>
+                    <input
+                      type="text"
+                      value={category === 'Other' ? '' : category}
+                      onChange={e => setCategory(e.target.value)}
+                      placeholder="Enter custom category name"
+                      autoFocus
+                    />
+                  </div>
+                )}
+
+                <div className={styles.row}>
+                  <div className={styles.formGroup}>
+                    <label>Opens At</label>
+                    <input type="time" value={openingTime} onChange={e => setOpeningTime(e.target.value)} />
+                  </div>
+                  <div className={styles.formGroup}>
+                    <label>Closes At</label>
+                    <input type="time" value={closingTime} onChange={e => setClosingTime(e.target.value)} />
+                  </div>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Description (Optional)</label>
+                  <textarea value={description} onChange={e => setDescription(e.target.value)} rows="3" placeholder="Tell customers about your shop..." />
+                </div>
+
+                <div className={styles.modalActions}>
+                  <button onClick={() => setIsEditing(false)} className={styles.secondaryButton}>Cancel</button>
+                  <button onClick={handleSave} className={styles.primaryButton} disabled={loading}>{loading ? 'Saving...' : 'Save Changes'}</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -250,7 +284,7 @@ function LocationManager({ shop, onShopUpdated }) {
       <p className={styles.addressText}>
         {shop.town_village}, {shop.mandal}
       </p>
-      {isEditing && (
+      {isEditing && createPortal(
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <h3>Update Location</h3>
@@ -268,7 +302,8 @@ function LocationManager({ shop, onShopUpdated }) {
               <button onClick={handleSaveLocation} className={styles.primaryButton} disabled={loading}>Confirm Location</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )
