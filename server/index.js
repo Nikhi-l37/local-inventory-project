@@ -9,7 +9,7 @@ const port = 3001;
 const host = '0.0.0.0';
 
 // === MIDDLEWARE ===
-app.use(cors()); // Allow requests from our frontend
+app.use(cors()); // Allow requests (Cross-Origin)
 app.use(express.json()); // Allow our server to read JSON body data
 
 // Use 'uploads' directory for static files (images)
@@ -41,6 +41,20 @@ app.use('/api/products', require('./product'));
 app.use('/api/categories', require('./category'));
 app.use('/api/search', require('./search'));
 
+// === SERVE STATIC FILES (Production) ===
+const path = require('path');
+// Serve static files from the React client app
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// Handle React routing, return all requests to React app
+// (Exclude /api routes so they don't get caught here if missing)
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+});
+
 // === ERROR HANDLING ===
 // Global error handler (must be last)
 app.use(errorHandler);
@@ -49,7 +63,7 @@ app.use(errorHandler);
 async function startServer() {
   // Check database connection before starting server
   await initializeDatabase();
-  
+
   app.listen(port, host, () => {
     console.log(`Server is running successfully on http://localhost:${port}`);
     console.log(`\nNetwork access is available. Use your laptop's IP address: http://<YOUR_IP>:${port}\n`);

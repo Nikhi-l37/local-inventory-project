@@ -1,0 +1,12 @@
+{
+    "name": "local-inventory-project-root",
+    "version": "1.0.0",
+    "description": "Root script for Render deployment",
+    "scripts": {
+        "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client",
+        "start": "npm start --prefix server"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    }
+}
