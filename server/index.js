@@ -1,8 +1,20 @@
-const dns = require('node:dns');
-// Force IPv4 to avoid ENETUNREACH with Supabase on some environments (Node 17+)
-if (dns.setDefaultResultOrder) {
-  dns.setDefaultResultOrder('ipv4first');
-}
+const dns = require('dns');
+
+// AGGRESSIVE FIX: Monkey-patch dns.lookup to force IPv4
+// This is necessary because Render/Supabase sometimes fail with IPv6 (ENETUNREACH)
+// and strict caching or result ordering might not be enough.
+const originalLookup = dns.lookup;
+dns.lookup = (hostname, options, callback) => {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  options = options || {};
+  if (!options.family) {
+    options.family = 4; // Force IPv4 if not specified
+  }
+  return originalLookup(hostname, options, callback);
+};
 
 const express = require('express');
 const cors = require('cors'); // Import cors
