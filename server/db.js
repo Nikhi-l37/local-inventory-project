@@ -35,12 +35,13 @@ if (isSupabase) {
   poolConfig.connectionTimeoutMillis = 10000;
 }
 
+console.log('Database Config Host:', poolConfig.host); // Debug log
 const pool = new Pool(poolConfig);
 
 // Handle pool errors gracefully
 pool.on('error', (err, client) => {
   // Use console.error for error logging - consider using a logging library in production
-  console.error('Unexpected database error on idle client:', err.message);
+  console.error('Unexpected database error on idle client:', err);
   // Don't crash the application on connection errors
 });
 
