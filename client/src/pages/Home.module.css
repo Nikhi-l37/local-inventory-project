@@ -15,6 +15,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -57,6 +58,7 @@
     opacity: 0;
     transform: translateX(-30px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -147,6 +149,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -243,6 +246,7 @@
     padding-top: 0;
     padding-bottom: 0;
   }
+
   to {
     opacity: 1;
     max-height: 500px;
@@ -361,17 +365,32 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.resultCard:nth-child(1) { animation-delay: 0.05s; }
-.resultCard:nth-child(2) { animation-delay: 0.1s; }
-.resultCard:nth-child(3) { animation-delay: 0.15s; }
-.resultCard:nth-child(4) { animation-delay: 0.2s; }
-.resultCard:nth-child(5) { animation-delay: 0.25s; }
+.resultCard:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.resultCard:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.resultCard:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.resultCard:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.resultCard:nth-child(5) {
+  animation-delay: 0.25s;
+}
 
 .resultCard:hover {
   transform: translateY(-4px);
@@ -544,6 +563,7 @@
     opacity: 0;
     backdrop-filter: blur(0px);
   }
+
   to {
     opacity: 1;
     backdrop-filter: blur(6px);
@@ -568,6 +588,7 @@
     opacity: 0;
     transform: scale(0.9) translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -646,6 +667,7 @@
     opacity: 0;
     transform: scale(0.8);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -669,8 +691,21 @@
     left: 15px;
     top: 15px;
     max-height: 70vh;
-    /* Make larger on mobile for better usability */
     padding: 20px;
+  }
+
+  .resultsPanel {
+    width: calc(100% - 30px) !important;
+    right: 15px !important;
+    top: auto !important;
+    bottom: 0 !important;
+    height: 60vh !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+
+  .miniSearchBtn {
+    top: 15px;
+    left: 15px;
   }
 
   .searchMain {
@@ -700,4 +735,125 @@
     width: 100%;
     height: 150px;
   }
+}
+
+/* --- New Split View Styles --- */
+
+/* Mini Search Trigger (Search Again) */
+.miniSearchBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: white;
+  color: #4f46e5;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.miniSearchBtn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+  background: #fdfdfd;
+}
+
+/* Right Side Results Panel */
+.resultsPanel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  bottom: 20px;
+  width: 380px;
+  max-width: 90vw;
+  z-index: 1000;
+
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.95);
+  /* Slightly more opaque for readability */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  border-radius: 16px;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  /* Reset padding to handle scroll area better */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideInRight 0.4s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.resultsHeader {
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resultsHeader h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #111827;
+}
+
+.closeResultsBtn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 5px;
+  transition: color 0.2s;
+}
+
+.closeResultsBtn:hover {
+  color: #ef4444;
+}
+
+/* Adjust the list to fit inside the new panel flex */
+.resultsList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+  /* Add padding back here */
+  margin-top: 0;
+  border-top: none;
 }

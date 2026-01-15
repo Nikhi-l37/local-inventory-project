@@ -42,6 +42,7 @@ router.get('/', async (req, res) => {
     // Construct the final query string with similarity score for ordering
     const queryString = `
       SELECT
+        p.id AS id, 
         s.id AS shop_id, s.name AS shop_name, s.is_open, s.opening_time, s.closing_time, s.image_url AS shop_image,
         p.name AS product_name, p.category, p.price, p.description, p.image_url AS product_image, p.last_updated,
         ST_Distance(s.location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography) AS distance_meters,

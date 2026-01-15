@@ -604,16 +604,107 @@
   cursor: pointer;
 }
 
+/* Mobile Menu Elements (Hidden on Desktop) */
+.mobileMenuToggle {
+  display: none;
+}
+
+.mobileOverlay {
+  display: none;
+}
+
+.mobileSidebarHeader {
+  display: none;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .layoutGrid {
-    grid-template-columns: 1fr;
+    display: block;
+    /* Stack components */
   }
 
-  .sidebar {
-    height: auto;
-    position: relative;
-    border-right: none;
+  /* Show Menu Button */
+  .mobileMenuToggle {
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    background: var(--bg-secondary);
+    border: none;
     border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  /* Sidebar becomes off-canvas drawer */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    /* Start off-screen */
+    width: 85%;
+    /* User friendly width */
+    max-width: 300px;
+    height: 100vh;
+    z-index: 2000;
+    border-right: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
+    padding-top: 20px;
+    /* Reset padding */
+  }
+
+  .mobileSidebarOpen {
+    left: 0 !important;
+    /* Force open */
+  }
+
+  /* Internal Sidebar Header */
+  .mobileSidebarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .mobileSidebarHeader h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--text-color);
+  }
+
+  .mobileSidebarHeader button {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--text-color-light);
+    cursor: pointer;
+    padding: 0 5px;
+  }
+
+  /* Dimmed Overlay */
+  .mobileOverlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    backdrop-filter: blur(3px);
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  /* Main Content Adjustments */
+  .mainContent {
+    height: auto;
+    overflow-y: visible;
+    padding: 20px 15px;
   }
 }

@@ -139,14 +139,16 @@ function SellerProfile({ initialShop, onShopUpdated }) {
           <button
             onClick={handleToggleStatus}
             disabled={statusLoading}
-            className={`${styles.statusToggleBtn} ${styles[status.colorClass]}`}
-            title={initialShop.is_open ? "Click to Manually Close" : "Click to Resume Orders"}
+            className={`${styles.statusToggleBtn} ${initialShop.is_open ? styles.statusOpen : styles.statusClosed}`}
+            title={initialShop.is_open ? "Shop is set to OPEN (Auto)" : "Shop is set to CLOSED (Manual)"}
           >
-            {statusLoading ? '...' : (initialShop.is_open ? `● ${status.text}` : `● ${status.text}`)}
+            {statusLoading ? '...' : (initialShop.is_open ? '● Set to Open' : '● Set to Closed')}
           </button>
 
           <span className={styles.statusDetail}>
-            {initialShop.is_open ? status.detail : "Click to Enable Shop"}
+            {initialShop.is_open
+              ? (status.text === 'Open' ? `Currently Open (Closes ${formatTime(initialShop.closing_time)})` : `Currently Closed (${status.detail})`)
+              : "Shop is manually paused"}
           </span>
 
         </div>
@@ -340,10 +342,17 @@ function Dashboard() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [shopStats, setShopStats] = useState({ total: 0, active: 0, inactive: 0 }); // Added inactive
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     fetchShopAndCategories();
   }, []);
+
+  // Close mobile menu when category is selected (optional but good UX)
+  const handleCategorySelect = (catId) => {
+    setSelectedCategory(catId);
+    if (window.innerWidth < 768) setIsMobileMenuOpen(false);
+  };
 
   const fetchShopAndCategories = async () => {
     try {
@@ -378,60 +387,82 @@ function Dashboard() {
   return (
     <div className={styles.dashboardContainer}>
       {shop ? (
-        <div className={styles.layoutGrid}>
-          {/* --- SIDEBAR --- */}
-          <aside className={styles.sidebar}>
-            <SellerProfile initialShop={shop} onShopUpdated={s => setShop(prev => ({ ...prev, ...s }))} />
+        <>
+          {/* Mobile Menu Toggle Button */}
+          <button
+            className={styles.mobileMenuToggle}
+            onClick={() => setIsMobileMenuOpen(true)}
+          >
+            ☰ Menu
+          </button>
 
-            <StatsWidget
-              totalCategories={categories.length}
-              activeProducts={shopStats.active}
-              inactiveProducts={shopStats.inactive}
-            />
+          {/* Mobile Overlay (Click to close) */}
+          {isMobileMenuOpen && (
+            <div className={styles.mobileOverlay} onClick={() => setIsMobileMenuOpen(false)} />
+          )}
 
-            <div className={styles.sidebarCard}>
-              <div className={styles.cardHeader}>
-                <h4>Categories</h4>
-                {/* Tiny Add Button */}
-                <button className={styles.iconBtn} title="Manage Categories" onClick={() => setSelectedCategory('manage')}>⚙️</button>
+          <div className={styles.layoutGrid}>
+            {/* --- SIDEBAR --- */}
+            <aside className={`${styles.sidebar} ${isMobileMenuOpen ? styles.mobileSidebarOpen : ''}`}>
+
+              {/* Mobile Close Button (Visible only on mobile inside sidebar) */}
+              <div className={styles.mobileSidebarHeader}>
+                <h3>Dashboard</h3>
+                <button onClick={() => setIsMobileMenuOpen(false)}>×</button>
               </div>
-              <nav className={styles.categoryNav}>
-                <button
-                  className={selectedCategory === 'All' ? styles.activeCat : ''}
-                  onClick={() => setSelectedCategory('All')}
-                >
-                  All Products
-                </button>
-                {categories.map(cat => (
-                  <button
-                    key={cat.id}
-                    className={selectedCategory === cat.id ? styles.activeCat : ''}
-                    onClick={() => setSelectedCategory(cat.id)}
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-              </nav>
-            </div>
 
-            <LocationManager shop={shop} onShopUpdated={s => setShop(prev => ({ ...prev, ...s }))} />
-          </aside>
+              <SellerProfile initialShop={shop} onShopUpdated={s => setShop(prev => ({ ...prev, ...s }))} />
 
-          {/* --- MAIN CONTENT --- */}
-          <main className={styles.mainContent}>
-            {selectedCategory === 'manage' ? (
-              <CategoryManager shop={shop} onCategoriesChange={refreshCategories} />
-            ) : (
-              <ProductManager
-                shop={shop}
-                categories={categories}
-                selectedCategory={selectedCategory}
-                onCategoriesChange={refreshCategories}
-                onStatsUpdate={setShopStats}
+              <StatsWidget
+                totalCategories={categories.length}
+                activeProducts={shopStats.active}
+                inactiveProducts={shopStats.inactive}
               />
-            )}
-          </main>
-        </div>
+
+              <div className={styles.sidebarCard}>
+                <div className={styles.cardHeader}>
+                  <h4>Categories</h4>
+                  {/* Tiny Add Button */}
+                  <button className={styles.iconBtn} title="Manage Categories" onClick={() => handleCategorySelect('manage')}>⚙️</button>
+                </div>
+                <nav className={styles.categoryNav}>
+                  <button
+                    className={selectedCategory === 'All' ? styles.activeCat : ''}
+                    onClick={() => handleCategorySelect('All')}
+                  >
+                    All Products
+                  </button>
+                  {categories.map(cat => (
+                    <button
+                      key={cat.id}
+                      className={selectedCategory === cat.id ? styles.activeCat : ''}
+                      onClick={() => handleCategorySelect(cat.id)}
+                    >
+                      {cat.name}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+
+              <LocationManager shop={shop} onShopUpdated={s => setShop(prev => ({ ...prev, ...s }))} />
+            </aside>
+
+            {/* --- MAIN CONTENT --- */}
+            <main className={styles.mainContent}>
+              {selectedCategory === 'manage' ? (
+                <CategoryManager shop={shop} onCategoriesChange={refreshCategories} />
+              ) : (
+                <ProductManager
+                  shop={shop}
+                  categories={categories}
+                  selectedCategory={selectedCategory}
+                  onCategoriesChange={refreshCategories}
+                  onStatsUpdate={setShopStats}
+                />
+              )}
+            </main>
+          </div>
+        </>
       ) : (
         <ShopCreator onShopCreated={setShop} />
       )}

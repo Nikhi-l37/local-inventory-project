@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
-import ImageUpload from './ImageUpload.jsx';
 import styles from './ProductManager.module.css';
 
 function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
@@ -12,7 +11,7 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
   const [categoryId, setCategoryId] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
+  // Image state removed
   const [loading, setLoading] = useState(true);
   const [openMenuId, setOpenMenuId] = useState(null); // Track which menu is open
 
@@ -59,7 +58,7 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
     setCategoryId('');
     setPrice('');
     setDescription('');
-    setImage(null);
+    // Image reset removed
     setIsEditing(null);
     setShowModal(false);
   };
@@ -70,7 +69,7 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
     setCategoryId(product.category_id || '');
     setPrice(product.price || '');
     setDescription(product.description || '');
-    setImage(null);
+    // Image set removed
     setShowModal(true);
   };
 
@@ -100,7 +99,7 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
       }
 
       formData.append('description', description);
-      if (image) formData.append('image', image);
+      // Image append removed
 
       let response;
       if (isEditing) {
@@ -156,12 +155,8 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
       <div className={styles.productGrid}>
         {filteredProducts.map(product => (
           <div key={product.id} className={styles.productCard}>
-            {/* Image Area */}
-            <div className={styles.cardImageContainer}>
-              {product.image_url ? (
-                <img src={`${import.meta.env.VITE_API_BASE_URL}${product.image_url}`} alt={product.name} />
-              ) : <div className={styles.cardNoImage}>No Image</div>}
-
+            {/* Header Area (No Image) */}
+            <div className={styles.cardHeaderArea}>
               <span className={`${styles.statusBadge} ${product.is_available ? styles.inStock : styles.outOfStock}`}>
                 {product.is_available ? 'In Stock' : 'Out of Stock'}
               </span>
@@ -182,10 +177,6 @@ function ProductManager({ shop, categories, selectedCategory, onStatsUpdate }) {
                     </button>
                     <button onClick={() => { setOpenMenuId(null); handleToggleProduct(product.id, product.is_available); }}>
                       Option: {product.is_available ? 'Mark Unavailable' : 'Mark Available'}
-                    </button>
-                    {/* "Change Image" is part of Edit, but user asked for it specifically. It basically leads to same edit form */}
-                    <button onClick={() => { setOpenMenuId(null); handleEditClick(product); }}>
-                      Option: Change Image
                     </button>
                     <button onClick={() => { setOpenMenuId(null); handleDeleteProduct(product.id); }} className={styles.dangerItem}>
                       Option: Delete

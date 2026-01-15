@@ -81,7 +81,8 @@ body,
 #root {
   margin: 0;
   padding: 0;
-  height: 100%;
+  /* height: 100%;  <-- REMOVED to allow scrolling */
+  min-height: 100%;
   width: 100%;
   box-sizing: border-box;
   /* overflow: hidden removed to allow scrolling */
@@ -107,6 +108,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -169,6 +171,7 @@ button:active:not(:disabled) {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

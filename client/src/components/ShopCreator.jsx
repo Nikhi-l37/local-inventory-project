@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api';
 import axios from 'axios'; // To call the geocoding API
-import { MapContainer, TileLayer, Marker, useMapEvents, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import ImageUpload from './ImageUpload'; // Import ImageUpload
 import styles from './ShopCreator.module.css';
@@ -27,6 +27,17 @@ function LocationFinder({ position, setPosition }) {
       <Popup>Click on the map to move this pin</Popup>
     </Marker>
   );
+}
+
+// Helper to auto-center map when position changes (e.g. via Search)
+function MapUpdater({ position }) {
+  const map = useMap();
+  useEffect(() => {
+    if (position) {
+      map.flyTo(position, map.getZoom());
+    }
+  }, [position, map]);
+  return null;
 }
 
 // Our new ShopCreator
@@ -286,6 +297,7 @@ function ShopCreator({ onShopCreated }) {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               <LocationFinder position={position} setPosition={handleMapClick} />
+              <MapUpdater position={position} />
             </MapContainer>
           </div>
 
