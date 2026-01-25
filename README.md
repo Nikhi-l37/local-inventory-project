@@ -2,12 +2,15 @@
 
 A location-based inventory management system for local shops, now powered by Supabase.
 
+**New Feature**: Secure OTP-based login with email verification! 🔐
+
 ## 🚀 Quick Start (Supabase)
 
 ### Prerequisites
 - Node.js v16 or higher
 - A Supabase account (free tier works!)
 - npm or yarn
+- **SMTP credentials** (Gmail, Mailtrap, etc.) for OTP emails
 
 ### 1. Clone and Install
 
@@ -49,6 +52,14 @@ Option 1: Using Supabase SQL Editor (Recommended)
 3. Copy and paste the entire content
 4. Click **Run** to execute
 
+#### D. Create OTP Table (NEW)
+
+1. In Supabase SQL Editor, create a new query
+2. Copy the content from: `supabase/migrations/20250125000001_create_seller_login_otp.sql`
+3. Paste and click **Run**
+
+This creates the `seller_login_otp` table for the new OTP login feature.
+
 Option 2: Using Migration Scripts (requires connection)
 ```bash
 cd server
@@ -63,21 +74,52 @@ cd server
 cp .env.example .env
 ```
 
-Edit `.env` with your Supabase credentials:
+Edit `.env` with your Supabase and SMTP credentials:
 
 ```env
+# Database
 DATABASE_USER=postgres
 DATABASE_HOST=db.xxxxx.supabase.co
 DATABASE_NAME=postgres
 DATABASE_PASSWORD=your_database_password
 DATABASE_PORT=5432
+
+# JWT
 JWT_SECRET=generate_a_secure_random_string
+
+# SMTP (for OTP email verification)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-specific-password
+MAIL_FROM=noreply@localinventory.com
 ```
 
 **Generate a secure JWT secret:**
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
+
+#### SMTP Configuration
+
+The new OTP login feature requires SMTP credentials. Choose one:
+
+**Option A: Gmail (Recommended for testing)**
+1. Enable 2-Factor Authentication on your Google account
+2. Generate App Password: https://myaccount.google.com/apppasswords
+3. Use the 16-character password as `SMTP_PASS`
+4. Set `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=587`, `SMTP_SECURE=false`
+
+**Option B: Mailtrap (Best for testing)**
+1. Create account: https://mailtrap.io
+2. Copy SMTP credentials from Dashboard
+3. Check "Email Logs" to verify OTP emails are sent
+
+**Option C: Your own SMTP server**
+Configure any SMTP server you have available.
+
+See [OTP_IMPLEMENTATION.md](OTP_IMPLEMENTATION.md) for detailed SMTP setup instructions.
 
 ### 4. Verify Setup
 
@@ -102,6 +144,22 @@ npm run dev
 ```
 
 Visit `http://localhost:5173` to use the application! 🎉
+
+## 🔐 OTP Login Feature (NEW)
+
+The project now uses **2-step OTP-based login** for enhanced security:
+
+1. **Step 1**: Enter email + password
+2. **Step 2**: Enter 6-digit code sent to email
+
+**OTP Details**:
+- Validity: 5 minutes
+- Max verification attempts: 5
+- Max resends: 3
+- Resend cooldown: 30 seconds
+- Rate limiting: Protects against brute force
+
+For complete documentation, see [OTP_IMPLEMENTATION.md](OTP_IMPLEMENTATION.md).
 
 ## 📁 Project Structure
 

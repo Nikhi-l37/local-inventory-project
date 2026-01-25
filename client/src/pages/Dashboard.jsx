@@ -71,6 +71,7 @@ function SellerProfile({ initialShop, onShopUpdated }) {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(initialShop.is_open);
 
   useEffect(() => {
     setName(initialShop.name);
@@ -78,6 +79,7 @@ function SellerProfile({ initialShop, onShopUpdated }) {
     setDescription(initialShop.description || '');
     setOpeningTime(initialShop.opening_time || '09:00');
     setClosingTime(initialShop.closing_time || '21:00');
+    setIsOpen(initialShop.is_open);
   }, [initialShop]);
 
   const handleSave = async () => {
@@ -105,10 +107,9 @@ function SellerProfile({ initialShop, onShopUpdated }) {
   const handleToggleStatus = async () => {
     setStatusLoading(true);
     try {
-      // Logic: If currently manually closed (false), switch to true (auto).
-      // If currently auto (true), switch to false (manual close).
-      const newStatus = !initialShop.is_open;
+      const newStatus = !isOpen;
       const response = await api.patch('/api/shops/status', { is_open: newStatus });
+      setIsOpen(response.data.is_open);
       onShopUpdated(response.data);
     } catch (err) {
       console.error('Error updating status:', err);
@@ -119,7 +120,7 @@ function SellerProfile({ initialShop, onShopUpdated }) {
   };
 
   // Calculate Status
-  const status = getShopStatus(initialShop.opening_time, initialShop.closing_time, initialShop.is_open);
+  const status = getShopStatus(initialShop.opening_time, initialShop.closing_time, isOpen);
 
   return (
     <div className={styles.sidebarCard}>
@@ -139,16 +140,14 @@ function SellerProfile({ initialShop, onShopUpdated }) {
           <button
             onClick={handleToggleStatus}
             disabled={statusLoading}
-            className={`${styles.statusToggleBtn} ${initialShop.is_open ? styles.statusOpen : styles.statusClosed}`}
-            title={initialShop.is_open ? "Shop is set to OPEN (Auto)" : "Shop is set to CLOSED (Manual)"}
+            className={`${styles.statusToggleBtn} ${isOpen ? styles.statusOpen : styles.statusClosed}`}
+            title={isOpen ? "Shop is open" : "Shop is closed"}
           >
-            {statusLoading ? '...' : (initialShop.is_open ? '● Set to Open' : '● Set to Closed')}
+            {statusLoading ? 'Updating...' : (isOpen ? 'Close shop' : 'Open shop')}
           </button>
 
           <span className={styles.statusDetail}>
-            {initialShop.is_open
-              ? (status.text === 'Open' ? `Currently Open (Closes ${formatTime(initialShop.closing_time)})` : `Currently Closed (${status.detail})`)
-              : "Shop is manually paused"}
+            {isOpen ? 'Shop is now open' : 'Shop is now closed'}
           </span>
 
         </div>

@@ -23,33 +23,24 @@ const formatTime = (timeStr) => {
   return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 };
 
-// Helper to determine status color and text
+// Helper to determine status color and text (manual toggle wins)
 const getShopStatus = (opening, closing, isOpenOverride) => {
-  // 1. Manual Override Check
+  // Manual toggle from seller dashboard always wins
+  if (isOpenOverride === true) {
+    return { text: 'Open', color: '#38a169', status: 'open', detail: 'Manually opened' };
+  }
   if (isOpenOverride === false) {
-    return {
-      text: 'Closed',
-      color: '#e53e3e', // Red
-      status: 'closed',
-      detail: 'Manually Paused'
-    };
+    return { text: 'Closed', color: '#e53e3e', status: 'closed', detail: 'Manually paused' };
   }
 
-  // 2. Data Check
+  // Fallback to schedule only if manual override is not set
   if (!opening || !closing) {
-    return {
-      text: 'Closed',
-      color: '#718096',
-      status: 'unknown',
-      detail: 'Hours not set'
-    };
+    return { text: 'Closed', color: '#718096', status: 'unknown', detail: 'Hours not set' };
   }
 
-  // 3. Time Calculation
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-  // Helper to parse "HH:mm:ss" or "HH:mm"
   const parseTime = (timeStr) => {
     const [h, m] = timeStr.split(':').map(Number);
     return h * 60 + m;
@@ -58,16 +49,11 @@ const getShopStatus = (opening, closing, isOpenOverride) => {
   const openMinutes = parseTime(opening);
   const closeMinutes = parseTime(closing);
 
-  // 4. Status Determination
-  if (currentMinutes < openMinutes) {
-    return { text: 'Closed', color: '#e53e3e', status: 'closed', detail: `Opens ${formatTime(opening)}` };
-
-  } else if (currentMinutes >= openMinutes && currentMinutes < closeMinutes) {
-    return { text: 'Open', color: '#38a169', status: 'open', detail: `Closes ${formatTime(closing)}` }; // Green
-
-  } else {
-    return { text: 'Closed', color: '#e53e3e', status: 'closed', detail: `Closed at ${formatTime(closing)}` };
+  if (currentMinutes >= openMinutes && currentMinutes < closeMinutes) {
+    return { text: 'Open', color: '#38a169', status: 'open', detail: `Closes ${formatTime(closing)}` };
   }
+
+  return { text: 'Closed', color: '#e53e3e', status: 'closed', detail: `Closed at ${formatTime(closing)}` };
 };
 
 function ProductListModal({ shop, onClose }) {
