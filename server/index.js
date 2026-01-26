@@ -13,7 +13,7 @@ const { errorHandler } = require('./middleware/errorHandler');
 const { verifySMTPConfig } = require('./utils/mail'); // Verify SMTP config
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001; // Use Render's PORT or default to 3001
 const host = '0.0.0.0';
 
 // === MIDDLEWARE ===
